@@ -1,0 +1,10 @@
+__pycache__/
+venv/
+.env
+build.sh
+flask_session/
+
+
+demo.txt
+test.txt
+main.py
