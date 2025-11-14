@@ -16,4 +16,8 @@ class State(TypedDict, total=False):
     contracts: Optional[List[str]]
     metrics: Optional[List[str]]
     product: Optional[str]
+    data_dict : Optional[str]
+    tool_prompt: Optional[str]
+    relevant_tables: Optional[List[str]]
+    fallback_state: Optional[str]
 

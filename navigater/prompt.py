@@ -4,7 +4,38 @@ from navigater.state import State
 from utils import llm
 import logging
 from langchain_core.output_parsers import JsonOutputParser
+from langchain_openai import AzureOpenAIEmbeddings
+import os
+from dotenv import load_dotenv
+from langchain_community.vectorstores import Chroma
 
+load_dotenv()
+
+azure_deployment=os.getenv("AZURE_OPENAI_EMBEDDING_MODEL")
+openai_api_key=os.getenv("AZURE_OPENAI_API_KEY")
+azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
+openai_api_version=os.getenv("AZURE_OPENAI_API_VERSION")
+
+# Same embedding configuration you used earlier
+embeddings = AzureOpenAIEmbeddings(
+    azure_deployment=azure_deployment,
+    openai_api_key=openai_api_key,
+    azure_endpoint=azure_endpoint,
+    openai_api_version=openai_api_version
+)
+
+vectorstore = Chroma(
+    collection_name="routing_prompts",
+    persist_directory="./chroma_db",
+    embedding_function=embeddings
+)
+
+def get_relevant_catalog_context(question, page_url):
+    query = f"{question} {page_url}"
+    results = vectorstore.similarity_search(query, k=3)
+    context = "\n\n".join([doc.page_content for doc in results])
+    return context
+    
 
 def route_user_query(State)->State:
     print("routing user query")
@@ -40,36 +71,8 @@ Your job is to determine if the user's provided `page_url` correctly matches one
  
 --- 
    
-## PRODUCT CATALOG:
-
-### 1. MOG (Market Opportunity Generator / Market Intelligence)
-  - **URL:** `/sales-prophet/individual-life/market-overview` 
-  - **Sub URL:** [`sales-prophet/individual-life/wallet-share-assessment`, `sales-prophet/individual-life/sales-opportunity`, `sales-prophet/individual-life/agent-performance`]
-  - **Purpose:** Estimate market size, analyze client performance, sales opportunity
-  - **Query Keywords:** market premiums, client premiums/policies, agents, MSAs, states, counties, population, sales opportunity, carrier policies, effectiveness, premium share
-
-### 2. Commission Intelligence (Contingent Commission)
-  - **URL:** `/commission-intelligence`   
-  - **Sub URL:** [`commission-intelligence/property-and-casualty/contract-ingestion`, `commission-intelligence/property-and-casualty/contract-summary`, `commission-intelligence/property-and-casualty/contract-comparison`]
-  - **Purpose:** AI contract platform for analyzing commission structures
-  - **Query Keywords:** contingent commission, carrier contracts, loss ratio, eligible written premium (EWP), growth rate, thresholds, contract comparison, Document Ingestion
-
-### 3. Contract Comparator (aka Contingent Commission Contract Comparator)
-  - **URL:** `/commission-intelligence/property-and-casualty/contract-comparison` 
-  - **Sub URL:** `/commission-intelligence`
-  - **Keywords:** compare contracts, side by side comparison, contract differences, better commission, carrier comparison, bonus structure comparison, eligibility comparison, commission rates comparison, which contract is better, contract analysis
-  - **Description:** Side-by-side comparison tool for multiple contingent commission contracts across different carriers, highlighting key differences and similarities in commission structures, bonus types, eligibility criteria, thresholds, and requirements 
-
-### 4. Contract Summary (aka Contingent Commission Contract Summary)
-  - **URL:** `/commission-intelligence/property-and-casualty/contract-summary`
-  - **Sub URL:** `/commission-intelligence`
-  - **Keywords:** contracts summary, contract information, contract details, contract synopsis, contract abstract, contract condensation
-  - **Description:** Centralized repository of all ingested contracts for easy search, filter and management. 
-
-### 5. Spinnaker General Information
-  - **Purpose:** Information about Spinnaker products, solutions, descriptions
-  - **Query Keywords:** "what is", "tell me about", product features, demos, purchasing
-
+### PRODUCT CATALOG:
+{catalog_context}
 ---
 
 ### Routing Logic
@@ -122,6 +125,7 @@ Your job is to determine if the user's provided `page_url` correctly matches one
 User Question: {question}
 Page URL: {page_url}
 Frontend Origin: {frontend_origin}
+Product Catalog:{catalog_context}
 
 Previous Conversation: 
 {messages}
@@ -134,6 +138,7 @@ Return ONLY valid JSON with no additional text.
     messages=State["messages"]
     page_url = State["page_url"]
     frontend_origin=State["frontend_origin"]
+    catalog_context = get_relevant_catalog_context(question, page_url)
     
     json_parser = JsonOutputParser()
     question_router_chain = prompt | llm | json_parser
@@ -144,7 +149,8 @@ Return ONLY valid JSON with no additional text.
             "question": question,
             "page_url": page_url,
             "messages": messages,
-            "frontend_origin": frontend_origin
+            "frontend_origin": frontend_origin,
+            "catalog_context":catalog_context
         })
         print(f"Response: {response}")
         route_to = response.get("route_to", "llm_fallback")

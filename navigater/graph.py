@@ -2,7 +2,7 @@ from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
 from navigater.state import State
 from navigater.prompt import route_user_query
-from navigater.nodes import handle_redirect,llm_fallback,call_your_agent,sql_qa_tool,contract_comparator_tool,spinnaker_qa_tool,route_condition,tool_router
+from navigater.nodes import handle_redirect,llm_fallback,call_your_agent,sql_qa_tool,contract_comparator_tool,spinnaker_qa_tool,route_condition,tool_router,fallback_condition,spinnaker_questions,general_questions
 
 from langgraph.graph import StateGraph, END
 
@@ -14,6 +14,10 @@ workflow_route.add_node("route_query", route_user_query)
 workflow_route.add_node("handle_redirect", handle_redirect)
 workflow_route.add_node("llm_fallback", llm_fallback)
 workflow_route.add_node("call_agent", call_your_agent)
+workflow_route.add_node("fallback_condition", fallback_condition)
+workflow_route.add_node("spinnaker_questions", spinnaker_questions)
+workflow_route.add_node("general_questions", general_questions)
+
 
 # Add tool nodes
 workflow_route.add_node("sql_qa_tool", sql_qa_tool)
@@ -34,6 +38,15 @@ workflow_route.add_conditional_edges(
     }
 )
 
+workflow_route.add_conditional_edges(
+    "llm_fallback",
+    fallback_condition,
+    {
+        "spinnaker_questions":"spinnaker_questions",
+        "general_questions":"general_questions"
+    }
+)
+
 # Add conditional edges from call_agent to tools
 workflow_route.add_conditional_edges(
     "call_agent",
@@ -50,7 +63,8 @@ workflow_route.add_edge("handle_redirect", END)
 workflow_route.add_edge("llm_fallback", END)
 workflow_route.add_edge("sql_qa_tool", END)
 workflow_route.add_edge("contract_comparator_tool", END)
-workflow_route.add_edge("spinnaker_qa_tool", END)
+workflow_route.add_edge("spinnaker_questions", END)
+workflow_route.add_edge("general_questions", END)
 
 # Compile the graph
 app_route = workflow_route.compile()
