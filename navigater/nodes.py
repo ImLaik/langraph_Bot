@@ -1,4 +1,3 @@
-
 from langchain_core.output_parsers import JsonOutputParser
 from datetime import datetime
 from langchain_core.prompts import ChatPromptTemplate
@@ -8,6 +7,9 @@ import os
 from langchain_community.utilities import SQLDatabase
 from dotenv import load_dotenv
 from langchain.agents import create_agent
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import StrOutputParser
+
 # from langgraph.prebuilt import create_react_agent, AgentExecutor
 import json
 from langchain_community.agent_toolkits import SQLDatabaseToolkit
@@ -29,11 +31,48 @@ host = os.getenv("PG_HOST", "localhost")
 port = os.getenv("PG_PORT", "5432")
 dbname = os.getenv("PG_DATABASE")
 
+EXPLAIN_PROMPT = ChatPromptTemplate.from_template(
+    """
+You are a skilled data analyst. Your task is to explain the result of a SQL query
+in a clear, concise, and user-friendly way. Also, include the assumptions that were used
 
+Guidelines:
+- Answer the user's question directly and gracefully.
+- Use simple, plain language that a non-technical person can easily understand.
+- Summarize key numbers or trends- avoid listing raw data unless necessary.
+- Do NOT mention the SQL query, SQL syntax, Table Names or database operations.
+- Do NOT restate the query — just give the answer or insight.
+- If there are many rows, summarize patterns or totals instead of listing everything.
+- If there is no result, say "No data found for this request."
+- Do not generate or execute any DDL (Data Definition Language) statements, such as CREATE, ALTER, DROP, TRUNCATE, or similar. Only focus on reading or analyzing data, not modifying database structure.
+- For any user-specified dimensions or default dimensions, use them in the GROUP BY clause, not in the WHERE clause. These dimensions should be used to aggregate and break down the results — not to filter them.
+** OUTPUT FORMAT** 
+    - If the information fits naturally into a table, present it as a markdown table.
+    - Clearly state any assumptions made while generating the SQL query.
+    - Use headings, bullet points, or bold text where helpful for clarity.
+    - Avoid unnecessary details, repetition, or filler text.
+    - Focus only on the core insight or summary the user needs to understand the result.
 
+    
+
+Context:
+User Question: {question}
+SQL Response: {sql_response}
+Assunptions: {assumptions}
+
+Now provide a helpful, natural-language explanation.
+"""
+)
 
 REACT_SQL_PROMPT = PromptTemplate(
-    input_variables=["input", "agent_scratchpad", "chat_history", "product_prompt", "tools", "tool_names"],
+    input_variables=[
+        "input",
+        "agent_scratchpad",
+        "chat_history",
+        "product_prompt",
+        "tools",
+        "tool_names",
+    ],
     template="""You are an expert SQL generator with read-only access to a PostgreSQL database. 
     Using the provided data dictionary (tables/columns), translate the user's request into a correct, executable SQL query. 
     Use exact names and types from the dictionary. Return only the SQL (no explanations).
@@ -83,16 +122,9 @@ REACT_SQL_PROMPT = PromptTemplate(
 
     Begin step-by-step reasoning now.
     {agent_scratchpad}
-    """
+    """,
 )
- 
 
-"""
-Spinnaker Analytics Data Dictionary
-Auto-generated from Excel file
-"""
-
- 
 
 CONTRACT_SUMMARY_DATA_DICTIONARY = """
 # SPINNAKER ANALYTICS DATABASE
@@ -131,7 +163,7 @@ Historical data for contracts of various Carriers.
 ---
  
 """
- 
+
 CONTRACT_SUMMARY_PROMPT = f"""
 You are an expert SQL generator specialized in analyzing **Contingent Commission Contracts**.
 Your task is to generate an accurate SQL query based on the user's question using the provided data dictionary.
@@ -271,16 +303,32 @@ Now, generate the most accurate and optimized SQL query based on the user’s qu
 
 
 PRODUCT_ALLOWED_TABLES = {
-    "market-overview": ["il_mi_population", "il_mi_life_agents_by_zipcode", "mi_master_geo", "il_mi_market", "il_mi_mog","il_mi_client_dummy", "il_mi_income"],
+    "market-overview": [
+        "il_mi_population",
+        "il_mi_life_agents_by_zipcode",
+        "mi_master_geo",
+        "il_mi_market",
+        "il_mi_mog",
+        "il_mi_client_dummy",
+        "il_mi_income",
+    ],
     "il_mi_sales_opty": [],
     "il_mi_agent_performance": [],
     "contract-summary": ["contract_summary"],
 }
 
 
+class DBStore:
+    db = None
+
+
+db_store = DBStore()
+
+
 def build_postgres_uri():
     print(f"user: {user}_{password}_{host}_{port}_{dbname}")
     return f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{dbname}"
+
 
 def initialize_db(allowed_tables: list[str] | None = None):
     """
@@ -290,7 +338,7 @@ def initialize_db(allowed_tables: list[str] | None = None):
     Returns: SQLDatabase instance (filtered)
     """
     print(f"initialize db: {allowed_tables} and {type(allowed_tables)}")
-  
+
     if not (user and password and dbname):
         raise ValueError("Missing Postgres credentials in environment")
 
@@ -300,13 +348,14 @@ def initialize_db(allowed_tables: list[str] | None = None):
         db = temp_db  # Reuse the same connection!
     else:
         db = SQLDatabase.from_uri(uri)
-    
+
     return db
 
 
-def llm_fallback(State)->State:
+def llm_fallback(State) -> State:
     print("went to llm fallback")
-    prompt=ChatPromptTemplate.from_template("""You are an advanced routing assistant. Your job is to decide the correct route for a user query.
+    prompt = ChatPromptTemplate.from_template(
+        """You are an advanced routing assistant. Your job is to decide the correct route for a user query.
 
 You MUST strictly output only one of the following:
 - "spinnaker_questions"
@@ -340,48 +389,55 @@ NO explanation, NO sentences, NO extra text.
 Now produce the route:
 """
     )
-    
-    question=State["question"]
-    messages=State["messages"]
+
+    question = State["question"]
+    messages = State["messages"]
     # time= datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    llm_fallback_chain= prompt|llm
-    
+    llm_fallback_chain = prompt | llm
+
     try:
-        response = llm_fallback_chain.invoke({
-            "question": question,
-            "messages": messages,
-            # "time": time
-        })
-        
+        response = llm_fallback_chain.invoke(
+            {
+                "question": question,
+                "messages": messages,
+                # "time": time
+            }
+        )
+
         # Extract content from response,it always returns an object
-        if hasattr(response, 'content'):
+        if hasattr(response, "content"):
             generation = response.content
         else:
             generation = str(response)
-            
+
         State["fallback_state"] = generation
-        
+
     except Exception as e:
         logging.error(f"Error in llm_fallback: {e}")
-        State["generation"] = "I'm having trouble processing your request. Please try again or contact info@spinnakeranalytics.com for assistance."
-    
+        State["generation"] = (
+            "I'm having trouble processing your request. Please try again or contact info@spinnakeranalytics.com for assistance."
+        )
+
     return State
+
 
 def fallback_condition(state: State) -> str:
     """Determines which node to route to based on route_to value."""
     fallback_state = state.get("fallback_state", "general_questions")
-    
+
     if fallback_state == "general_questions":
         return "general_questions"
     else:  # llm_fallback or any other value
         return "spinnaker_questions"
 
+
 def general_questions(state: State) -> str:
-     
-    question=state["question"]
-    messages=state["messages"]
+
+    question = state["question"]
+    messages = state["messages"]
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    prompt=ChatPromptTemplate.from_template("""# Sage Chatbot — Persona & Experience
+    prompt = ChatPromptTemplate.from_template(
+        """# Sage Chatbot — Persona & Experience
 
 Below are core details about Sage’s persona, background, and capabilities.
 
@@ -442,37 +498,36 @@ When answer to user:
 \n\nQuestion: {question}
 """
     )
-    general_questions_chain= prompt|llm
-    
-    response= general_questions_chain.invoke({
-            "question": question,
-            "messages": messages,
-            "time": current_time
-        })
-    
-    state["generation"]=response.content
+    general_questions_chain = prompt | llm
+
+    response = general_questions_chain.invoke(
+        {"question": question, "messages": messages, "time": current_time}
+    )
+
+    state["generation"] = response.content
 
     return state
 
 
 def spinnaker_questions(state: State) -> str:
-    
-    response="hi iam in spinnaker question"
-    state["generation"]=response
+
+    response = "hi iam in spinnaker question"
+    state["generation"] = response
 
     return state
+
 
 def route_condition(state: State) -> str:
     """Determines which node to route to based on route_to value."""
     route_to = state.get("route_to", "llm_fallback")
-    
+
     if route_to == "agent":
         return "call_agent"
     elif route_to == "redirect":
         return "handle_redirect"
     else:  # llm_fallback or any other value
         return "llm_fallback"
-    
+
 
 def handle_redirect(state: State) -> State:
     """Handles redirection messages when user is on wrong page."""
@@ -480,114 +535,143 @@ def handle_redirect(state: State) -> State:
     # The generation already contains the redirect message from route_user_query
     return state
 
+
 def parse_relevant_tables(value):
     """Convert '[a, b, c]' → ['a', 'b', 'c']"""
     if isinstance(value, str):
-        cleaned = re.sub(r'[\[\]]', '', value)
-        tables = [t.strip() for t in cleaned.split(',') if t.strip()]
+        cleaned = re.sub(r"[\[\]]", "", value)
+        tables = [t.strip() for t in cleaned.split(",") if t.strip()]
         return tables
     return value
+
 
 def call_your_agent(state: State) -> State:
     """Agent decides which tool to use"""
     print("Agent routing to tool")
-     
-    question= state["question"]
-    page_url= state["page_url"]
-    messages= state["messages"]
-    csv_data = pd.read_csv('Spinnaker Bot Mapping.csv')
+
+    question = state["question"]
+    page_url = state["page_url"]
+    messages = state["messages"]
+    csv_data = pd.read_csv("Spinnaker Bot Mapping.csv")
     print(page_url)
-    matching_row = csv_data[csv_data['Product Catalog Module url'] == page_url].iloc[0]
+    matching_row = csv_data[csv_data["Product Catalog Module url"] == page_url].iloc[0]
     print("📋 Available columns:", csv_data.columns.tolist())
 
-    tool = matching_row['Agent / Tool ']  
-    # db_selected=matching_row['Data Source']  
-    data_dict = matching_row['Data Dictionary ']  
-    tool_prompt = matching_row['Tool_Prompt']  
-    relevant_tables=matching_row['Relevant Tables']
+    tool = matching_row["Agent / Tool "]
+    # db_selected=matching_row['Data Source']
+    data_dict = matching_row["Data Dictionary "]
+    tool_prompt = matching_row["Tool_Prompt"]
+    relevant_tables = matching_row["Relevant Tables"]
     print(tool)
     # print(db_selected)
     print(data_dict)
     print(tool_prompt)
     print(relevant_tables)
-  
+
     # Store which tool to use
     state["selected_tool"] = tool if tool else "Spinnaker_Solutions_QA_Tool"
     # state['db']= db_selected
-    state['data_dict']= data_dict
-    state['tool_prompt']= tool_prompt
-    state['relevant_tables'] = parse_relevant_tables(relevant_tables)
+    state["data_dict"] = data_dict
+    state["tool_prompt"] = tool_prompt
+    state["relevant_tables"] = parse_relevant_tables(relevant_tables)
 
     return state
-    
 
 
 def sql_qa_tool(state: State) -> State:
     """Tool node for SQL queries"""
     print("Executing SQL_QA_Tool")
 
-    question=state["question"]
-    tool_prompt=state["tool_prompt"]
-    relevant_tables=state["relevant_tables"]
+    question = state["question"]
+    tool_prompt = state["tool_prompt"]
+    relevant_tables = state["relevant_tables"]
     print(f"Tool prompt name: {tool_prompt} ")
     print(f"Relevant tables: {relevant_tables} and type: {type(relevant_tables)}")
-    db= initialize_db(relevant_tables)
-    # db= state["db"]  
+    # if db_store.db is None:
+    #     db_store.db = initialize_db(relevant_tables)
+
+    # db = db_store.db
+    db = initialize_db(relevant_tables)
+    print(f"this is my db{db}")
+    # db= state["db"]
     print("hello world")
     print(db)
     print("✅ Connected tables:", db.get_usable_table_names())
     toolkit = SQLDatabaseToolkit(db=db, llm=llm)
     tools = toolkit.get_tools()
-    
 
-    
     try:
-      print("iam in the try")
-      print(">>> DEBUG: question =", repr(question))
+        print("iam in the try")
+        print(">>> DEBUG: question =", repr(question))
 
-      if tool_prompt=="MOG_IL_PROMPT":
-          tool_prompt=MOG_IL_PROMPT
-      
-      formatted_system_prompt = REACT_SQL_PROMPT.format(
-        input=question,
-        agent_scratchpad="",
-        chat_history="",
-        product_prompt=tool_prompt,
-        tools="", 
-        tool_names=""
-    )
-      agent = create_agent(model=llm,
-        tools=tools,
-        system_prompt=formatted_system_prompt)
-    #   print(f"the tool prompt is:{tool_prompt}") 
-      agent_response = agent.invoke({"input": question, "product_prompt": tool_prompt})
-      print(f"*********** agent_response:{agent_response}")
-      content = agent_response.get("output")
-      print("============================")
-      print(f"hi i am content:{content}")
-      print('-------------------------------')
-      print(f"Final response: {agent_response.get("Final Answer")}")
-      messages = agent_response["messages"]
-      print('000000000000000000')
-      print(f"MEssages: {messages}")
-      last_msg = messages[-1]   # the final AIMessage
-      print("111111111111111")
-      print(f"last msg: {last_msg}")
-      content = last_msg.content
-      print("FINAL RAW CONTENT:", content)
+        if tool_prompt == "MOG_IL_PROMPT":
+            tool_prompt = MOG_IL_PROMPT
 
+        formatted_system_prompt = REACT_SQL_PROMPT.format(
+            input=question,
+            agent_scratchpad="",
+            chat_history="",
+            product_prompt=tool_prompt,
+            tools="",
+            tool_names="",
+        )
+        agent = create_agent(
+            model=llm, tools=tools, system_prompt=formatted_system_prompt
+        )
+        #   print(f"the tool prompt is:{tool_prompt}")
+        agent_response = agent.invoke(
+            {"input": question, "product_prompt": tool_prompt}
+        )
+        print(f"*********** agent_response:{agent_response}")
+        print(type(agent_response))
+        messages = agent_response["messages"]
+        last_msg = messages[-1]
+        print(f" ****** this is my last message{last_msg}")
+        content = last_msg.content
+        print("FINAL RAW CONTENT:", content)
+        # print(type(content))
+        # match = re.search(r"Final Answer:\s*(\{.*?\})", content, re.DOTALL)
+        # json_text = match.group(1)
+        # # print(match)
+        # # print(type(match))
+        # # print(json_text)
+        # match = json.loads(json_text)
 
-# Find the JSON part after "Final Answer:"
-      match = re.search(r"Final Answer:\s*(\{.*\})", content, re.DOTALL)
+        # if match:
+        #     print("SQL Query:", match["sql_query"])
+        #     print("Assumptions:", match["assumptions"])
+        # else:
+        #     print("Final Answer not found.")
+        # state["generation"] = match["sql_query"]
+        match = re.search(r"Final Answer:\s*(\{.*?\})", content, re.DOTALL)
 
-      if match:
-            data = json.loads(match.group(1))
-            print("SQL Query:", data["sql_query"])
-            print("Assumptions:", data["assumptions"])
-      else:
-            print("Final Answer not found.")
+        if match:
+            print("Final Answer FOUND in the agent response")
 
-      state["generation"] = data["sql_query"]
+            json_text = match.group(1)
+
+            match = json.loads(json_text)
+
+            if match:
+                print("SQL Query:", match["sql_query"])
+                print("Assumptions:", match["assumptions"])
+            state["generation"] = {
+                "sql_query": match["sql_query"],
+                "assumptions": match["assumptions"],
+            }
+
+        else:
+            print("NO Final Answer — the answer is the original answer")
+            print(type(content))
+            content = json.loads(content)
+            if content:
+                print("SQL Query:", content["sql_query"])
+                print("Assumptions:", content["assumptions"])
+            state["generation"] = {
+                "sql_query": content["sql_query"],
+                "assumptions": content["assumptions"],
+            }
+
     except Exception as e:
         error_message = f"sql_agent Could not parse SQL: {e}"
         print(error_message)
@@ -596,17 +680,109 @@ def sql_qa_tool(state: State) -> State:
         state["generation"] = error_message
 
         # Option 1: return the whole state, including the error
-    return state    
-       
+    return state
+
+
+def execute_sql(state: State) -> State:
+    try:
+        print("hi iam in execute sql")
+        gen = state.get("generation", {})
+
+        sql_query = gen.get("sql_query", "")
+        assumptions = gen.get("assumptions", "")
+
+        db = initialize_db(state["relevant_tables"])
+
+        if not db:
+            state["generation"] = "Database connection is not available."
+            return state
+
+        if not sql_query or not isinstance(sql_query, str):
+            state["generation"] = "Invalid SQL query."
+            return state
+
+        # Run SQL
+        with db._engine.connect() as conn:
+            df = pd.read_sql(sql_query, conn)
+        print(type(df))
+        df_json = df.to_dict(orient="records")
+
+        # Equivalent to {**inputs, "df": df} in LangChain:
+        output = {"sql_query": sql_query, "assumption": assumptions, "df": df_json}
+        # output = {"df": df_json}
+
+        state["generation"] = output
+        return state
+
+    except Exception as e:
+        state["generation"] = f"Error executing SQL: {e}"
+        return state
+
+
+def generate_response(state: State) -> State:
+    # If any upstream stage produced an error → stop and return
+    if isinstance(state.get("generation"), dict) and "error" in state["generation"]:
+        return state
+
+    # 1. Read SQL + assumptions from generation dict
+    gen = state.get("generation", {})
+
+    sql_query = gen.get("sql_query", "")
+    assumptions = gen.get("assumption", "")
+    user_query = state.get("input", "")
+
+    # 2. df must exist (JSON records list)
+    df_records = gen.get("df") or state.get("df")
+
+    if df_records is None:
+        state["generation"] = {"error": "No data frame to generate response."}
+        return state
+
+    # Convert JSON records → DataFrame
+    df = pd.DataFrame(df_records)
+
+    # 3. Empty dataframe?
+    if df.empty:
+        state["generation"] = {
+            "response_text": "Query returned no results.",
+            "data": [],
+        }
+        return state
+
+    # 4. Limit preview for LLM summary
+    sql_result_str = df.head(10).to_string(index=False)
+
+    # 5. Generate natural language summary using your LLM chain
+    summary = (RunnablePassthrough() | EXPLAIN_PROMPT | llm | StrOutputParser()).invoke(
+        {
+            "question": user_query,
+            "query": sql_query,
+            "sql_response": sql_result_str,
+            "assumptions": assumptions,
+        }
+    )
+
+    # 6. Build output dict (LangGraph safe)
+    output = {
+        "sql_query": sql_query,
+        "assumptions": assumptions,
+        "response_text": summary.strip(),
+        "data": df.to_dict(orient="records"),  # still JSON-serializable
+    }
+
+    # 7. Store the final response in state["generation"]
+    state["generation"] = output
+    return state
+
 
 def contract_comparator_tool(state: State) -> State:
     """Tool node for contract comparison"""
     print("Executing Contract_Comparator_Tool")
-    
+
     question = state["question"]
     # Your comparison logic here
     result = "iam in contract comparator tool"
-    
+
     state["generation"] = result
     return state
 
@@ -614,11 +790,11 @@ def contract_comparator_tool(state: State) -> State:
 def spinnaker_qa_tool(state: State) -> State:
     """Tool node for Spinnaker info"""
     print("Executing Spinnaker_Solutions_QA_Tool")
-    
+
     question = state["question"]
     # Your QA logic here
     result = "iam in spinnaker qa tool"
-    
+
     state["generation"] = result
     return state
 
@@ -626,7 +802,7 @@ def spinnaker_qa_tool(state: State) -> State:
 def tool_router(state: State) -> str:
     """Route to appropriate tool based on agent decision"""
     selected_tool = state.get("selected_tool", "spinnaker_qa_tool")
-    
+
     if selected_tool == "SQL_QA_Tool":
         return "sql_qa_tool"
     elif selected_tool == "Contract_Comparator_Tool":
