@@ -8,7 +8,6 @@ from navigater.nodes import (
     call_your_agent,
     sql_qa_tool,
     contract_comparator_tool,
-    spinnaker_qa_tool,
     route_condition,
     tool_router,
     fallback_condition,
@@ -37,7 +36,7 @@ workflow_route.add_node("generate_response", generate_response)
 # Add tool nodes
 workflow_route.add_node("sql_qa_tool", sql_qa_tool)
 workflow_route.add_node("contract_comparator_tool", contract_comparator_tool)
-workflow_route.add_node("spinnaker_qa_tool", spinnaker_qa_tool)
+
 workflow_route.add_node("execute_sql", execute_sql)
 
 # Set entry point
@@ -70,14 +69,13 @@ workflow_route.add_conditional_edges(
     {
         "sql_qa_tool": "sql_qa_tool",
         "contract_comparator_tool": "contract_comparator_tool",
-        "spinnaker_qa_tool": "spinnaker_qa_tool",
+        "llm_fallback": "llm_fallback",
     },
 )
 
 # All endpoints go to END
 workflow_route.add_edge("sql_qa_tool", "execute_sql")
 workflow_route.add_edge("execute_sql", "generate_response")
-workflow_route.add_edge("execute_sql", END)
 workflow_route.add_edge("generate_response", END)
 workflow_route.add_edge("handle_redirect", END)
 workflow_route.add_edge("llm_fallback", END)

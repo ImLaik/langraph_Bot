@@ -569,7 +569,7 @@ def call_your_agent(state: State) -> State:
     print(relevant_tables)
 
     # Store which tool to use
-    state["selected_tool"] = tool if tool else "Spinnaker_Solutions_QA_Tool"
+    state["selected_tool"] = tool if tool else "llm_fallback"
     # state['db']= db_selected
     state["data_dict"] = data_dict
     state["tool_prompt"] = tool_prompt
@@ -801,11 +801,11 @@ def spinnaker_qa_tool(state: State) -> State:
 
 def tool_router(state: State) -> str:
     """Route to appropriate tool based on agent decision"""
-    selected_tool = state.get("selected_tool", "spinnaker_qa_tool")
+    selected_tool = state.get("selected_tool", "llm_fallback")
 
     if selected_tool == "SQL_QA_Tool":
         return "sql_qa_tool"
     elif selected_tool == "Contract_Comparator_Tool":
         return "contract_comparator_tool"
     else:
-        return "spinnaker_qa_tool"
+        return "llm_fallback"
