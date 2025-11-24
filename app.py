@@ -1,58 +1,73 @@
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
-from loguru import logger
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from loguru import logger
+import uvicorn
+
 from dependencies import setup_app_state
 
 load_dotenv()
 
-app = FastAPI(
-    title="Adaptive RAG PoC",
-    version="1.0.0",
-    description="Self-RAG, Web Search and LLM Fallback",
-)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@asynccontextmanager
-async def app_lifespan(app: FastAPI):
+def create_app() -> FastAPI:
     """
-    Manages application lifecycle events, specifically for setup and teardown processes.
-
-    This asynchronous context manager is responsible for initializing and cleaning up resources
-    upon application startup and shutdown. It loads secrets from external sources and configures
-    the application state, ensuring resources are ready before handling any requests. Upon shutdown,
-    it can also manage resource deallocation and perform logging activities.
-
-    Parameters:
-    - app (FastAPI): The FastAPI application instance to manage.
-
-    Yields:
-    - None: This function does not return any value but ensures proper resource management.
-    
-    Exceptions:
-    - Exception: Catches and logs any exception that occurs during the setup process, particularly
-      when loading secrets or configuring the app state.
+    Factory function for creating a fully initialized FastAPI application.
+    This ensures clean separation of application instantiation and runtime.
     """
-    logger.info("Starting up...")
-    try:
-        setup_app_state(app)
-        yield
-    except (ValueError, EnvironmentError) as e:
-        logger.critical(f"Fatal error during application startup: {e}")
-        yield
-    finally:
-        logger.info("Shutting down... Cleaning up resources.")
 
-app.router.lifespan_context = app_lifespan
+    app = FastAPI(
+        title="Adaptive RAG PoC",
+        version="1.0.0",
+        description="Self-RAG, Web Search and LLM Fallback",
+    )
+
+    # ---------------------------------------------------------------------
+    # CORS Configuration
+    # ---------------------------------------------------------------------
+    # NOTE: allow_origins=["*"] is not recommended for production.
+    # Replace with your actual frontend domain(s).
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        """
+        Application startup and shutdown lifecycle manager.
+        Handles resource initialization and cleanup.
+        """
+        logger.info("Starting Adaptive RAG API server...")
+
+        try:
+            setup_app_state(app)
+            logger.info("Application state initialized successfully.")
+            yield
+        except Exception as e:
+            logger.critical(f"Unrecoverable error during startup: {e}")
+            # Yield to prevent FastAPI from silently dying without starting Uvicorn.
+            yield
+        finally:
+            logger.info("Server shutdown: releasing resources.")
+
+    app.router.lifespan_context = lifespan
+
+    return app
+
+
+app = create_app()
+
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0")
+    # In production, do NOT rely on this — use Gunicorn/Uvicorn workers.
+    uvicorn.run(
+        "app:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=False,
+        log_level="info"
+    )

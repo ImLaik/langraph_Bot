@@ -22,7 +22,6 @@ from product_prompts.MOG_IL_PROMPT import MOG_IL_PROMPT
 import logging
 from datetime import datetime
 
-
 load_dotenv()
 
 user = os.getenv("PG_USER")
@@ -124,7 +123,6 @@ REACT_SQL_PROMPT = PromptTemplate(
     {agent_scratchpad}
     """,
 )
-
 
 CONTRACT_SUMMARY_DATA_DICTIONARY = """
 # SPINNAKER ANALYTICS DATABASE
@@ -301,7 +299,6 @@ Each contract PDF may contain multiple rows, but **contract_id** represents a si
 Now, generate the most accurate and optimized SQL query based on the user’s question.
 """
 
-
 PRODUCT_ALLOWED_TABLES = {
     "market-overview": [
         "il_mi_population",
@@ -317,13 +314,10 @@ PRODUCT_ALLOWED_TABLES = {
     "contract-summary": ["contract_summary"],
 }
 
-
 class DBStore:
     db = None
 
-
 db_store = DBStore()
-
 
 def build_postgres_uri():
     print(f"user: {user}_{password}_{host}_{port}_{dbname}")
@@ -552,7 +546,7 @@ def call_your_agent(state: State) -> State:
     question = state["question"]
     page_url = state["page_url"]
     messages = state["messages"]
-    csv_data = pd.read_csv("Spinnaker Bot Mapping.csv")
+    csv_data = pd.read_csv("Bot Mapping.csv")
     print(page_url)
     matching_row = csv_data[csv_data["Product Catalog Module url"] == page_url].iloc[0]
     print("📋 Available columns:", csv_data.columns.tolist())
@@ -562,11 +556,7 @@ def call_your_agent(state: State) -> State:
     data_dict = matching_row["Data Dictionary "]
     tool_prompt = matching_row["Tool_Prompt"]
     relevant_tables = matching_row["Relevant Tables"]
-    print(tool)
-    # print(db_selected)
-    print(data_dict)
-    print(tool_prompt)
-    print(relevant_tables)
+
 
     # Store which tool to use
     state["selected_tool"] = tool if tool else "llm_fallback"
