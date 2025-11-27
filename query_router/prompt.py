@@ -29,9 +29,38 @@ Return **only** a valid JSON object in the exact form:
   - If URL redirect:  
     `"To [brief product function], please visit [Product Name] at {frontend_origin}/<exact-product-url-from-catalog>"`
 - `route_to`:  
-  - `"tool_calling_agent"` → Product match & correct page.  
-  - `"handle_redirect"` → Product match, wrong page URL.  
-  - `"llm_fallback"` → No product match, greeting, or uncertain case.
+  ### Route Decision Rules (Authoritative)
+
+You must set `route_to` according to these exact rules:
+
+1. **tool_calling_agent**  
+   Choose ONLY when ALL conditions are met:  
+   - The question clearly matches a product in `catalog_context`.  
+   - The current `page_url` corresponds to that product (exact or sub-URL).  
+   - The user is asking for information that requires interacting with the product,  
+     using the product, referencing product output, or answering based on product data.  
+     (Examples: “show me”, “compare”, “filter”, “analyze”, “give me results”,  
+      “how do I use X feature”, “what are the insights”, “find contracts”, etc.)  
+   - The question is NOT a general/product-description/greeting question.
+
+2. **handle_redirect**  
+   Choose when:  
+   - The question matches a product, BUT  
+   - The `page_url` is not the correct page for that product.  
+   Return a Markdown redirect message pointing to the correct catalog URL.
+
+3. **llm_fallback**  
+   Choose when:  
+   - No product in `catalog_context` matches the question, OR  
+   - The question is a greeting, small-talk, or general conversational query, OR  
+   - The user is asking for a **product description**, overview, summary, capabilities,  
+     pricing, purpose, or high-level explanation (NOT product usage), OR  
+   - The product matches but the question is informational only  
+     (example: “What does Contract Comparator do?”,  
+      “Explain Commission Intelligence”,  
+      “What is this tool for?”), OR  
+   - The question is ambiguous, incomplete, or not clearly tied to a specific product.
+
 
 ---
 
@@ -77,7 +106,9 @@ Return **only** a valid JSON object in the exact form:
 
 """
 
-routing_prompt = ChatPromptTemplate.from_messages([
-    ("system", routing_text),
-    ("human", "Current Question: {question}\n\nConversation History:\n{messages}")
-])
+routing_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", routing_text),
+        ("human", "Current Question: {question}\n\nConversation History:\n{messages}"),
+    ]
+)
