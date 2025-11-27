@@ -1,120 +1,161 @@
 import os
+from typing import Dict, Any, Optional
 import pandas as pd
 from loguru import logger
-from typing import Dict, Any
-from fastapi import HTTPException
-from parent_graph.state import ParentState
+from langgraph.graph import END, START, StateGraph
+from utils.states import WorkingState
 
-def tool_calling_agent_graph(state: ParentState) -> Dict[str, Any]:
+# Node constants
+NODE_EXTRACT_TOOL = "extract_tool_name"
+
+# CSV configuration
+TOOL_MAPPING_CSV = "tool_mapping.csv"
+REQUIRED_COLUMNS = {"product_catalog_module_url", "agent_tool"}
+
+# Base URL your CSV expects
+PRODUCT_BASE_URL = "https://www.spinnakerhub.com"
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+def _load_mapping_csv(path: str) -> pd.DataFrame:
     """
-    Resolve the correct tool/agent for the current page based on a CSV mapping table.
-
-    Returns:
-        dict with keys:
-        - generation: tool name or fallback message
-        - tool_info: optional metadata from CSV row
-        - selected_tool: name of the resolved tool
-        - next: node to route to
+    Load the tool mapping CSV with strict validation.
+    Throws ValueError for any structural errors.
     """
-
-    logger.info("Tool-calling agent graph triggered.")
-
-    # -------------------------------------------------------------------------
-    # Validate required state fields
-    # -------------------------------------------------------------------------
-    page_url = state["page_url"]
-
-    if not page_url:
-        logger.error("State is missing 'page_url'.")
-        return {
-            "generation": "No page URL provided; cannot resolve tool.",
-            "next": "llm_fallback_graph"
-        }
-
-    # -------------------------------------------------------------------------
-    # Validate CSV availability
-    # -------------------------------------------------------------------------
-    mapping_path = "tool_mapping.csv"
-    if not os.path.exists(mapping_path):
-        msg = f"CSV mapping file not found: {mapping_path}"
+    if not os.path.exists(path):
+        msg = f"Tool mapping CSV not found: {path}"
         logger.critical(msg)
-        raise HTTPException(status_code=500, detail=msg)
+        raise ValueError(msg)
 
-    # -------------------------------------------------------------------------
-    # Read mapping CSV safely
-    # -------------------------------------------------------------------------
     try:
-        csv_data = pd.read_csv(mapping_path)
-    except Exception as e:
-        logger.critical(f"Failed reading tool mapping CSV: {e}")
-        raise HTTPException(status_code=500, detail="Invalid tool mapping CSV file.")
+        df = pd.read_csv(path, dtype=str)  # Treat everything as string to avoid dtype surprises.
+    except Exception as exc:
+        msg = f"Failed to read tool mapping CSV: {exc}"
+        logger.critical(msg)
+        raise ValueError(msg)
 
-    required_columns = {"product_catalog_module_url", "agent_tool"}
-    missing = required_columns - set(csv_data.columns)
-
+    missing = REQUIRED_COLUMNS - set(df.columns)
     if missing:
         msg = f"Tool mapping CSV missing required columns: {missing}"
         logger.critical(msg)
-        raise HTTPException(status_code=500, detail=msg)
+        raise ValueError(msg)
 
-    # -------------------------------------------------------------------------
-    # Construct lookup URL
-    # -------------------------------------------------------------------------
-    full_url = f"https://www.spinnakerhub.com{page_url}"
+    # Normalize columns to avoid trailing spaces or URL formatting issues
+    df["product_catalog_module_url"] = df["product_catalog_module_url"].astype(str).str.strip()
+    df["agent_tool"] = df["agent_tool"].astype(str).str.strip()
 
-    # -------------------------------------------------------------------------
-    # Lookup matching tool
-    # -------------------------------------------------------------------------
-    matching_rows = csv_data[csv_data["product_catalog_module_url"] == full_url]
+    return df
 
-    if matching_rows.empty:
-        logger.warning(f"No matching tool found for page_url='{page_url}', full_url='{full_url}'")
-        return {
-            "generation": "No matching tool found; falling back to default handling.",
-            "selected_tool": None,
-            "next": "llm_fallback_graph"
-        }
 
-    row = matching_rows.iloc[0]
-    tool_name = row["agent_tool"]
+def _resolve_tool_for_page(df: pd.DataFrame, full_url: str) -> Optional[Dict[str, Any]]:
+    """
+    Given a loaded DataFrame and full URL, return the matching CSV row as a dict.
+    Returns None when unmatched.
+    """
+    match = df[df["product_catalog_module_url"] == full_url]
+    if match.empty:
+        return None
+    return match.iloc[0].to_dict()
 
-    if not isinstance(tool_name, str) or not tool_name.strip():
-        logger.warning(f"Tool name missing or invalid for CSV row: {row.to_dict()}")
-        return {
-            "generation": "Invalid tool mapping; cannot proceed.",
-            "selected_tool": None,
-            "next": "llm_fallback_graph"
-        }
 
-    row_dict = row.to_dict()
+# ---------------------------------------------------------------------------
+# Node logic
+# ---------------------------------------------------------------------------
+def extract_tool_name(state: WorkingState) -> WorkingState:
+    """
+    Resolve the correct tool based on the page URL using a CSV mapping table.
 
-    logger.info(f"Matched tool: {tool_name}")
-    logger.debug(f"Resolved tool metadata: {row_dict}")
+    Mutates and returns the WorkingState with keys:
+        - selected_tool: resolved tool name or None
+        - tool_info: metadata dict from the CSV (when matched)
+        - generation: any fallback message
+        - next: target node
+    """
+    logger.info("tool_calling_agent_graph: extract_tool_name triggered.")
 
-    # -------------------------------------------------------------------------
-    # Validate next-node routing target
-    # -------------------------------------------------------------------------
-    # NOTE: If your graph has only fixed nodes, ensure this tool_name is valid.
-    # allowed_nodes = {"handle_redirect", "tool_calling_agent_graph", "llm_fallback_graph"}
+    # ----------------------------------------------------------------------
+    # Validate required state
+    # ----------------------------------------------------------------------
+    page_url = state.get("page_url")
+    if not page_url:
+        logger.error("Missing 'page_url' in state; cannot resolve tool.")
+        state["generation"] = "No page URL provided; cannot resolve tool."
+        state["selected_tool"] = None
+        state["next"] = "llm_fallback_graph"
+        return state
 
-    # if tool_name not in allowed_nodes:
-    #     logger.warning(
-    #         f"Resolved tool '{tool_name}', but no graph node exists with this name. "
-    #         "Falling back to llm_fallback_graph."
-    #     )
-    #     return {
-    #         "generation": tool_name,
-    #         "tool_info": row_dict,
-    #         "selected_tool": tool_name,
-    #         "next": "llm_fallback_graph"
-    #     }
+    # Normalize incoming page_url to avoid trailing slash issues
+    page_url = str(page_url).strip()
 
-    # -------------------------------------------------------------------------
-    # Success → Route to appropriate tool node
-    # -------------------------------------------------------------------------
-    return {
-        "generation": tool_name,
-        "tool_info": row_dict,
-        "selected_tool": tool_name,
-        "next": tool_name
-    }
+    # ----------------------------------------------------------------------
+    # Load CSV
+    # ----------------------------------------------------------------------
+    try:
+        mapping_df = _load_mapping_csv(TOOL_MAPPING_CSV)
+    except ValueError as exc:
+        logger.error(f"Tool mapping load failed: {exc}")
+        state["generation"] = "Tool mapping unavailable. Reverting to default handling."
+        state["selected_tool"] = None
+        state["next"] = "llm_fallback_graph"
+        return state
+
+    # ----------------------------------------------------------------------
+    # Construct fully qualified URL used in mapping table
+    # ----------------------------------------------------------------------
+    full_url = f"{PRODUCT_BASE_URL}{page_url}"
+    logger.debug(f"Resolving tool for full URL: {full_url}")
+
+    # ----------------------------------------------------------------------
+    # Lookup tool in CSV
+    # ----------------------------------------------------------------------
+    row_dict = _resolve_tool_for_page(mapping_df, full_url)
+
+    if row_dict is None:
+        logger.warning(f"No tool match found for URL: {full_url}")
+        state["generation"] = "No matching tool found. Switching to default handling."
+        state["selected_tool"] = None
+        state["next"] = "llm_fallback_graph"
+        return state
+
+    tool_name = row_dict.get("agent_tool")
+
+    if not tool_name or not isinstance(tool_name, str) or not tool_name.strip():
+        logger.warning(f"Invalid or empty tool name in CSV row: {row_dict}")
+        state["generation"] = "Invalid tool mapping; cannot proceed."
+        state["selected_tool"] = None
+        state["next"] = "llm_fallback_graph"
+        return state
+
+    # ----------------------------------------------------------------------
+    # Success
+    # ----------------------------------------------------------------------
+    logger.info(f"Resolved tool: {tool_name}")
+    logger.debug(f"Tool metadata: {row_dict}")
+
+    state["tool_info"] = row_dict
+    state["selected_tool"] = tool_name
+    state["next"] = tool_name  # downstream graph routes based on node name
+
+    return state
+
+
+# ---------------------------------------------------------------------------
+# Graph builder
+# ---------------------------------------------------------------------------
+def build_tool_calling_agent_graph() -> StateGraph:
+    graph = StateGraph(WorkingState)
+
+    graph.add_node(NODE_EXTRACT_TOOL, extract_tool_name)
+
+    graph.add_edge(START, NODE_EXTRACT_TOOL)
+    graph.add_edge(NODE_EXTRACT_TOOL, END)
+
+    compiled = graph.compile()
+    logger.info("tool_calling_agent_graph compiled.")
+    return compiled
+
+
+# Build graph on import (matching your existing pattern)
+tool_calling_agent_graph = build_tool_calling_agent_graph()

@@ -1,90 +1,132 @@
 import os
 import re
 import logging
+import importlib
+from typing import Optional, Any, Dict, Callable, List, Union, Tuple
 
-from typing import Optional, Any
-from typing import Any, Dict, Callable, List
+from dotenv import load_dotenv
 from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
 from langchain_chroma import Chroma
-from dotenv import load_dotenv
 from langchain_core.documents import Document
-from parent_graph.state import ParentState
-from tools.sql_agent.state import SQLAgentState
-import importlib
+
+from utils.states import WorkingState, OutputState
 
 logger = logging.getLogger(__name__)
-
 load_dotenv()
 
+# ---------------------------------------------------------------------------
+# ENVIRONMENT CONFIG LOADING
+# ---------------------------------------------------------------------------
+
+def _require_env(var: str) -> str:
+    value = os.getenv(var)
+    if not value:
+        raise EnvironmentError(f"Missing required environment variable: {var}")
+    return value
+
+AZURE_ENDPOINT = _require_env("AZURE_OPENAI_ENDPOINT")
+AZURE_API_KEY = _require_env("AZURE_OPENAI_API_KEY")
+AZURE_API_VERSION = _require_env("AZURE_OPENAI_API_VERSION")
+
+DEFAULT_GPT_MODEL = _require_env("AZURE_OPENAI_GPT_4o_MODEL")
+DEFAULT_EMBED_MODEL = _require_env("AZURE_OPENAI_EMBEDDING_MODEL")
+
+
+# ---------------------------------------------------------------------------
+# LLM CREATION
+# ---------------------------------------------------------------------------
 def create_llm(
+    *,
     azure_deployment: Optional[str] = None,
     azure_endpoint: Optional[str] = None,
     openai_api_key: Optional[str] = None,
     openai_api_version: Optional[str] = None,
     temperature: Optional[float] = None,
     temperature_required: Optional[bool] = None,
-    **extra_params: Any,
+    **params: Any,
 ) -> AzureChatOpenAI:
-    """Creates an AzureChatOpenAI instance with environment-based fallbacks."""
-    
-    azure_deployment = azure_deployment or os.getenv("AZURE_OPENAI_GPT_4o_MODEL")
-    azure_endpoint = azure_endpoint or os.getenv("AZURE_OPENAI_ENDPOINT")
-    openai_api_key = openai_api_key or os.getenv("AZURE_OPENAI_API_KEY")
-    openai_api_version = openai_api_version or os.getenv("AZURE_OPENAI_API_VERSION")
-    
-    missing_configs = {
-        "AZURE_OPENAI_GPT_4o_MODEL": azure_deployment,
-        "AZURE_OPENAI_ENDPOINT": azure_endpoint,
-        "AZURE_OPENAI_API_KEY": openai_api_key,
-        "AZURE_OPENAI_API_VERSION": openai_api_version,
-    }
-    
-    missing = [key for key, value in missing_configs.items() if not value]
+    """
+    Creates an AzureChatOpenAI instance with strict validation.
+    Safely handles temperature logic and guarantees required config exists.
+    """
+
+    azure_deployment = azure_deployment or DEFAULT_GPT_MODEL
+    azure_endpoint = azure_endpoint or AZURE_ENDPOINT
+    openai_api_key = openai_api_key or AZURE_API_KEY
+    openai_api_version = openai_api_version or AZURE_API_VERSION
+
+    missing = [
+        name
+        for name, value in {
+            "azure_deployment": azure_deployment,
+            "azure_endpoint": azure_endpoint,
+            "openai_api_key": openai_api_key,
+            "openai_api_version": openai_api_version,
+        }.items()
+        if not value
+    ]
     if missing:
-        raise ValueError(f"Missing required configurations: {', '.join(missing)}")
-    
+        raise ValueError(f"Missing required configuration values: {', '.join(missing)}")
+
     if temperature_required and temperature is None:
         raise ValueError("Temperature is required but not provided.")
-    if temperature_required is False and temperature is not None:
-        logger.warning("Temperature provided but ignored.")
-    
+
+    # No temperature expected, warn and ignore if provided
+    if temperature_required is False:
+        if temperature is not None:
+            logger.warning("Temperature provided but ignored (temperature_required=False)")
+        temperature = None
+
     return AzureChatOpenAI(
         azure_deployment=azure_deployment,
         azure_endpoint=azure_endpoint,
         openai_api_key=openai_api_key,
         openai_api_version=openai_api_version,
-        temperature=temperature if temperature_required is not False else None,
-        **extra_params
+        temperature=temperature,
+        **params,
     )
 
+
+# ---------------------------------------------------------------------------
+# SERVICE INVOCATION WRAPPER
+# ---------------------------------------------------------------------------
 def invoke_with_logging(
     service_func: Callable[[Dict[str, Any]], Any],
     payload: Dict[str, Any],
-    service_name: str
+    service_name: str,
 ) -> Any:
     """
-    Helper function to invoke an external service with logging and error handling.
+    Wrap any call with structured logging and error propagation.
     """
     try:
-        logger.debug(f"Invoking {service_name} with payload: {payload}")
+        logger.debug(f"{service_name}: request payload={payload}")
         result = service_func(payload)
-        logger.debug(f"{service_name} result: {result}")
+        logger.debug(f"{service_name}: response={result}")
         return result
-    except Exception as e:
-        logger.error(f"Error invoking {service_name}: {e}")
+    except Exception as exc:
+        logger.error(f"{service_name} failed: {exc}")
         raise
 
+
+# ---------------------------------------------------------------------------
+# LOGGING DECORATOR
+# ---------------------------------------------------------------------------
 def log_function(func: Callable) -> Callable:
-    """
-    Decorator to log function entry and exit with function name.
-    """
     def wrapper(*args, **kwargs):
-        logger.info(f"Entering function: {func.__name__}")
-        result = func(*args, **kwargs)
-        logger.info(f"Exiting function: {func.__name__}")
-        return result
+        logger.info(f"Entering: {func.__name__}")
+        try:
+            result = func(*args, **kwargs)
+            logger.info(f"Exiting: {func.__name__}")
+            return result
+        except Exception:
+            logger.exception(f"Error in function: {func.__name__}")
+            raise
     return wrapper
 
+
+# ---------------------------------------------------------------------------
+# VECTOR CONTEXT RETRIEVAL
+# ---------------------------------------------------------------------------
 def get_relevant_catalog_context(
     question: str,
     page_url: str,
@@ -93,194 +135,180 @@ def get_relevant_catalog_context(
     collection_name: str = "routing_prompts",
     persist_directory: str = "./chroma_db",
     embeddings: Optional[AzureOpenAIEmbeddings] = None,
-    vectorstore: Optional[Chroma] = None
+    vectorstore: Optional[Chroma] = None,
 ) -> str:
     """
-    Retrieve relevant context from Chroma based on the question and page URL.
-
-    Parameters
-    ----------
-    question : str
-        User question or query.
-    page_url : str
-        Current page URL to add contextual relevance.
-    k : int, optional
-        Number of top results to retrieve. Default is 3.
-    collection_name : str, optional
-        Chroma collection name.
-    persist_directory : str, optional
-        Directory where Chroma DB is persisted.
-    embeddings : AzureOpenAIEmbeddings, optional
-        Pre-initialized embedding model.
-    vectorstore : Chroma, optional
-        Pre-initialized vector store.
-
-    Returns
-    -------
-    str
-        Concatenated relevant context.
+    Perform semantic search with strict input validation and safety.
     """
 
-    # ------------------------------------------------------------
-    # Validate inputs
-    # ------------------------------------------------------------
     if not question or not question.strip():
-        raise ValueError("Parameter 'question' must be a non-empty string.")
+        raise ValueError("Question must be a non-empty string.")
 
     if not page_url or not page_url.strip():
-        raise ValueError("Parameter 'page_url' must be a non-empty string.")
+        raise ValueError("Page URL must be a non-empty string.")
 
-    # ------------------------------------------------------------
-    # Initialize embeddings if not provided
-    # ------------------------------------------------------------
     if embeddings is None:
-        azure_deployment = os.getenv("AZURE_OPENAI_EMBEDDING_MODEL")
-        openai_api_key = os.getenv("AZURE_OPENAI_API_KEY")
-        azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-        openai_api_version = os.getenv("AZURE_OPENAI_API_VERSION")
-
-        missing_vars = [
-            var for var, val in {
-                "AZURE_OPENAI_EMBEDDING_MODEL": azure_deployment,
-                "AZURE_OPENAI_API_KEY": openai_api_key,
-                "AZURE_OPENAI_ENDPOINT": azure_endpoint,
-                "AZURE_OPENAI_API_VERSION": openai_api_version,
-            }.items() 
-            if not val
-        ]
-
-        if missing_vars:
-            raise EnvironmentError(
-                f"Missing required environment variables: {', '.join(missing_vars)}"
-            )
-
-        logger.debug("Initializing Azure OpenAI Embeddings...")
         embeddings = AzureOpenAIEmbeddings(
-            azure_deployment=azure_deployment,
-            openai_api_key=openai_api_key,
-            azure_endpoint=azure_endpoint,
-            openai_api_version=openai_api_version
+            azure_deployment=DEFAULT_EMBED_MODEL,
+            openai_api_key=AZURE_API_KEY,
+            azure_endpoint=AZURE_ENDPOINT,
+            openai_api_version=AZURE_API_VERSION,
         )
 
-    # ------------------------------------------------------------
-    # Initialize vectorstore if not provided
-    # ------------------------------------------------------------
     if vectorstore is None:
-        logger.debug("Loading Chroma vectorstore...")
         vectorstore = Chroma(
             collection_name=collection_name,
             persist_directory=persist_directory,
-            embedding_function=embeddings
+            embedding_function=embeddings,
         )
 
-    # ------------------------------------------------------------
-    # Query vectorstore
-    # ------------------------------------------------------------
-    query_string = f"{question.strip()} {page_url.strip()}"
-
-    logger.info(f"Performing similarity search for query: {query_string}")
+    query = question.strip()
+    logger.info(f"Vector search: query='{query}'")
 
     try:
-        results: List[Document] = vectorstore.similarity_search(query_string, k=k)
-    except Exception as e:
-        logger.error(f"Vectorstore query failed: {e}")
-        raise RuntimeError("Failed to query vectorstore.") from e
+        results: List[Document] = vectorstore.similarity_search(query, k=k)
+    except Exception as exc:
+        logger.error(f"Vectorstore similarity_search failed: {exc}")
+        raise RuntimeError("Failed to query vectorstore.") from exc
 
     if not results:
-        logger.warning("No relevant documents found in the vectorstore.")
+        logger.warning("Vectorstore returned no relevant documents.")
         return ""
 
-    # ------------------------------------------------------------
-    # Construct context
-    # ------------------------------------------------------------
-    context = "\n\n".join(doc.page_content for doc in results)
-    logger.debug(f"Retrieved {len(results)} documents.")
+    return "\n\n".join(doc.page_content for doc in results)
 
-    return context
 
-def parse_relevant_tables(value):
-    """Convert '[a, b, c]' → ['a', 'b', 'c']"""
+# ---------------------------------------------------------------------------
+# PARSERS
+# ---------------------------------------------------------------------------
+def parse_relevant_tables(value: Union[str, list, None]) -> Union[List[str], None]:
+    if not value:
+        return value
+
     if isinstance(value, str):
         cleaned = re.sub(r"[\[\]]", "", value)
-        tables = [t.strip() for t in cleaned.split(",") if t.strip()]
-        return tables
+        return [v.strip() for v in cleaned.split(",") if v.strip()]
+
     return value
 
+
+def parse_array_str(value: Union[str, list, None]) -> Union[List[str], None]:
+    if not value:
+        return value
+
+    if isinstance(value, str):
+        cleaned = re.sub(r"[\[\]]", "", value)
+        return [
+            v.strip().strip('"').strip("'")
+            for v in cleaned.split(",")
+            if v.strip()
+        ]
+
+    return value
+
+
+# ---------------------------------------------------------------------------
+# DYNAMIC PROMPT LOADER
+# ---------------------------------------------------------------------------
 def load_product_prompt(prompt_name: str) -> str:
     """
-    Dynamically load a product prompt constant from a file in product_prompts folder.
-
-    prompt_name: The constant name, which should also match the file name.
-                 Example: MOG_IL_PROMPT → product_prompts/MOG_IL_PROMPT.py
+    Loads prompts dynamically from product_prompts/<prompt_name>.py
     """
-    PROMPT_FOLDER = "product_prompts"
+
+    module_path = f"product_prompts.{prompt_name}"
+
     try:
-        # Build module path - e.g. product_prompts.MOG_IL_PROMPT
-        module_path = f"{PROMPT_FOLDER}.{prompt_name}"
-        
-        # Import the module dynamically
         module = importlib.import_module(module_path)
-        
-        # Get the constant inside the module that matches the name
-        return getattr(module, prompt_name)
-    
     except ModuleNotFoundError:
-        raise FileNotFoundError(f"Prompt file for '{prompt_name}' not found in {PROMPT_FOLDER}")
+        raise FileNotFoundError(f"Prompt file not found: {module_path}")
+
+    try:
+        return getattr(module, prompt_name)
     except AttributeError:
-        raise ValueError(f"Prompt variable '{prompt_name}' not found inside {module_path}")
-    
-def parent_to_sql_agent(state: ParentState) -> SQLAgentState:
-    return {
-        "question": state["question"],
-        "tool_info": state["tool_info"],
-        "sql_query": None,
-        "assumptions": None,
-        "db": None,
-        "df_json": None,
-        "summary": None,
-        "error": None,
-    }
+        raise ValueError(f"Prompt variable '{prompt_name}' missing in module '{module_path}'")
 
-def sql_agent_to_parent(sql_state: SQLAgentState) -> ParentState:
+
+# ---------------------------------------------------------------------------
+# STATE TRANSFORMERS
+# ---------------------------------------------------------------------------
+def to_working_from_input(input_obj: Any) -> WorkingState:
+    data = (
+        input_obj.model_dump()
+        if hasattr(input_obj, "model_dump")
+        else dict(input_obj)
+    )
+
+    return WorkingState(
+        question=data.get("question"),
+        page_url=data.get("page_url"),
+        frontend_origin=data.get("frontend_origin"),
+        contracts=data.get("contracts"),
+        metrics=data.get("metrics"),
+        messages=[],  # Always initialize empty
+    )
+
+
+def finalize_to_output(state: WorkingState) -> OutputState:
+    if state.get("error"):
+        return OutputState(generation=f"Error: {state['error']}")
+
+    generation = state.get("generation") or "No output generated."
+    return OutputState(generation=generation)
+
+
+# ---------------------------------------------------------------------------
+# CONTRACT FILTERING
+# ---------------------------------------------------------------------------
+def filter_contracts(
+    contract_list: List[Dict[str, Any]],
+    metrics: List[str],
+    contracts: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
     """
-    Merges SQL outputs back into parent state.
-    Puts final SQL summary into 'generation' so that parent graph output is consistent
-    regardless of downstream node.
+    Filter contracts deterministically and attach 'isPrimary'.
     """
-    parent_state: ParentState = {
-        **sql_state,                # brings sql_query, assumptions, df_json, summary, etc.
-        "messages": [],             # preserve/initialize messages here
-        "next": None,
-    }
 
-    # Populate generation from summary or error
-    if sql_state.get("error"):
-        parent_state["generation"] = f"SQL Agent Error: {sql_state['error']}"
-    else:
-        parent_state["generation"] = sql_state.get("summary", "No summary generated.")
+    if not contract_list:
+        return []
 
-    return parent_state
+    if not metrics:
+        metrics = []
 
-def filter_contracts(contract_list, metrics, contracts):
-    print(f"\nContract list: {contract_list}")
-    print(f"\nMetrics: {metrics}")
-    print(f"\nContracts: {contracts}")
-    keys = [
-        "primary_carrier_name",
-        "carrier_name",
-        "plan_name",
-    ]
+    keys = ["primary_carrier_name", "carrier_name", "plan_name"]
     filtered_keys = keys + metrics
 
-    # Build a mapping from hash_key to isPrimary
-    contracts_map = {c['hash_key']: c['isPrimary'] for c in contracts}
+    hash_map = {c["hash_key"]: c.get("isPrimary") for c in contracts}
 
-    filtered_contracts = []
+    output = []
     for contract in contract_list:
-        c = {}
+        filtered = {}
         for key in filtered_keys:
-            c[key] = contract[key]
-        c['isPrimary'] = contracts_map.get(contract['hash_key'])
-        filtered_contracts.append(c)
+            if key in contract:
+                filtered[key] = contract[key]
+        filtered["isPrimary"] = hash_map.get(contract.get("hash_key"))
+        output.append(filtered)
 
-    return filtered_contracts
+    return output
+
+
+# ---------------------------------------------------------------------------
+# VECTOR STORE LOADER
+# ---------------------------------------------------------------------------
+def load_vector_retriever() -> Tuple[Chroma, Any]:
+    parent_dir = os.path.normpath(__file__).rsplit(os.sep, maxsplit=2)[0]
+    vector_db_dir = f"{parent_dir}/llm_fallback/VectorStore/spinnaker_chatbot_data"
+
+    embeddings = AzureOpenAIEmbeddings(
+        openai_api_key=AZURE_API_KEY,
+        azure_endpoint=AZURE_ENDPOINT,
+        azure_deployment=DEFAULT_EMBED_MODEL,
+        openai_api_version=AZURE_API_VERSION,
+    )
+
+    vector_store = Chroma(
+        collection_name="vector_store",
+        persist_directory=vector_db_dir,
+        embedding_function=embeddings,
+    )
+
+    return vector_store, vector_store.as_retriever()

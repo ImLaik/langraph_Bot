@@ -13,3 +13,8 @@ class RouteQuery(BaseModel):
         None,
         description="Markdown-formatted friendly message guiding the user to the correct product page if location is incorrect, otherwise null."
     )
+    route_to: Optional[str] = Field(
+        ...,
+        description="Tell where to route"
+    )
+    

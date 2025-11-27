@@ -1,4 +1,5 @@
 import json
+import re
 from typing import Dict, Any
 
 import pandas as pd
@@ -9,22 +10,21 @@ from langchain_core.messages import AIMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langgraph.graph import END, START, StateGraph
-from langgraph.checkpoint.memory import MemorySaver
 
-from db.sql_db import initialize_db
-from tools.sql_agent.state import SQLAgentState
+from db.sql_db import initialize_db_cached
 from tools.sql_agent.prompt import REACT_SQL_PROMPT, EXPLAIN_PROMPT
 from utils.utils import (
     parse_relevant_tables,
     create_llm,
     load_product_prompt,
 )
-import re
+from utils.states import WorkingState
+
 
 # ---------------------------------------------------------------------------
 # STEP 1 – Build SQL Query using LLM Agent
 # ---------------------------------------------------------------------------
-def prepare_sql_query(state: SQLAgentState) -> SQLAgentState:
+def prepare_sql_query(state: WorkingState) -> WorkingState:
     logger.info("STEP 1: Preparing SQL query...")
 
     question: str = state.get("question", "")
@@ -35,13 +35,14 @@ def prepare_sql_query(state: SQLAgentState) -> SQLAgentState:
         relevant_tables = parse_relevant_tables(tool_info.get("relevant_tables", ""))
         product_prompt_name = tool_info.get("product_prompt")
 
-        # Init DB + LLM
-        db = initialize_db(relevant_tables)
-        llm = create_llm()
+        # Prepare DB (cached)
+        allowed_tuple = tuple(sorted(relevant_tables)) if relevant_tables else None
+        db = initialize_db_cached(allowed_tuple)
 
+        llm = create_llm()
         product_prompt_text = load_product_prompt(product_prompt_name) or ""
 
-        # Build system prompt
+        # Build the system prompt
         system_prompt = REACT_SQL_PROMPT.format(
             input=question,
             agent_scratchpad="",
@@ -60,7 +61,7 @@ def prepare_sql_query(state: SQLAgentState) -> SQLAgentState:
             tools=tools,
             system_prompt=system_prompt,
         )
-        
+
         agent_response = agent.invoke(
             {
                 "input": question,
@@ -68,42 +69,43 @@ def prepare_sql_query(state: SQLAgentState) -> SQLAgentState:
             }
         )
 
-        # Get the last AIMessage
+        # Get last AIMessage
         final_message = next(
             (
                 msg
                 for msg in reversed(agent_response.get("messages", []))
-                if isinstance(msg, AIMessage) and msg.content and msg.content.strip()
+                if isinstance(msg, AIMessage)
+                and msg.content
+                and msg.content.strip()
             ),
             None,
         )
 
         if not final_message:
-            raise ValueError("No AI message with content found")
+            raise ValueError("No AIMessage content returned from SQL agent.")
 
         content = final_message.content.strip()
 
-        # If it contains "Final Answer:", remove prefix
+        # Strip "Final Answer:"
         if content.lower().startswith("final answer"):
             content = content.split(":", 1)[1].strip()
 
-        # Extract JSON using regex to handle cases where there's extra markdown
+        # Extract JSON block
         json_match = re.search(r"\{.*\}", content, re.DOTALL)
         if not json_match:
-            raise ValueError("No JSON found in final AI message")
+            raise ValueError("No JSON object detected in LLM output.")
 
         parsed = json.loads(json_match.group(0))
-
         sql_query = parsed.get("sql_query", "")
         assumptions = parsed.get("assumptions", "")
 
         if not sql_query:
-            raise ValueError("No SQL query detected in LLM output")
+            raise ValueError("SQL query missing in LLM output JSON.")
 
-        # Store in state
-        state["db"] = db
+        # Store results
         state["sql_query"] = sql_query
         state["assumptions"] = assumptions
+        state["allowed_tables"] = allowed_tuple  # Store key for DB reuse
 
         return state
 
@@ -116,28 +118,28 @@ def prepare_sql_query(state: SQLAgentState) -> SQLAgentState:
 # ---------------------------------------------------------------------------
 # STEP 2 – Execute SQL Query
 # ---------------------------------------------------------------------------
-def execute_sql(state: SQLAgentState) -> SQLAgentState:
+def execute_sql(state: WorkingState) -> WorkingState:
     logger.info("STEP 2: Executing SQL query...")
 
     if state.get("error"):
-        logger.warning("Skipping execute_sql due to earlier error")
+        logger.warning("Skipping execute_sql due to earlier error.")
         return state
 
-    sql_query: str = state.get("sql_query", "")
-    db = state.get("db")
+    sql_query = state.get("sql_query", "")
+    allowed_tables = state.get("allowed_tables")
 
     try:
         if not sql_query:
-            raise ValueError("SQL query missing from state")
+            raise ValueError("State missing sql_query.")
 
-        if not db:
-            raise ValueError("Database instance missing from state")
+        # Fetch cached DB again (safe)
+        db = initialize_db_cached(allowed_tables)
 
         with db._engine.connect() as conn:
             df = pd.read_sql(sql_query, conn)
 
         state["df_json"] = df.to_dict(orient="records")
-        logger.debug(f"SQL returned {len(state['df_json'])} rows")
+        logger.debug(f"SQL returned {len(state['df_json'])} rows.")
 
         return state
 
@@ -150,11 +152,11 @@ def execute_sql(state: SQLAgentState) -> SQLAgentState:
 # ---------------------------------------------------------------------------
 # STEP 3 – Natural Language Summary of Results
 # ---------------------------------------------------------------------------
-def summarize_results(state: SQLAgentState) -> SQLAgentState:
+def summarize_results(state: WorkingState) -> WorkingState:
     logger.info("STEP 3: Summarizing SQL results...")
 
     if state.get("error"):
-        logger.warning("Skipping summarize_results due to earlier error")
+        logger.warning("Skipping summarize_results due to earlier error.")
         return state
 
     try:
@@ -166,7 +168,9 @@ def summarize_results(state: SQLAgentState) -> SQLAgentState:
         llm = create_llm()
 
         df = pd.DataFrame(df_json)
-        sql_result_preview = df.head(10).to_string(index=False) if not df.empty else "No rows returned"
+        sql_result_preview = (
+            df.head(10).to_string(index=False) if not df.empty else "No rows returned"
+        )
 
         summary = (
             RunnablePassthrough()
@@ -182,8 +186,8 @@ def summarize_results(state: SQLAgentState) -> SQLAgentState:
             }
         )
 
-        state["summary"] = summary
-        logger.debug("Summary generated successfully")
+        state["generation"] = summary
+        logger.debug("Summary generated successfully.")
         return state
 
     except Exception as e:
@@ -195,7 +199,7 @@ def summarize_results(state: SQLAgentState) -> SQLAgentState:
 # ---------------------------------------------------------------------------
 # BUILD GRAPH
 # ---------------------------------------------------------------------------
-sql_agent_graph_builder = StateGraph(SQLAgentState)
+sql_agent_graph_builder = StateGraph(WorkingState)
 
 sql_agent_graph_builder.add_node("prepare_sql_query", prepare_sql_query)
 sql_agent_graph_builder.add_node("execute_sql", execute_sql)

@@ -1,43 +1,39 @@
-from __future__ import annotations
-
 from typing import Any, Dict, List
 
 from loguru import logger
 from langgraph.graph import END, START, StateGraph
 from langgraph.checkpoint.memory import MemorySaver
-from langchain_core.output_parsers import StrOutputParser
 
 from db.cosmo_db import CosmoDBConnection
-from parent_graph.state import ParentState
 from utils.utils import filter_contracts, create_llm, invoke_with_logging
 from query_router.prompt import routing_prompt
 from tools.contract_comparator.model import ContractComparator
 from tools.contract_comparator.prompt import contract_comparator_prompt
+from utils.states import WorkingState
 
 # ---------------------------------------------------------------------------
-# LLM INITIALIZATION (shared instance)
+# GLOBAL LLM INSTANCE (reused for performance and consistency)
 # ---------------------------------------------------------------------------
 llm = create_llm()
-
 
 # ---------------------------------------------------------------------------
 # NODE: Prepare Contracts
 # ---------------------------------------------------------------------------
-def prepare_contracts(state: ParentState) -> ParentState:
-    logger.info("Preparing contracts for comparison...")
+def prepare_contracts(state: WorkingState) -> WorkingState:
+    logger.info("Preparing contracts for comparison")
 
     try:
         page_url: str | None = state.get("page_url")
         if not page_url:
-            raise ValueError("Missing `page_url` in state")
+            raise ValueError("`page_url` is required in state")
 
         selected_metrics: list[str] | None = state.get("metrics")
-        selected_contracts: list[Dict[str, Any]] | None = state.get("contracts")
+        selected_contracts: List[Dict[str, Any]] | None = state.get("contracts")
 
         if not selected_contracts:
-            raise ValueError("No contracts provided to prepare")
+            raise ValueError("No contracts provided")
 
-        # Determine container
+        # Decide Cosmos container based on page source
         container_name = (
             "world_insurance_contract_comparator_db"
             if "property-and-casualty" in page_url
@@ -49,16 +45,13 @@ def prepare_contracts(state: ParentState) -> ParentState:
 
         contract_records: List[Dict[str, Any]] = []
 
-        # Fetch each contract’s data
         for contract_data in selected_contracts:
             carrier_name = contract_data.get("contractName")
             plan_name = contract_data.get("planName")
             hash_key = contract_data.get("hash_key")
 
             if not (carrier_name and plan_name and hash_key):
-                logger.warning(
-                    f"Skipping contract due to missing attributes: {contract_data}"
-                )
+                logger.warning(f"Skipping malformed contract: {contract_data}")
                 continue
 
             query = """
@@ -73,13 +66,19 @@ def prepare_contracts(state: ParentState) -> ParentState:
                 {"name": "@hash_key", "value": hash_key},
             ]
 
-            results = list(
-                container.query_items(
-                    query=query,
-                    parameters=parameters,
-                    partition_key=carrier_name,
+            try:
+                results = list(
+                    container.query_items(
+                        query=query,
+                        parameters=parameters,
+                        partition_key=carrier_name,
+                    )
                 )
-            )
+            except Exception:
+                logger.exception(
+                    f"CosmosDB query failure: carrier={carrier_name}, plan={plan_name}"
+                )
+                continue
 
             if not results:
                 logger.warning(
@@ -91,13 +90,13 @@ def prepare_contracts(state: ParentState) -> ParentState:
         if not contract_records:
             raise RuntimeError("No matching contract records found in CosmosDB")
 
-        # Filter the contract information
+        # Business filtering logic
         filtered_data = filter_contracts(
             contract_records, selected_metrics, selected_contracts
         )
 
         state["contracts"] = filtered_data
-        logger.info("Contract preparation completed.")
+        logger.info("Contract preparation successful")
         return state
 
     except Exception as exc:
@@ -109,8 +108,8 @@ def prepare_contracts(state: ParentState) -> ParentState:
 # ---------------------------------------------------------------------------
 # NODE: Contract Comparator
 # ---------------------------------------------------------------------------
-def contract_comparator(state: ParentState) -> ParentState:
-    logger.info("Running contract comparator...")
+def contract_comparator(state: WorkingState) -> WorkingState:
+    logger.info("Executing contract comparator")
 
     try:
         question: str | None = state.get("question")
@@ -118,21 +117,19 @@ def contract_comparator(state: ParentState) -> ParentState:
         context = state.get("contracts")
 
         if not question:
-            raise ValueError("Missing question for comparator")
-
+            raise ValueError("Missing question")
         if not context:
             raise ValueError("Missing contract data in state")
 
-        # Structured LLM wrapper
         structured_llm = llm.with_structured_output(
-            ContractComparator, 
-            method="function_calling"
+            ContractComparator,
+            method="function_calling",
         )
 
-        comparison_chain = contract_comparator_prompt | structured_llm
+        chain = contract_comparator_prompt | structured_llm
 
         response = invoke_with_logging(
-            comparison_chain.invoke,
+            chain.invoke,
             {
                 "question": question,
                 "metrics": metrics,
@@ -143,14 +140,13 @@ def contract_comparator(state: ParentState) -> ParentState:
         )
 
         response_dict = response.model_dump()
-
         final_response = response_dict.get("response")
+
         if not final_response:
-            raise RuntimeError("LLM did not produce a valid comparator response")
+            raise RuntimeError("Empty response from LLM comparator")
 
         state["generation"] = final_response
-        logger.info("Contract comparison completed successfully.")
-
+        logger.info("Contract comparison successful")
         return state
 
     except Exception as exc:
@@ -162,18 +158,17 @@ def contract_comparator(state: ParentState) -> ParentState:
 # ---------------------------------------------------------------------------
 # GRAPH DEFINITION
 # ---------------------------------------------------------------------------
-contract_comparator_graph_builder = StateGraph(ParentState)
+graph_builder = StateGraph(WorkingState)
 
-contract_comparator_graph_builder.add_node("prepare_contracts", prepare_contracts)
-contract_comparator_graph_builder.add_node("contract_comparator", contract_comparator)
+graph_builder.add_node("prepare_contracts", prepare_contracts)
+graph_builder.add_node("contract_comparator", contract_comparator)
 
-contract_comparator_graph_builder.add_edge(START, "prepare_contracts")
-contract_comparator_graph_builder.add_edge("prepare_contracts", "contract_comparator")
-contract_comparator_graph_builder.add_edge("contract_comparator", END)
+graph_builder.add_edge(START, "prepare_contracts")
+graph_builder.add_edge("prepare_contracts", "contract_comparator")
+graph_builder.add_edge("contract_comparator", END)
 
-# Enable optional checkpointing if desired
+# For checkpointing, uncomment:
 # memory = MemorySaver()
-# contract_comparator_graph = contract_comparator_graph_builder.compile(checkpointer=memory)
+# contract_comparator_graph = graph_builder.compile(checkpointer=memory)
 
-contract_comparator_graph = contract_comparator_graph_builder.compile()
-
+contract_comparator_graph = graph_builder.compile()
