@@ -65,7 +65,9 @@ When the user doesn't specify dimensions, apply these defaults for tables annuit
 - **Examples:**
     - "What's the total premium?" → GROUP BY year, metric HAVING year = 2023 AND metric = 'Sales'
     - "Whats the total client premium" -> GROUP BY year, metric HAVING year = 2023 and metric = 'Sales'
-    - "Premium by state (for Alaska)" → GROUP BY year, state, metric HAVING year = 2023 AND metric = 'Sales' AND state = 'AK'
+    - "Premium by state (for Alaska)" → select year, metric, state, sum(client_a_premium) from annuity_mog_data
+        group  by year, metric, state
+        having year = 2023 and metric in ('Sales') and state in ('AK')
     - "Premium by product" → GROUP BY year, product, metric HAVING year = 2023 AND metric = 'Sales'
 
 
