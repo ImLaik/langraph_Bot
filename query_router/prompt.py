@@ -39,7 +39,7 @@ You must set `route_to` according to these exact rules:
    - The current `page_url` corresponds to that product (exact or sub-URL).  
    - The user is asking for information that requires interacting with the product,  
      using the product, referencing product output, or answering based on product data.  
-     (Examples: “show me”, “compare”, “filter”, “analyze”, “give me results”,  
+     (Examples: “show me”, “compare”, “filter”, “analyze”, “give me results”, "summarize these images",  
       “how do I use X feature”, “what are the insights”, “find contracts”, etc.)  
    - The question is NOT a general/product-description/greeting question.
 

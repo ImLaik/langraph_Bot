@@ -25,7 +25,6 @@ def build_prompt(image_urls, question, messages):
 
     # Attach images if available
     for image_url in image_urls:
-        # print(f"\nimage url {image_url}")
         prompt.append({"type": "image_url", "image_url": {"url": image_url}})
 
     return ChatPromptTemplate.from_messages([HumanMessage(content=prompt)])

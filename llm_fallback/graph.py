@@ -18,7 +18,7 @@ def get_docs(state: WorkingState) -> WorkingState:
     """
     Retrieve relevant documents for a given question using the configured vector store.
     """
-    logger.info("Executing: get_docs")
+    logger.info("Executing: LLM Fallback...")
 
     question = state.get("question")
     if not question:
@@ -45,7 +45,6 @@ def generate_response(state: WorkingState) -> WorkingState:
     """
     Generate the LLM response based on the question, chat history, and retrieved context.
     """
-    logger.info("Executing: generate_response")
 
     question: Optional[str] = state.get("question")
     messages: Optional[List[Dict[str, Any]]] = state.get("messages")
@@ -58,6 +57,7 @@ def generate_response(state: WorkingState) -> WorkingState:
         logger.warning("No context provided to generate_response. Proceeding without context.")
 
     llm = create_llm()
+    
     if llm is None:
         raise RuntimeError("create_llm() returned None. Cannot proceed.")
 
@@ -87,6 +87,7 @@ def generate_response(state: WorkingState) -> WorkingState:
         raise ValueError("StructuredResponse did not return 'response'.")
 
     state["generation"] = response_text
+    logger.info("Executed: LLM fallback executed successfully")
     return state
 
 

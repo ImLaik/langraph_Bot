@@ -1,0 +1,1247 @@
+2025-12-03 17:35:31.857 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-03 17:35:31.862 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-03 17:35:32.418 | ERROR    | Agent.graph:agent:51 - LLM generation error.
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 352
+               │     └ 3
+               └ <function _main at 0x00000288E9A6F060>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 352
+           │    └ <function BaseProcess._bootstrap at 0x00000288E99649A0>
+           └ <SpawnProcess name='SpawnProcess-1' parent=10880 started>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x00000288E995BEC0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=10880 started>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x00000288E9A38380>, 'target': <bound method Server.run of <uvicorn.server.Server...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=10880 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=10880 started>
+    │    └ <function subprocess_started at 0x00000288EBE72CA0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=10880 started>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\uvicorn\_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=384, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x00000288EBFE3440>>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\uvicorn\server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+           │           │    │             │                      │    │      └ <function Config.get_loop_factory at 0x00000288EBDC3240>
+           │           │    │             │                      │    └ <uvicorn.config.Config object at 0x00000288E9A38380>
+           │           │    │             │                      └ <uvicorn.server.Server object at 0x00000288EBFE3440>
+           │           │    │             └ [<socket.socket fd=384, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+           │           │    └ <function Server.serve at 0x00000288EBE72160>
+           │           └ <uvicorn.server.Server object at 0x00000288EBFE3440>
+           └ <function run at 0x00000288E9A6FF60>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x00000288EBFCEEA0>
+           │      └ <function Runner.run at 0x00000288EB75F380>
+           └ <asyncio.runners.Runner object at 0x00000288E9A38320>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at C:\Production\Langraph Master Bot\venv\Lib\site-packages\uvicorn\...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x00000288EB75CF40>
+           │    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x00000288E9A38320>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 678, in run_until_complete
+    self.run_forever()
+    │    └ <function BaseEventLoop.run_forever at 0x00000288EB75CEA0>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 645, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x00000288EB75ECA0>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 1999, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x00000288EB6A4860>
+    └ <Handle Task.task_wakeup(<Future finished result=None>)>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finished result=None>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finished result=None>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finished result=None>)>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+          │    │   │      │                      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x000002889249F380>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.sessions.SessionMiddleware object at 0x00000288924415E0>
+          └ <starlette.middleware.base.BaseHTTPMiddleware object at 0x00000288924415B0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\sessions.py", line 85, in __call__
+    await self.app(scope, receive, send_wrapper)
+          │    │   │      │        └ <function SessionMiddleware.__call__.<locals>.send_wrapper at 0x000002889249F1A0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.cors.CORSMiddleware object at 0x0000028892441550>
+          └ <starlette.middleware.sessions.SessionMiddleware object at 0x00000288924415E0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+          │    │               │      │        │                     └ Headers({'host': '127.0.0.1:8000', 'connection': 'keep-alive', 'content-length': '163', 'sec-ch-ua-platform': '"Windows"', 'u...
+          │    │               │      │        └ <function SessionMiddleware.__call__.<locals>.send_wrapper at 0x000002889249F1A0>
+          │    │               │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │               └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <function CORSMiddleware.simple_response at 0x00000288923BBEC0>
+          └ <starlette.middleware.cors.CORSMiddleware object at 0x0000028892441550>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+          │    │   │      │        └ functools.partial(<bound method CORSMiddleware.send of <starlette.middleware.cors.CORSMiddleware object at 0x0000028892441550...
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x00000288924416A0>
+          └ <starlette.middleware.cors.CORSMiddleware object at 0x0000028892441550>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ functools.partial(<bound method CORSMiddleware.send of <starlette.middleware.cors.CORSMiddleware object at 0x0000028892441550...
+          │                            │    │    │     │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │                            │    │    │     └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    │    └ <starlette.requests.Request object at 0x00000288924A4C20>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x0000028892441730>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x00000288924416A0>
+          └ <function wrap_app_handling_exceptions at 0x00000288ED042480>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F060>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x0000028892441730>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F060>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <fastapi.routing.APIRouter object at 0x00000288923E6390>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x0000028892441730>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F060>
+          │    │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <bound method Router.app of <fastapi.routing.APIRouter object at 0x00000288923E6390>>
+          └ <fastapi.routing.APIRouter object at 0x00000288923E6390>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F060>
+          │     │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │     └ <function Route.handle at 0x00000288ED043A60>
+          └ APIRoute(path='/api/master_bot/queries', name='master_bot_query', methods=['POST'])
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F060>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <function request_response.<locals>.app at 0x00000288924500E0>
+          └ APIRoute(path='/api/master_bot/queries', name='master_bot_query', methods=['POST'])
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F060>
+          │                            │    │        │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │                            │    │        └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    └ <starlette.requests.Request object at 0x00000288924A4DA0>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x000002889249F100>
+          └ <function wrap_app_handling_exceptions at 0x00000288ED042480>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F420>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <function request_response.<locals>.app.<locals>.app at 0x000002889249F100>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 111, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x00000288924A4DA0>
+                     └ <function get_request_handler.<locals>.app at 0x00000288ED0A3F60>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x00000288ED0658A0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 290, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'payload': InputState(question='what is the total market premium', page_url='/home', frontend_origin=None, contracts=[], met...
+                 │         └ <function master_bot_query at 0x00000288ED1460C0>
+                 └ Dependant(path_params=[], query_params=[], header_params=[], cookie_params=[], body_params=[ModelField(field_info=Body(Pydant...
+
+  File "C:\Production\Langraph Master Bot\routes\parent_graph.py", line 62, in master_bot_query
+    raw_state = typed_graph.invoke(payload, config={"configurable": {"thread_id": session_id}})
+                │           │      │                                              └ '228dd63d-3c38-4635-8c22-75b9baa6856e'
+                │           │      └ {'question': 'what is the total market premium', 'page_url': '/home', 'frontend_origin': 'http://localhost:3000', 'contracts'...
+                │           └ <function RunnableBindingBase.invoke at 0x00000288EEE5C860>
+                └ RunnableBinding(bound=<langgraph.graph.state.CompiledStateGraph object at 0x00000288923E4D70>, kwargs={}, config={}, config_f...
+
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\runnables\base.py", line 5534, in invoke
+    return self.bound.invoke(
+           │    │     └ <function Pregel.invoke at 0x00000288EEFB5A80>
+           │    └ <langgraph.graph.state.CompiledStateGraph object at 0x00000288923E4D70>
+           └ RunnableBinding(bound=<langgraph.graph.state.CompiledStateGraph object at 0x00000288923E4D70>, kwargs={}, config={}, config_f...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\main.py", line 3050, in invoke
+    for chunk in self.stream(
+        │        │    └ <function Pregel.stream at 0x00000288EEFB5940>
+        │        └ <langgraph.graph.state.CompiledStateGraph object at 0x00000288923E4D70>
+        └ ('values', {'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total mar...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\main.py", line 2633, in stream
+    for _ in runner.tick(
+        │    │      └ <function PregelRunner.tick at 0x00000288EEFA3740>
+        │    └ <langgraph.pregel._runner.PregelRunner object at 0x00000288924A5640>
+        └ None
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\_runner.py", line 167, in tick
+    run_with_retry(
+    └ <function run_with_retry at 0x00000288EEFA2CA0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\_retry.py", line 42, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           │    │           │    │      └ {'metadata': {'thread_id': '228dd63d-3c38-4635-8c22-75b9baa6856e', 'langgraph_step': 2, 'langgraph_node': 'agent_graph', 'lan...
+           │    │           │    └ <member 'input' of 'PregelExecutableTask' objects>
+           │    │           └ PregelExecutableTask(name='agent_graph', input={'messages': [{'role': 'user', 'content': 'what is the total market premium'}]...
+           │    └ <member 'proc' of 'PregelExecutableTask' objects>
+           └ PregelExecutableTask(name='agent_graph', input={'messages': [{'role': 'user', 'content': 'what is the total market premium'}]...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 656, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            │       │   │    │       │      │         └ {}
+            │       │   │    │       │      └ {'metadata': {'thread_id': '228dd63d-3c38-4635-8c22-75b9baa6856e', 'langgraph_step': 2, 'langgraph_node': 'agent_graph', 'lan...
+            │       │   │    │       └ {'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premium...
+            │       │   │    └ <function RunnableCallable.invoke at 0x00000288EEEDDE40>
+            │       │   └ agent_graph(tags=None, recurse=True, explode_args=False, func_accepts={})
+            │       └ <method 'run' of '_contextvars.Context' objects>
+            └ <_contextvars.Context object at 0x00000288924A8680>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 400, in invoke
+    ret = self.func(*args, **kwargs)
+          │    │     │       └ {}
+          │    │     └ ({'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premiu...
+          │    └ <function build_parent_graph.<locals>.<lambda> at 0x00000288923BA700>
+          └ agent_graph(tags=None, recurse=True, explode_args=False, func_accepts={})
+
+  File "C:\Production\Langraph Master Bot\parent_graph\graph.py", line 155, in <lambda>
+    lambda state: call_subgraph_preserving_state(agent_graph, state, "agent_graph"),
+           │      │                              │            └ {'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premium...
+           │      │                              └ <langgraph.graph.state.CompiledStateGraph object at 0x00000288923E4080>
+           │      └ <function call_subgraph_preserving_state at 0x000002888E676020>
+           └ {'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premium...
+
+  File "C:\Production\Langraph Master Bot\utils\utils.py", line 447, in call_subgraph_preserving_state
+    result = subgraph.invoke(state)
+             │        │      └ {'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premium...
+             │        └ <function Pregel.invoke at 0x00000288EEFB5A80>
+             └ <langgraph.graph.state.CompiledStateGraph object at 0x00000288923E4080>
+
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\main.py", line 3050, in invoke
+    for chunk in self.stream(
+        │        │    └ <function Pregel.stream at 0x00000288EEFB5940>
+        │        └ <langgraph.graph.state.CompiledStateGraph object at 0x00000288923E4080>
+        └ ('values', {'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total mar...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\main.py", line 2633, in stream
+    for _ in runner.tick(
+        │    │      └ <function PregelRunner.tick at 0x00000288EEFA3740>
+        │    └ <langgraph.pregel._runner.PregelRunner object at 0x00000288924A56A0>
+        └ None
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\_runner.py", line 167, in tick
+    run_with_retry(
+    └ <function run_with_retry at 0x00000288EEFA2CA0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\_retry.py", line 42, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           │    │           │    │      └ {'metadata': {'thread_id': '228dd63d-3c38-4635-8c22-75b9baa6856e', 'langgraph_step': 1, 'langgraph_node': 'agent', 'langgraph...
+           │    │           │    └ <member 'input' of 'PregelExecutableTask' objects>
+           │    │           └ PregelExecutableTask(name='agent', input={'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'que...
+           │    └ <member 'proc' of 'PregelExecutableTask' objects>
+           └ PregelExecutableTask(name='agent', input={'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'que...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 656, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            │       │   │    │       │      │         └ {}
+            │       │   │    │       │      └ {'metadata': {'thread_id': '228dd63d-3c38-4635-8c22-75b9baa6856e', 'langgraph_step': 1, 'langgraph_node': 'agent', 'langgraph...
+            │       │   │    │       └ {'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premium...
+            │       │   │    └ <function RunnableCallable.invoke at 0x00000288EEEDDE40>
+            │       │   └ agent(tags=None, recurse=True, explode_args=False, func_accepts={})
+            │       └ <method 'run' of '_contextvars.Context' objects>
+            └ <_contextvars.Context object at 0x000002889244D840>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 400, in invoke
+    ret = self.func(*args, **kwargs)
+          │    │     │       └ {}
+          │    │     └ ({'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premiu...
+          │    └ <function agent at 0x00000288923B9EE0>
+          └ agent(tags=None, recurse=True, explode_args=False, func_accepts={})
+
+> File "C:\Production\Langraph Master Bot\Agent\graph.py", line 42, in agent
+    model_output = chain.invoke(
+                   │     └ <function RunnableSequence.invoke at 0x00000288EEE4CD60>
+                   └ ChatPromptTemplate(input_variables=['\n  "response"', 'messages', 'page_url', 'question'], input_types={}, partial_variables=...
+
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\runnables\base.py", line 3127, in invoke
+    input_ = context.run(step.invoke, input_, config, **kwargs)
+             │       │   │    │       │       │         └ {}
+             │       │   │    │       │       └ {'tags': [], 'metadata': {'thread_id': '228dd63d-3c38-4635-8c22-75b9baa6856e', 'langgraph_step': 1, 'langgraph_node': 'agent'...
+             │       │   │    │       └ {'question': 'what is the total market premium', 'messages': [{'role': 'user', 'content': 'what is the total market premium'}...
+             │       │   │    └ <function BasePromptTemplate.invoke at 0x000002888E677740>
+             │       │   └ ChatPromptTemplate(input_variables=['\n  "response"', 'messages', 'page_url', 'question'], input_types={}, partial_variables=...
+             │       └ <method 'run' of '_contextvars.Context' objects>
+             └ <_contextvars.Context object at 0x00000288924A8580>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\prompts\base.py", line 217, in invoke
+    return self._call_with_config(
+           │    └ <function Runnable._call_with_config at 0x00000288EEE37A60>
+           └ ChatPromptTemplate(input_variables=['\n  "response"', 'messages', 'page_url', 'question'], input_types={}, partial_variables=...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\runnables\base.py", line 2050, in _call_with_config
+    context.run(
+    │       └ <method 'run' of '_contextvars.Context' objects>
+    └ <_contextvars.Context object at 0x00000288924B9880>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\runnables\config.py", line 428, in call_func_with_variable_args
+    return func(input, **kwargs)  # type: ignore[call-arg]
+           │    │        └ {}
+           │    └ {'question': 'what is the total market premium', 'messages': [{'role': 'user', 'content': 'what is the total market premium'}...
+           └ <bound method BasePromptTemplate._format_prompt_with_error_handling of ChatPromptTemplate(input_variables=['\n  "response"', ...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\prompts\base.py", line 190, in _format_prompt_with_error_handling
+    inner_input_ = self._validate_input(inner_input)
+                   │    │               └ {'question': 'what is the total market premium', 'messages': [{'role': 'user', 'content': 'what is the total market premium'}...
+                   │    └ <function BasePromptTemplate._validate_input at 0x000002888E677560>
+                   └ ChatPromptTemplate(input_variables=['\n  "response"', 'messages', 'page_url', 'question'], input_types={}, partial_variables=...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\prompts\base.py", line 184, in _validate_input
+    raise KeyError(
+
+KeyError: 'Input to ChatPromptTemplate is missing variables {\'\\n  "response"\'}.  Expected: [\'\\n  "response"\', \'messages\', \'page_url\', \'question\'] Received: [\'question\', \'messages\', \'page_url\']\nNote: if you intended {\n  "response"} to be part of the string and not a variable, please escape it with double curly braces like: \'{{\n  "response"}}\'.\nFor troubleshooting, visit: https://docs.langchain.com/oss/python/langchain/errors/INVALID_PROMPT_INPUT '
+2025-12-03 17:35:32.736 | ERROR    | routes.parent_graph:master_bot_query:77 - Master bot request failed: 'next'
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 352
+               │     └ 3
+               └ <function _main at 0x00000288E9A6F060>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 352
+           │    └ <function BaseProcess._bootstrap at 0x00000288E99649A0>
+           └ <SpawnProcess name='SpawnProcess-1' parent=10880 started>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x00000288E995BEC0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=10880 started>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x00000288E9A38380>, 'target': <bound method Server.run of <uvicorn.server.Server...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=10880 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=10880 started>
+    │    └ <function subprocess_started at 0x00000288EBE72CA0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=10880 started>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\uvicorn\_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=384, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x00000288EBFE3440>>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\uvicorn\server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+           │           │    │             │                      │    │      └ <function Config.get_loop_factory at 0x00000288EBDC3240>
+           │           │    │             │                      │    └ <uvicorn.config.Config object at 0x00000288E9A38380>
+           │           │    │             │                      └ <uvicorn.server.Server object at 0x00000288EBFE3440>
+           │           │    │             └ [<socket.socket fd=384, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+           │           │    └ <function Server.serve at 0x00000288EBE72160>
+           │           └ <uvicorn.server.Server object at 0x00000288EBFE3440>
+           └ <function run at 0x00000288E9A6FF60>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x00000288EBFCEEA0>
+           │      └ <function Runner.run at 0x00000288EB75F380>
+           └ <asyncio.runners.Runner object at 0x00000288E9A38320>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at C:\Production\Langraph Master Bot\venv\Lib\site-packages\uvicorn\...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x00000288EB75CF40>
+           │    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x00000288E9A38320>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 678, in run_until_complete
+    self.run_forever()
+    │    └ <function BaseEventLoop.run_forever at 0x00000288EB75CEA0>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 645, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x00000288EB75ECA0>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 1999, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x00000288EB6A4860>
+    └ <Handle Task.task_wakeup(<Future finished result=None>)>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finished result=None>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finished result=None>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finished result=None>)>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+          │    │   │      │                      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x000002889249F380>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.sessions.SessionMiddleware object at 0x00000288924415E0>
+          └ <starlette.middleware.base.BaseHTTPMiddleware object at 0x00000288924415B0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\sessions.py", line 85, in __call__
+    await self.app(scope, receive, send_wrapper)
+          │    │   │      │        └ <function SessionMiddleware.__call__.<locals>.send_wrapper at 0x000002889249F1A0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.cors.CORSMiddleware object at 0x0000028892441550>
+          └ <starlette.middleware.sessions.SessionMiddleware object at 0x00000288924415E0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+          │    │               │      │        │                     └ Headers({'host': '127.0.0.1:8000', 'connection': 'keep-alive', 'content-length': '163', 'sec-ch-ua-platform': '"Windows"', 'u...
+          │    │               │      │        └ <function SessionMiddleware.__call__.<locals>.send_wrapper at 0x000002889249F1A0>
+          │    │               │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │               └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <function CORSMiddleware.simple_response at 0x00000288923BBEC0>
+          └ <starlette.middleware.cors.CORSMiddleware object at 0x0000028892441550>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+          │    │   │      │        └ functools.partial(<bound method CORSMiddleware.send of <starlette.middleware.cors.CORSMiddleware object at 0x0000028892441550...
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x00000288924416A0>
+          └ <starlette.middleware.cors.CORSMiddleware object at 0x0000028892441550>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ functools.partial(<bound method CORSMiddleware.send of <starlette.middleware.cors.CORSMiddleware object at 0x0000028892441550...
+          │                            │    │    │     │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │                            │    │    │     └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    │    └ <starlette.requests.Request object at 0x00000288924A4C20>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x0000028892441730>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x00000288924416A0>
+          └ <function wrap_app_handling_exceptions at 0x00000288ED042480>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F060>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x0000028892441730>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F060>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <fastapi.routing.APIRouter object at 0x00000288923E6390>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x0000028892441730>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F060>
+          │    │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <bound method Router.app of <fastapi.routing.APIRouter object at 0x00000288923E6390>>
+          └ <fastapi.routing.APIRouter object at 0x00000288923E6390>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F060>
+          │     │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │     └ <function Route.handle at 0x00000288ED043A60>
+          └ APIRoute(path='/api/master_bot/queries', name='master_bot_query', methods=['POST'])
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F060>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <function request_response.<locals>.app at 0x00000288924500E0>
+          └ APIRoute(path='/api/master_bot/queries', name='master_bot_query', methods=['POST'])
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F060>
+          │                            │    │        │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │                            │    │        └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    └ <starlette.requests.Request object at 0x00000288924A4DA0>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x000002889249F100>
+          └ <function wrap_app_handling_exceptions at 0x00000288ED042480>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002889249F420>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x00000288EBFEF740>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <function request_response.<locals>.app.<locals>.app at 0x000002889249F100>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 111, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x00000288924A4DA0>
+                     └ <function get_request_handler.<locals>.app at 0x00000288ED0A3F60>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x00000288ED0658A0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 290, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'payload': InputState(question='what is the total market premium', page_url='/home', frontend_origin=None, contracts=[], met...
+                 │         └ <function master_bot_query at 0x00000288ED1460C0>
+                 └ Dependant(path_params=[], query_params=[], header_params=[], cookie_params=[], body_params=[ModelField(field_info=Body(Pydant...
+
+> File "C:\Production\Langraph Master Bot\routes\parent_graph.py", line 62, in master_bot_query
+    raw_state = typed_graph.invoke(payload, config={"configurable": {"thread_id": session_id}})
+                │           │      │                                              └ '228dd63d-3c38-4635-8c22-75b9baa6856e'
+                │           │      └ {'question': 'what is the total market premium', 'page_url': '/home', 'frontend_origin': 'http://localhost:3000', 'contracts'...
+                │           └ <function RunnableBindingBase.invoke at 0x00000288EEE5C860>
+                └ RunnableBinding(bound=<langgraph.graph.state.CompiledStateGraph object at 0x00000288923E4D70>, kwargs={}, config={}, config_f...
+
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\runnables\base.py", line 5534, in invoke
+    return self.bound.invoke(
+           │    │     └ <function Pregel.invoke at 0x00000288EEFB5A80>
+           │    └ <langgraph.graph.state.CompiledStateGraph object at 0x00000288923E4D70>
+           └ RunnableBinding(bound=<langgraph.graph.state.CompiledStateGraph object at 0x00000288923E4D70>, kwargs={}, config={}, config_f...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\main.py", line 3050, in invoke
+    for chunk in self.stream(
+        │        │    └ <function Pregel.stream at 0x00000288EEFB5940>
+        │        └ <langgraph.graph.state.CompiledStateGraph object at 0x00000288923E4D70>
+        └ ('values', {'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total mar...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\main.py", line 2633, in stream
+    for _ in runner.tick(
+        │    │      └ <function PregelRunner.tick at 0x00000288EEFA3740>
+        │    └ <langgraph.pregel._runner.PregelRunner object at 0x00000288924A5640>
+        └ None
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\_runner.py", line 167, in tick
+    run_with_retry(
+    └ <function run_with_retry at 0x00000288EEFA2CA0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\_retry.py", line 42, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           │    │           │    │      └ {'metadata': {'thread_id': '228dd63d-3c38-4635-8c22-75b9baa6856e', 'langgraph_step': 2, 'langgraph_node': 'agent_graph', 'lan...
+           │    │           │    └ <member 'input' of 'PregelExecutableTask' objects>
+           │    │           └ PregelExecutableTask(name='agent_graph', input={'messages': [{'role': 'user', 'content': 'what is the total market premium'}]...
+           │    └ <member 'proc' of 'PregelExecutableTask' objects>
+           └ PregelExecutableTask(name='agent_graph', input={'messages': [{'role': 'user', 'content': 'what is the total market premium'}]...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 658, in invoke
+    input = step.invoke(input, config)
+            │    │      │      └ {'metadata': {'thread_id': '228dd63d-3c38-4635-8c22-75b9baa6856e', 'langgraph_step': 2, 'langgraph_node': 'agent_graph', 'lan...
+            │    │      └ {'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premium...
+            │    └ <function RunnableCallable.invoke at 0x00000288EEEDDE40>
+            └ _route(tags=None, recurse=True, explode_args=False, func_accepts={'config': ('N/A', <class 'inspect._empty'>)}, _is_channel_w...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 400, in invoke
+    ret = self.func(*args, **kwargs)
+          │    │     │       └ {'writer': <function CompiledStateGraph.attach_branch.<locals>.get_writes at 0x00000288923BB600>, 'reader': functools.partial...
+          │    │     └ ({'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premiu...
+          │    └ <bound method BranchSpec._route of BranchSpec(path=RunnableCallable(tags=None, recurse=True, explode_args=False, func_accepts...
+          └ _route(tags=None, recurse=True, explode_args=False, func_accepts={'config': ('N/A', <class 'inspect._empty'>)}, _is_channel_w...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\graph\_branch.py", line 166, in _route
+    result = self.path.invoke(value, config)
+             │    │           │      └ {'metadata': {'thread_id': '228dd63d-3c38-4635-8c22-75b9baa6856e', 'langgraph_step': 2, 'langgraph_node': 'agent_graph', 'lan...
+             │    │           └ {'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premium...
+             │    └ _tuplegetter(0, 'Alias for field number 0')
+             └ BranchSpec(path=RunnableCallable(tags=None, recurse=True, explode_args=False, func_accepts={}), ends={'route_question': 'rout...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 393, in invoke
+    ret = context.run(self.func, *args, **kwargs)
+          │       │   │    │      │       └ {}
+          │       │   │    │      └ ({'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premiu...
+          │       │   │    └ <function build_parent_graph.<locals>.<lambda> at 0x00000288923BAAC0>
+          │       │   └ RunnableCallable(tags=None, recurse=True, explode_args=False, func_accepts={})
+          │       └ <method 'run' of '_contextvars.Context' objects>
+          └ <_contextvars.Context object at 0x00000288924B9A00>
+
+  File "C:\Production\Langraph Master Bot\parent_graph\graph.py", line 187, in <lambda>
+    lambda state: state["next"],
+           │      └ {'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premium...
+           └ {'messages': [{'role': 'user', 'content': 'what is the total market premium'}], 'question': 'what is the total market premium...
+
+KeyError: 'next'
+During task with name 'agent_graph' and id 'd64b6d61-7211-9a98-0153-f4309541f661'
+2025-12-03 17:37:30.151 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-03 17:37:30.159 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-03 17:37:33.263 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-03 17:37:36.889 | INFO     | parent_graph.graph:route_question:118 - Routing to redirect flow with message.
+2025-12-03 17:37:36.903 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-03 17:39:13.249 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-03 17:39:13.251 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-03 17:39:15.557 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-03 17:43:30.238 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-03 17:43:30.244 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-03 17:43:33.078 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-03 17:51:15.083 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-03 17:51:15.094 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-03 17:51:18.060 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-03 17:53:39.054 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-03 17:53:39.057 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-03 17:53:42.741 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 12:50:00.948 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 12:50:00.979 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 12:50:04.594 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-04 12:50:09.969 | INFO     | parent_graph.graph:route_question:118 - Routing to redirect flow with message.
+2025-12-04 12:50:09.980 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 12:50:23.117 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 12:50:23.173 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 12:50:26.995 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 12:58:17.539 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 12:58:17.550 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 12:58:18.929 | ERROR    | Agent.graph:agent:51 - LLM generation error.
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 352
+               │     └ 3
+               └ <function _main at 0x000001F8BC31F060>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 352
+           │    └ <function BaseProcess._bootstrap at 0x000001F8BC2149A0>
+           └ <SpawnProcess name='SpawnProcess-1' parent=26996 started>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x000001F8BC20BEC0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=26996 started>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x000001F8BC2E8380>, 'target': <bound method Server.run of <uvicorn.server.Server...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=26996 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=26996 started>
+    │    └ <function subprocess_started at 0x000001F8BE6B2CA0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=26996 started>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\uvicorn\_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=756, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x000001F8BE823440>>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\uvicorn\server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+           │           │    │             │                      │    │      └ <function Config.get_loop_factory at 0x000001F8BE603240>
+           │           │    │             │                      │    └ <uvicorn.config.Config object at 0x000001F8BC2E8380>
+           │           │    │             │                      └ <uvicorn.server.Server object at 0x000001F8BE823440>
+           │           │    │             └ [<socket.socket fd=756, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+           │           │    └ <function Server.serve at 0x000001F8BE6B2160>
+           │           └ <uvicorn.server.Server object at 0x000001F8BE823440>
+           └ <function run at 0x000001F8BC31FF60>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x000001F8BE80EEA0>
+           │      └ <function Runner.run at 0x000001F8BDF6F380>
+           └ <asyncio.runners.Runner object at 0x000001F8BC2E8320>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at C:\Production\Langraph Master Bot\venv\Lib\site-packages\uvicorn\...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x000001F8BDF6CF40>
+           │    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x000001F8BC2E8320>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 678, in run_until_complete
+    self.run_forever()
+    │    └ <function BaseEventLoop.run_forever at 0x000001F8BDF6CEA0>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 645, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x000001F8BDF6ECA0>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 1999, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x000001F8BDE94860>
+    └ <Handle Task.task_wakeup(<Future finished result=None>)>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finished result=None>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finished result=None>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finished result=None>)>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+          │    │   │      │                      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x000001F8E4CFF060>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.sessions.SessionMiddleware object at 0x000001F8E4CA13A0>
+          └ <starlette.middleware.base.BaseHTTPMiddleware object at 0x000001F8E4CA0C20>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\sessions.py", line 85, in __call__
+    await self.app(scope, receive, send_wrapper)
+          │    │   │      │        └ <function SessionMiddleware.__call__.<locals>.send_wrapper at 0x000001F8E4CB1120>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.cors.CORSMiddleware object at 0x000001F8E4CA1610>
+          └ <starlette.middleware.sessions.SessionMiddleware object at 0x000001F8E4CA13A0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+          │    │               │      │        │                     └ Headers({'host': '127.0.0.1:8000', 'connection': 'keep-alive', 'content-length': '164', 'sec-ch-ua-platform': '"Windows"', 'u...
+          │    │               │      │        └ <function SessionMiddleware.__call__.<locals>.send_wrapper at 0x000001F8E4CB1120>
+          │    │               │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │               └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <function CORSMiddleware.simple_response at 0x000001F8E4C1BEC0>
+          └ <starlette.middleware.cors.CORSMiddleware object at 0x000001F8E4CA1610>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+          │    │   │      │        └ functools.partial(<bound method CORSMiddleware.send of <starlette.middleware.cors.CORSMiddleware object at 0x000001F8E4CA1610...
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000001F8E4CA0B90>
+          └ <starlette.middleware.cors.CORSMiddleware object at 0x000001F8E4CA1610>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ functools.partial(<bound method CORSMiddleware.send of <starlette.middleware.cors.CORSMiddleware object at 0x000001F8E4CA1610...
+          │                            │    │    │     │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │                            │    │    │     └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    │    └ <starlette.requests.Request object at 0x000001F8E4D050A0>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001F8E4CA0EC0>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000001F8E4CA0B90>
+          └ <function wrap_app_handling_exceptions at 0x000001F8BF882480>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFF2E0>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001F8E4CA0EC0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFF2E0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <fastapi.routing.APIRouter object at 0x000001F8E4C56330>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001F8E4CA0EC0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFF2E0>
+          │    │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <bound method Router.app of <fastapi.routing.APIRouter object at 0x000001F8E4C56330>>
+          └ <fastapi.routing.APIRouter object at 0x000001F8E4C56330>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFF2E0>
+          │     │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │     └ <function Route.handle at 0x000001F8BF883A60>
+          └ APIRoute(path='/api/master_bot/queries', name='master_bot_query', methods=['POST'])
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFF2E0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <function request_response.<locals>.app at 0x000001F8E4CB00E0>
+          └ APIRoute(path='/api/master_bot/queries', name='master_bot_query', methods=['POST'])
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFF2E0>
+          │                            │    │        │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │                            │    │        └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    └ <starlette.requests.Request object at 0x000001F8E4D05250>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x000001F8E4CFF380>
+          └ <function wrap_app_handling_exceptions at 0x000001F8BF882480>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFEF20>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <function request_response.<locals>.app.<locals>.app at 0x000001F8E4CFF380>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 111, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x000001F8E4D05250>
+                     └ <function get_request_handler.<locals>.app at 0x000001F8BF8E3F60>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x000001F8BF8A58A0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 290, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'payload': InputState(question='what is the total market premium?', page_url='/home', frontend_origin=None, contracts=[], me...
+                 │         └ <function master_bot_query at 0x000001F8BF9860C0>
+                 └ Dependant(path_params=[], query_params=[], header_params=[], cookie_params=[], body_params=[ModelField(field_info=Body(Pydant...
+
+  File "C:\Production\Langraph Master Bot\routes\parent_graph.py", line 62, in master_bot_query
+    raw_state = typed_graph.invoke(payload, config={"configurable": {"thread_id": session_id}})
+                │           │      │                                              └ '594ec2aa-b634-4abf-bb83-8871dc2c8bfe'
+                │           │      └ {'question': 'what is the total market premium?', 'page_url': '/home', 'frontend_origin': 'http://localhost:3000', 'contracts...
+                │           └ <function RunnableBindingBase.invoke at 0x000001F8C169C860>
+                └ RunnableBinding(bound=<langgraph.graph.state.CompiledStateGraph object at 0x000001F8E4C54C20>, kwargs={}, config={}, config_f...
+
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\runnables\base.py", line 5534, in invoke
+    return self.bound.invoke(
+           │    │     └ <function Pregel.invoke at 0x000001F8C17F5A80>
+           │    └ <langgraph.graph.state.CompiledStateGraph object at 0x000001F8E4C54C20>
+           └ RunnableBinding(bound=<langgraph.graph.state.CompiledStateGraph object at 0x000001F8E4C54C20>, kwargs={}, config={}, config_f...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\main.py", line 3050, in invoke
+    for chunk in self.stream(
+        │        │    └ <function Pregel.stream at 0x000001F8C17F5940>
+        │        └ <langgraph.graph.state.CompiledStateGraph object at 0x000001F8E4C54C20>
+        └ ('values', {'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total ma...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\main.py", line 2633, in stream
+    for _ in runner.tick(
+        │    │      └ <function PregelRunner.tick at 0x000001F8C17E3740>
+        │    └ <langgraph.pregel._runner.PregelRunner object at 0x000001F8E4D05BB0>
+        └ None
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\_runner.py", line 167, in tick
+    run_with_retry(
+    └ <function run_with_retry at 0x000001F8C17E2CA0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\_retry.py", line 42, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           │    │           │    │      └ {'metadata': {'thread_id': '594ec2aa-b634-4abf-bb83-8871dc2c8bfe', 'langgraph_step': 2, 'langgraph_node': 'agent_graph', 'lan...
+           │    │           │    └ <member 'input' of 'PregelExecutableTask' objects>
+           │    │           └ PregelExecutableTask(name='agent_graph', input={'messages': [{'role': 'user', 'content': 'what is the total market premium?'}...
+           │    └ <member 'proc' of 'PregelExecutableTask' objects>
+           └ PregelExecutableTask(name='agent_graph', input={'messages': [{'role': 'user', 'content': 'what is the total market premium?'}...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 656, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            │       │   │    │       │      │         └ {}
+            │       │   │    │       │      └ {'metadata': {'thread_id': '594ec2aa-b634-4abf-bb83-8871dc2c8bfe', 'langgraph_step': 2, 'langgraph_node': 'agent_graph', 'lan...
+            │       │   │    │       └ {'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premiu...
+            │       │   │    └ <function RunnableCallable.invoke at 0x000001F8C171DE40>
+            │       │   └ agent_graph(tags=None, recurse=True, explode_args=False, func_accepts={})
+            │       └ <method 'run' of '_contextvars.Context' objects>
+            └ <_contextvars.Context object at 0x000001F8E4D09400>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 400, in invoke
+    ret = self.func(*args, **kwargs)
+          │    │     │       └ {}
+          │    │     └ ({'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premi...
+          │    └ <function build_parent_graph.<locals>.<lambda> at 0x000001F8E4C1A700>
+          └ agent_graph(tags=None, recurse=True, explode_args=False, func_accepts={})
+
+  File "C:\Production\Langraph Master Bot\parent_graph\graph.py", line 155, in <lambda>
+    lambda state: call_subgraph_preserving_state(agent_graph, state, "agent_graph"),
+           │      │                              │            └ {'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premiu...
+           │      │                              └ <langgraph.graph.state.CompiledStateGraph object at 0x000001F8E4C0BB60>
+           │      └ <function call_subgraph_preserving_state at 0x000001F8E0EA6020>
+           └ {'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premiu...
+
+  File "C:\Production\Langraph Master Bot\utils\utils.py", line 447, in call_subgraph_preserving_state
+    result = subgraph.invoke(state)
+             │        │      └ {'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premiu...
+             │        └ <function Pregel.invoke at 0x000001F8C17F5A80>
+             └ <langgraph.graph.state.CompiledStateGraph object at 0x000001F8E4C0BB60>
+
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\main.py", line 3050, in invoke
+    for chunk in self.stream(
+        │        │    └ <function Pregel.stream at 0x000001F8C17F5940>
+        │        └ <langgraph.graph.state.CompiledStateGraph object at 0x000001F8E4C0BB60>
+        └ ('values', {'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total ma...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\main.py", line 2633, in stream
+    for _ in runner.tick(
+        │    │      └ <function PregelRunner.tick at 0x000001F8C17E3740>
+        │    └ <langgraph.pregel._runner.PregelRunner object at 0x000001F8E4D05C10>
+        └ None
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\_runner.py", line 167, in tick
+    run_with_retry(
+    └ <function run_with_retry at 0x000001F8C17E2CA0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\_retry.py", line 42, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           │    │           │    │      └ {'metadata': {'thread_id': '594ec2aa-b634-4abf-bb83-8871dc2c8bfe', 'langgraph_step': 1, 'langgraph_node': 'agent', 'langgraph...
+           │    │           │    └ <member 'input' of 'PregelExecutableTask' objects>
+           │    │           └ PregelExecutableTask(name='agent', input={'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'qu...
+           │    └ <member 'proc' of 'PregelExecutableTask' objects>
+           └ PregelExecutableTask(name='agent', input={'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'qu...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 656, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            │       │   │    │       │      │         └ {}
+            │       │   │    │       │      └ {'metadata': {'thread_id': '594ec2aa-b634-4abf-bb83-8871dc2c8bfe', 'langgraph_step': 1, 'langgraph_node': 'agent', 'langgraph...
+            │       │   │    │       └ {'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premiu...
+            │       │   │    └ <function RunnableCallable.invoke at 0x000001F8C171DE40>
+            │       │   └ agent(tags=None, recurse=True, explode_args=False, func_accepts={})
+            │       └ <method 'run' of '_contextvars.Context' objects>
+            └ <_contextvars.Context object at 0x000001F8E4C39240>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 400, in invoke
+    ret = self.func(*args, **kwargs)
+          │    │     │       └ {}
+          │    │     └ ({'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premi...
+          │    └ <function agent at 0x000001F8E4C19EE0>
+          └ agent(tags=None, recurse=True, explode_args=False, func_accepts={})
+
+> File "C:\Production\Langraph Master Bot\Agent\graph.py", line 42, in agent
+    model_output = chain.invoke(
+                   │     └ <function RunnableSequence.invoke at 0x000001F8C168CD60>
+                   └ ChatPromptTemplate(input_variables=['\n  "response"', 'messages', 'page_url', 'question'], input_types={}, partial_variables=...
+
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\runnables\base.py", line 3127, in invoke
+    input_ = context.run(step.invoke, input_, config, **kwargs)
+             │       │   │    │       │       │         └ {}
+             │       │   │    │       │       └ {'tags': [], 'metadata': {'thread_id': '594ec2aa-b634-4abf-bb83-8871dc2c8bfe', 'langgraph_step': 1, 'langgraph_node': 'agent'...
+             │       │   │    │       └ {'question': 'what is the total market premium?', 'messages': [{'role': 'user', 'content': 'what is the total market premium?...
+             │       │   │    └ <function BasePromptTemplate.invoke at 0x000001F8E0EA7740>
+             │       │   └ ChatPromptTemplate(input_variables=['\n  "response"', 'messages', 'page_url', 'question'], input_types={}, partial_variables=...
+             │       └ <method 'run' of '_contextvars.Context' objects>
+             └ <_contextvars.Context object at 0x000001F8E4C4D3C0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\prompts\base.py", line 217, in invoke
+    return self._call_with_config(
+           │    └ <function Runnable._call_with_config at 0x000001F8C1677A60>
+           └ ChatPromptTemplate(input_variables=['\n  "response"', 'messages', 'page_url', 'question'], input_types={}, partial_variables=...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\runnables\base.py", line 2050, in _call_with_config
+    context.run(
+    │       └ <method 'run' of '_contextvars.Context' objects>
+    └ <_contextvars.Context object at 0x000001F8E4D15F00>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\runnables\config.py", line 428, in call_func_with_variable_args
+    return func(input, **kwargs)  # type: ignore[call-arg]
+           │    │        └ {}
+           │    └ {'question': 'what is the total market premium?', 'messages': [{'role': 'user', 'content': 'what is the total market premium?...
+           └ <bound method BasePromptTemplate._format_prompt_with_error_handling of ChatPromptTemplate(input_variables=['\n  "response"', ...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\prompts\base.py", line 190, in _format_prompt_with_error_handling
+    inner_input_ = self._validate_input(inner_input)
+                   │    │               └ {'question': 'what is the total market premium?', 'messages': [{'role': 'user', 'content': 'what is the total market premium?...
+                   │    └ <function BasePromptTemplate._validate_input at 0x000001F8E0EA7560>
+                   └ ChatPromptTemplate(input_variables=['\n  "response"', 'messages', 'page_url', 'question'], input_types={}, partial_variables=...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\prompts\base.py", line 184, in _validate_input
+    raise KeyError(
+
+KeyError: 'Input to ChatPromptTemplate is missing variables {\'\\n  "response"\'}.  Expected: [\'\\n  "response"\', \'messages\', \'page_url\', \'question\'] Received: [\'question\', \'messages\', \'page_url\']\nNote: if you intended {\n  "response"} to be part of the string and not a variable, please escape it with double curly braces like: \'{{\n  "response"}}\'.\nFor troubleshooting, visit: https://docs.langchain.com/oss/python/langchain/errors/INVALID_PROMPT_INPUT '
+2025-12-04 12:58:19.504 | ERROR    | routes.parent_graph:master_bot_query:77 - Master bot request failed: 'next'
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 352
+               │     └ 3
+               └ <function _main at 0x000001F8BC31F060>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 352
+           │    └ <function BaseProcess._bootstrap at 0x000001F8BC2149A0>
+           └ <SpawnProcess name='SpawnProcess-1' parent=26996 started>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x000001F8BC20BEC0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=26996 started>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x000001F8BC2E8380>, 'target': <bound method Server.run of <uvicorn.server.Server...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=26996 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=26996 started>
+    │    └ <function subprocess_started at 0x000001F8BE6B2CA0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=26996 started>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\uvicorn\_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=756, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x000001F8BE823440>>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\uvicorn\server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+           │           │    │             │                      │    │      └ <function Config.get_loop_factory at 0x000001F8BE603240>
+           │           │    │             │                      │    └ <uvicorn.config.Config object at 0x000001F8BC2E8380>
+           │           │    │             │                      └ <uvicorn.server.Server object at 0x000001F8BE823440>
+           │           │    │             └ [<socket.socket fd=756, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+           │           │    └ <function Server.serve at 0x000001F8BE6B2160>
+           │           └ <uvicorn.server.Server object at 0x000001F8BE823440>
+           └ <function run at 0x000001F8BC31FF60>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x000001F8BE80EEA0>
+           │      └ <function Runner.run at 0x000001F8BDF6F380>
+           └ <asyncio.runners.Runner object at 0x000001F8BC2E8320>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at C:\Production\Langraph Master Bot\venv\Lib\site-packages\uvicorn\...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x000001F8BDF6CF40>
+           │    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x000001F8BC2E8320>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 678, in run_until_complete
+    self.run_forever()
+    │    └ <function BaseEventLoop.run_forever at 0x000001F8BDF6CEA0>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 645, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x000001F8BDF6ECA0>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 1999, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x000001F8BDE94860>
+    └ <Handle Task.task_wakeup(<Future finished result=None>)>
+  File "C:\Users\PrathameshShinde\AppData\Local\Programs\Python\Python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finished result=None>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finished result=None>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finished result=None>)>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+          │    │   │      │                      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x000001F8E4CFF060>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.sessions.SessionMiddleware object at 0x000001F8E4CA13A0>
+          └ <starlette.middleware.base.BaseHTTPMiddleware object at 0x000001F8E4CA0C20>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\sessions.py", line 85, in __call__
+    await self.app(scope, receive, send_wrapper)
+          │    │   │      │        └ <function SessionMiddleware.__call__.<locals>.send_wrapper at 0x000001F8E4CB1120>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.cors.CORSMiddleware object at 0x000001F8E4CA1610>
+          └ <starlette.middleware.sessions.SessionMiddleware object at 0x000001F8E4CA13A0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+          │    │               │      │        │                     └ Headers({'host': '127.0.0.1:8000', 'connection': 'keep-alive', 'content-length': '164', 'sec-ch-ua-platform': '"Windows"', 'u...
+          │    │               │      │        └ <function SessionMiddleware.__call__.<locals>.send_wrapper at 0x000001F8E4CB1120>
+          │    │               │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │               └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <function CORSMiddleware.simple_response at 0x000001F8E4C1BEC0>
+          └ <starlette.middleware.cors.CORSMiddleware object at 0x000001F8E4CA1610>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+          │    │   │      │        └ functools.partial(<bound method CORSMiddleware.send of <starlette.middleware.cors.CORSMiddleware object at 0x000001F8E4CA1610...
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000001F8E4CA0B90>
+          └ <starlette.middleware.cors.CORSMiddleware object at 0x000001F8E4CA1610>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ functools.partial(<bound method CORSMiddleware.send of <starlette.middleware.cors.CORSMiddleware object at 0x000001F8E4CA1610...
+          │                            │    │    │     │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │                            │    │    │     └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    │    └ <starlette.requests.Request object at 0x000001F8E4D050A0>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001F8E4CA0EC0>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000001F8E4CA0B90>
+          └ <function wrap_app_handling_exceptions at 0x000001F8BF882480>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFF2E0>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001F8E4CA0EC0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFF2E0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <fastapi.routing.APIRouter object at 0x000001F8E4C56330>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001F8E4CA0EC0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFF2E0>
+          │    │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <bound method Router.app of <fastapi.routing.APIRouter object at 0x000001F8E4C56330>>
+          └ <fastapi.routing.APIRouter object at 0x000001F8E4C56330>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFF2E0>
+          │     │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │     └ <function Route.handle at 0x000001F8BF883A60>
+          └ APIRoute(path='/api/master_bot/queries', name='master_bot_query', methods=['POST'])
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFF2E0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <function request_response.<locals>.app at 0x000001F8E4CB00E0>
+          └ APIRoute(path='/api/master_bot/queries', name='master_bot_query', methods=['POST'])
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFF2E0>
+          │                            │    │        │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │                            │    │        └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    └ <starlette.requests.Request object at 0x000001F8E4D05250>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x000001F8E4CFF380>
+          └ <function wrap_app_handling_exceptions at 0x000001F8BF882480>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001F8E4CFEF20>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000001F8E4CF47C0>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <function request_response.<locals>.app.<locals>.app at 0x000001F8E4CFF380>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 111, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x000001F8E4D05250>
+                     └ <function get_request_handler.<locals>.app at 0x000001F8BF8E3F60>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x000001F8BF8A58A0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\fastapi\routing.py", line 290, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'payload': InputState(question='what is the total market premium?', page_url='/home', frontend_origin=None, contracts=[], me...
+                 │         └ <function master_bot_query at 0x000001F8BF9860C0>
+                 └ Dependant(path_params=[], query_params=[], header_params=[], cookie_params=[], body_params=[ModelField(field_info=Body(Pydant...
+
+> File "C:\Production\Langraph Master Bot\routes\parent_graph.py", line 62, in master_bot_query
+    raw_state = typed_graph.invoke(payload, config={"configurable": {"thread_id": session_id}})
+                │           │      │                                              └ '594ec2aa-b634-4abf-bb83-8871dc2c8bfe'
+                │           │      └ {'question': 'what is the total market premium?', 'page_url': '/home', 'frontend_origin': 'http://localhost:3000', 'contracts...
+                │           └ <function RunnableBindingBase.invoke at 0x000001F8C169C860>
+                └ RunnableBinding(bound=<langgraph.graph.state.CompiledStateGraph object at 0x000001F8E4C54C20>, kwargs={}, config={}, config_f...
+
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langchain_core\runnables\base.py", line 5534, in invoke
+    return self.bound.invoke(
+           │    │     └ <function Pregel.invoke at 0x000001F8C17F5A80>
+           │    └ <langgraph.graph.state.CompiledStateGraph object at 0x000001F8E4C54C20>
+           └ RunnableBinding(bound=<langgraph.graph.state.CompiledStateGraph object at 0x000001F8E4C54C20>, kwargs={}, config={}, config_f...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\main.py", line 3050, in invoke
+    for chunk in self.stream(
+        │        │    └ <function Pregel.stream at 0x000001F8C17F5940>
+        │        └ <langgraph.graph.state.CompiledStateGraph object at 0x000001F8E4C54C20>
+        └ ('values', {'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total ma...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\main.py", line 2633, in stream
+    for _ in runner.tick(
+        │    │      └ <function PregelRunner.tick at 0x000001F8C17E3740>
+        │    └ <langgraph.pregel._runner.PregelRunner object at 0x000001F8E4D05BB0>
+        └ None
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\_runner.py", line 167, in tick
+    run_with_retry(
+    └ <function run_with_retry at 0x000001F8C17E2CA0>
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\pregel\_retry.py", line 42, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           │    │           │    │      └ {'metadata': {'thread_id': '594ec2aa-b634-4abf-bb83-8871dc2c8bfe', 'langgraph_step': 2, 'langgraph_node': 'agent_graph', 'lan...
+           │    │           │    └ <member 'input' of 'PregelExecutableTask' objects>
+           │    │           └ PregelExecutableTask(name='agent_graph', input={'messages': [{'role': 'user', 'content': 'what is the total market premium?'}...
+           │    └ <member 'proc' of 'PregelExecutableTask' objects>
+           └ PregelExecutableTask(name='agent_graph', input={'messages': [{'role': 'user', 'content': 'what is the total market premium?'}...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 658, in invoke
+    input = step.invoke(input, config)
+            │    │      │      └ {'metadata': {'thread_id': '594ec2aa-b634-4abf-bb83-8871dc2c8bfe', 'langgraph_step': 2, 'langgraph_node': 'agent_graph', 'lan...
+            │    │      └ {'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premiu...
+            │    └ <function RunnableCallable.invoke at 0x000001F8C171DE40>
+            └ _route(tags=None, recurse=True, explode_args=False, func_accepts={'config': ('N/A', <class 'inspect._empty'>)}, _is_channel_w...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 400, in invoke
+    ret = self.func(*args, **kwargs)
+          │    │     │       └ {'writer': <function CompiledStateGraph.attach_branch.<locals>.get_writes at 0x000001F8E4C1B600>, 'reader': functools.partial...
+          │    │     └ ({'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premi...
+          │    └ <bound method BranchSpec._route of BranchSpec(path=RunnableCallable(tags=None, recurse=True, explode_args=False, func_accepts...
+          └ _route(tags=None, recurse=True, explode_args=False, func_accepts={'config': ('N/A', <class 'inspect._empty'>)}, _is_channel_w...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\graph\_branch.py", line 166, in _route
+    result = self.path.invoke(value, config)
+             │    │           │      └ {'metadata': {'thread_id': '594ec2aa-b634-4abf-bb83-8871dc2c8bfe', 'langgraph_step': 2, 'langgraph_node': 'agent_graph', 'lan...
+             │    │           └ {'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premiu...
+             │    └ _tuplegetter(0, 'Alias for field number 0')
+             └ BranchSpec(path=RunnableCallable(tags=None, recurse=True, explode_args=False, func_accepts={}), ends={'route_question': 'rout...
+  File "C:\Production\Langraph Master Bot\venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 393, in invoke
+    ret = context.run(self.func, *args, **kwargs)
+          │       │   │    │      │       └ {}
+          │       │   │    │      └ ({'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premi...
+          │       │   │    └ <function build_parent_graph.<locals>.<lambda> at 0x000001F8E4C1AAC0>
+          │       │   └ RunnableCallable(tags=None, recurse=True, explode_args=False, func_accepts={})
+          │       └ <method 'run' of '_contextvars.Context' objects>
+          └ <_contextvars.Context object at 0x000001F8E4D16080>
+
+  File "C:\Production\Langraph Master Bot\parent_graph\graph.py", line 187, in <lambda>
+    lambda state: state["next"],
+           │      └ {'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premiu...
+           └ {'messages': [{'role': 'user', 'content': 'what is the total market premium?'}], 'question': 'what is the total market premiu...
+
+KeyError: 'next'
+During task with name 'agent_graph' and id '9a7ea988-a474-01e6-afca-45fa33b8ecf8'
+2025-12-04 12:59:07.568 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 12:59:07.585 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 12:59:10.784 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-04 12:59:15.787 | INFO     | parent_graph.graph:route_question:118 - Routing to redirect flow with message.
+2025-12-04 12:59:15.800 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 12:59:29.756 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 12:59:29.764 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 12:59:32.936 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-04 12:59:36.917 | INFO     | parent_graph.graph:route_question:129 - Routing to tool_calling_agent_graph.
+2025-12-04 12:59:36.936 | INFO     | tool_calling_graph.graph:extract_tool_name:76 - tool_calling_agent_graph: extract_tool_name triggered.
+2025-12-04 12:59:37.057 | INFO     | tool_calling_graph.graph:extract_tool_name:134 - Resolved tool: sql_tool
+2025-12-04 12:59:37.067 | INFO     | tools.sql_agent.graph:prepare_sql_query:28 - STEP 1: Preparing SQL query...
+2025-12-04 12:59:37.067 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=('il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo')
+2025-12-04 12:59:37.067 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 12:59:41.686 | INFO     | db.sql_db:initialize_db:76 - Restricting SQLDatabase to tables: ['il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo']
+2025-12-04 12:59:53.056 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 13:00:03.301 | INFO     | tools.sql_agent.graph:execute_sql:123 - STEP 2: Executing SQL query...
+2025-12-04 13:00:03.301 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=None
+2025-12-04 13:00:03.301 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 13:00:16.884 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 13:00:18.167 | INFO     | tools.sql_agent.graph:summarize_results:157 - STEP 3: Summarizing SQL results...
+2025-12-04 13:00:22.568 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 13:00:35.917 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 13:00:35.939 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 13:00:39.252 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-04 13:00:43.438 | INFO     | parent_graph.graph:route_question:129 - Routing to tool_calling_agent_graph.
+2025-12-04 13:00:43.454 | INFO     | tool_calling_graph.graph:extract_tool_name:76 - tool_calling_agent_graph: extract_tool_name triggered.
+2025-12-04 13:00:43.471 | INFO     | tool_calling_graph.graph:extract_tool_name:134 - Resolved tool: sql_tool
+2025-12-04 13:00:43.488 | INFO     | tools.sql_agent.graph:prepare_sql_query:28 - STEP 1: Preparing SQL query...
+2025-12-04 13:00:56.352 | INFO     | tools.sql_agent.graph:execute_sql:123 - STEP 2: Executing SQL query...
+2025-12-04 13:00:57.682 | INFO     | tools.sql_agent.graph:summarize_results:157 - STEP 3: Summarizing SQL results...
+2025-12-04 13:01:02.289 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 13:04:11.268 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 13:04:11.287 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 13:04:14.720 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-04 13:04:19.829 | INFO     | parent_graph.graph:route_question:118 - Routing to redirect flow with message.
+2025-12-04 13:04:19.836 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 13:04:33.877 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 13:04:33.893 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 13:04:37.036 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-04 13:04:41.434 | INFO     | parent_graph.graph:route_question:129 - Routing to tool_calling_agent_graph.
+2025-12-04 13:04:41.440 | INFO     | tool_calling_graph.graph:extract_tool_name:76 - tool_calling_agent_graph: extract_tool_name triggered.
+2025-12-04 13:04:41.468 | INFO     | tool_calling_graph.graph:extract_tool_name:134 - Resolved tool: sql_tool
+2025-12-04 13:04:41.478 | INFO     | tools.sql_agent.graph:prepare_sql_query:28 - STEP 1: Preparing SQL query...
+2025-12-04 13:04:41.478 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=('il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo')
+2025-12-04 13:04:41.478 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 13:04:45.421 | INFO     | db.sql_db:initialize_db:76 - Restricting SQLDatabase to tables: ['il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo']
+2025-12-04 13:04:56.457 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 13:05:06.834 | INFO     | tools.sql_agent.graph:execute_sql:123 - STEP 2: Executing SQL query...
+2025-12-04 13:05:06.834 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=None
+2025-12-04 13:05:06.834 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 13:05:18.790 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 13:05:19.942 | INFO     | tools.sql_agent.graph:summarize_results:157 - STEP 3: Summarizing SQL results...
+2025-12-04 13:05:23.936 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 13:10:38.984 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 13:10:39.005 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 13:10:43.027 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 13:53:20.857 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 13:53:20.878 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 13:53:24.599 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-04 13:53:29.173 | INFO     | parent_graph.graph:route_question:129 - Routing to tool_calling_agent_graph.
+2025-12-04 13:53:29.190 | INFO     | tool_calling_graph.graph:extract_tool_name:76 - tool_calling_agent_graph: extract_tool_name triggered.
+2025-12-04 13:53:29.257 | INFO     | tool_calling_graph.graph:extract_tool_name:134 - Resolved tool: sql_tool
+2025-12-04 13:53:29.268 | INFO     | tools.sql_agent.graph:prepare_sql_query:28 - STEP 1: Preparing SQL query...
+2025-12-04 13:53:29.268 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=('il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo')
+2025-12-04 13:53:29.268 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 13:53:35.740 | INFO     | db.sql_db:initialize_db:76 - Restricting SQLDatabase to tables: ['il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo']
+2025-12-04 13:53:47.777 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 13:53:56.024 | INFO     | tools.sql_agent.graph:execute_sql:124 - STEP 2: Executing SQL query...
+2025-12-04 13:53:56.027 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=None
+2025-12-04 13:53:56.027 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 13:54:08.100 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 13:54:09.437 | INFO     | tools.sql_agent.graph:summarize_results:158 - STEP 3: Summarizing SQL results...
+2025-12-04 13:54:13.342 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 13:57:43.055 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 13:57:43.074 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 13:57:46.760 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-04 13:57:51.344 | INFO     | parent_graph.graph:route_question:129 - Routing to tool_calling_agent_graph.
+2025-12-04 13:57:51.355 | INFO     | tool_calling_graph.graph:extract_tool_name:76 - tool_calling_agent_graph: extract_tool_name triggered.
+2025-12-04 13:57:51.374 | INFO     | tool_calling_graph.graph:extract_tool_name:134 - Resolved tool: sql_tool
+2025-12-04 13:57:51.381 | INFO     | tools.sql_agent.graph:prepare_sql_query:28 - STEP 1: Preparing SQL query...
+2025-12-04 13:57:51.381 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=('il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo')
+2025-12-04 13:57:51.381 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 13:57:55.336 | INFO     | db.sql_db:initialize_db:76 - Restricting SQLDatabase to tables: ['il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo']
+2025-12-04 13:58:06.908 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 13:58:18.912 | INFO     | tools.sql_agent.graph:execute_sql:127 - STEP 2: Executing SQL query...
+2025-12-04 13:58:18.920 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=None
+2025-12-04 13:58:18.920 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 13:58:30.905 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 13:58:33.948 | INFO     | tools.sql_agent.graph:summarize_results:161 - STEP 3: Summarizing SQL results...
+2025-12-04 13:58:38.570 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 14:00:14.060 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 14:00:14.082 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 14:00:17.393 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-04 14:00:22.497 | INFO     | parent_graph.graph:route_question:129 - Routing to tool_calling_agent_graph.
+2025-12-04 14:00:22.502 | INFO     | tool_calling_graph.graph:extract_tool_name:76 - tool_calling_agent_graph: extract_tool_name triggered.
+2025-12-04 14:00:22.512 | INFO     | tool_calling_graph.graph:extract_tool_name:134 - Resolved tool: sql_tool
+2025-12-04 14:00:22.533 | INFO     | tools.sql_agent.graph:prepare_sql_query:28 - STEP 1: Preparing SQL query...
+2025-12-04 14:00:22.533 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=('il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo')
+2025-12-04 14:00:22.533 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 14:00:27.612 | INFO     | db.sql_db:initialize_db:76 - Restricting SQLDatabase to tables: ['il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo']
+2025-12-04 14:00:38.763 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 14:00:47.476 | INFO     | tools.sql_agent.graph:execute_sql:127 - STEP 2: Executing SQL query...
+2025-12-04 14:00:47.478 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=None
+2025-12-04 14:00:47.478 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 14:01:00.711 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 14:01:02.040 | INFO     | tools.sql_agent.graph:summarize_results:162 - STEP 3: Summarizing SQL results...
+2025-12-04 14:01:07.463 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 14:05:17.984 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 14:05:18.001 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 14:05:21.342 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-04 14:05:26.230 | INFO     | parent_graph.graph:route_question:129 - Routing to tool_calling_agent_graph.
+2025-12-04 14:05:26.231 | INFO     | tool_calling_graph.graph:extract_tool_name:76 - tool_calling_agent_graph: extract_tool_name triggered.
+2025-12-04 14:05:26.255 | INFO     | tool_calling_graph.graph:extract_tool_name:134 - Resolved tool: sql_tool
+2025-12-04 14:05:26.271 | INFO     | tools.sql_agent.graph:prepare_sql_query:27 - STEP 1: Preparing SQL query...
+2025-12-04 14:05:26.273 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=('il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo')
+2025-12-04 14:05:26.273 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 14:05:30.116 | INFO     | db.sql_db:initialize_db:76 - Restricting SQLDatabase to tables: ['il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo']
+2025-12-04 14:05:42.401 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 14:05:49.888 | INFO     | tools.sql_agent.graph:execute_sql:127 - STEP 2: Executing SQL query...
+2025-12-04 14:05:49.892 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=None
+2025-12-04 14:05:49.892 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 14:06:02.083 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 14:06:03.504 | INFO     | tools.sql_agent.graph:summarize_results:163 - STEP 3: Summarizing SQL results...
+2025-12-04 14:06:09.147 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 14:54:10.811 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 14:54:10.834 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 14:54:14.073 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-04 14:54:18.756 | INFO     | parent_graph.graph:route_question:129 - Routing to tool_calling_agent_graph.
+2025-12-04 14:54:18.775 | INFO     | tool_calling_graph.graph:extract_tool_name:77 - tool_calling_agent_graph: extract_tool_name triggered.
+2025-12-04 14:54:18.788 | INFO     | tool_calling_graph.graph:extract_tool_name:138 - Resolved tool: sql_tool
+2025-12-04 14:54:18.803 | INFO     | tools.sql_agent.graph:prepare_sql_query:28 - STEP 1: Preparing SQL query...
+2025-12-04 14:54:18.803 | INFO     | db.sql_db:initialize_db_cached:104 - Fetching cached SQLDatabase for tables=('il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo')
+2025-12-04 14:54:18.803 | INFO     | db.sql_db:initialize_db:68 - Initializing SQLDatabase instance...
+2025-12-04 14:54:23.572 | INFO     | db.sql_db:initialize_db:76 - Restricting SQLDatabase to tables: ['il_mi_client_dummy', 'il_mi_income', 'il_mi_life_agents_by_zipcode', 'il_mi_mog', 'il_mi_population', 'mi_master_geo']
+2025-12-04 14:54:35.557 | SUCCESS  | db.sql_db:initialize_db:81 - SQLDatabase initialized successfully.
+2025-12-04 14:54:46.110 | INFO     | tools.sql_agent.graph:execute_sql:123 - STEP 2: Executing SQL query...
+2025-12-04 14:54:47.442 | INFO     | tools.sql_agent.graph:summarize_results:157 - STEP 3: Summarizing SQL results...
+2025-12-04 14:54:51.645 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully
+2025-12-04 14:57:44.325 | INFO     | routes.parent_graph:master_bot_query:42 - Received master bot request
+2025-12-04 14:57:44.348 | INFO     | Agent.graph:agent:19 - Executing: Agent...
+2025-12-04 14:57:47.792 | INFO     | parent_graph.graph:route_question:52 - Starting route_question
+2025-12-04 14:57:53.298 | INFO     | parent_graph.graph:route_question:118 - Routing to redirect flow with message.
+2025-12-04 14:57:53.308 | INFO     | routes.parent_graph:master_bot_query:73 - Master bot query executed successfully

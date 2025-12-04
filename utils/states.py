@@ -1,4 +1,5 @@
-from typing import Optional, Union, Dict, Any, List
+from typing import Optional, Union, Dict, Any, List, Tuple
+from langchain_core.documents import Document
 from langgraph.graph import MessagesState
 from pydantic import BaseModel
 
@@ -19,13 +20,15 @@ class WorkingState(MessagesState):
     # Runtime / transient fields (tool-specific)
     tool_info: Optional[Dict[str, Any]] = None
     selected_tool: Optional[str] = None
+    allowed_tables: Optional[Tuple[str, ...]] = None
 
     sql_query: Optional[str] = None
     assumptions: Optional[str] = None
     df_json: Optional[Dict[str, Any]] = None
     summary: Optional[str] = None
     error: Optional[str] = None
-
+    context: Optional[List[Document]] = None
+    messages: List
     # The final human-facing generation content (populated by finalizer)
     generation: Optional[Union[str, Dict[str, Any]]] = None
 

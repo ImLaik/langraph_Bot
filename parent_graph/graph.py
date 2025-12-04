@@ -1,13 +1,16 @@
-from typing import Dict, Any, Callable, Optional, Mapping
+from typing import Dict, Any, Callable, Optional, Mapping, List
 from loguru import logger
 from langgraph.graph import END, StateGraph, START
 from langgraph.checkpoint.memory import MemorySaver
 
 from utils.utils import (
     invoke_with_logging,
-    log_function,
     get_relevant_catalog_context,
-    finalize_to_output,
+    call_subgraph_preserving_state,
+    append_model_message,
+    append_user_message,
+    handle_redirect,
+    finalize_node,   
 )
 from query_router.query_router import question_router
 from tool_calling_graph.graph import tool_calling_agent_graph
@@ -15,9 +18,12 @@ from tools.sql_agent.graph import sql_agent_graph
 from tools.contract_comparator.graph import contract_comparator_graph
 from llm_fallback.graph import llm_fallback_graph
 from tools.image_tool.graph import image_tool_graph
-from utils.states import WorkingState, OutputState
+from utils.states import WorkingState
+from Agent.graph import agent_graph
 
 # Node name constants
+NODE_UPDATE_USER_MESSAGES = "append_user_message"
+NODE_AGENT = "agent_graph"
 NODE_HANDLE_REDIRECT = "handle_redirect"
 NODE_ROUTE_QUESTION = "route_question"
 NODE_TOOL_CALLING_AGENT = "tool_calling_agent_graph"
@@ -25,23 +31,13 @@ NODE_SQL_AGENT = "sql_agent_graph"
 NODE_CONTRACT_COMPARATOR = "contract_comparator_graph"
 NODE_IMAGE_TOOL = "image_tool_graph"
 NODE_LLM_FALLBACK = "llm_fallback_graph"
+NODE_APPEND_MODEL_MESSAGE = "append_model_message"
 NODE_FINALIZE = "finalize_output"
-
-# ---------------------------------------------------------------------------
-# Simple nodes
-# ---------------------------------------------------------------------------
-def handle_redirect(state: WorkingState) -> WorkingState:
-    """
-    Simple redirect handler. Intentionally minimal — behavior can be extended.
-    """
-    logger.info("Redirect node triggered.")
-    return state
 
 
 # ---------------------------------------------------------------------------
 # Router node
 # ---------------------------------------------------------------------------
-@log_function
 def route_question(state: WorkingState) -> Dict[str, Any]:
     """
     Route the question to redirect, tool-calling agent, or fallback LLM.
@@ -59,7 +55,7 @@ def route_question(state: WorkingState) -> Dict[str, Any]:
     page_url = state.get("page_url")
     frontend_origin = state.get("frontend_origin")
     messages = state.get("messages", [])
-
+    
     if not question:
         logger.error("route_question: missing 'question' in state")
         raise ValueError("Missing 'question' in state.")
@@ -115,8 +111,12 @@ def route_question(state: WorkingState) -> Dict[str, Any]:
 
     # Redirect branch (explicit incorrect location)
     if (is_correct_location is False) and (route_to == "handle_redirect"):
-        incorrect_msg = response_dict.get("is_incorrect_location_msg") or "You are viewing the wrong location."
+        incorrect_msg = (
+            response_dict.get("is_incorrect_location_msg")
+            or "You are viewing the wrong location."
+        )
         logger.info("Routing to redirect flow with message.")
+        # ensure the redirect message is set as the generation so append_model_message will persist it
         return {
             "tool_info": state.get("tool_info"),
             "selected_tool": state.get("selected_tool"),
@@ -134,58 +134,6 @@ def route_question(state: WorkingState) -> Dict[str, Any]:
     return {"next": NODE_LLM_FALLBACK}
 
 
-# ---------------------------------------------------------------------------
-# Subgraph invocation wrapper
-# ---------------------------------------------------------------------------
-def call_subgraph_preserving_state(
-    subgraph,
-    state: WorkingState,
-    subgraph_name: Optional[str] = None,
-) -> WorkingState:
-    """
-    Invoke a compiled subgraph that expects a WorkingState and returns a WorkingState.
-    On error, annotate the state with an 'error' key and return the original state.
-
-    Args:
-        subgraph: compiled LangGraph object with .invoke(state) API.
-        state: WorkingState to pass into the subgraph.
-        subgraph_name: optional name for logging.
-
-    Returns:
-        WorkingState (resulting state from subgraph or input state with error).
-    """
-    name = subgraph_name or getattr(subgraph, "__name__", "subgraph")
-    logger.info("Invoking subgraph: {}", name)
-
-    try:
-        result = subgraph.invoke(state)
-        # Some subgraphs may return a raw dict; try to normalize
-        if isinstance(result, dict):
-            return result  # WorkingState-compatible mapping
-        return result
-    except Exception as exc:
-        logger.exception("Subgraph invocation failed: {}", name)
-        # Annotate and return original state so the graph can continue to finalize
-        state["error"] = f"Subgraph '{name}' invocation failed: {exc}"
-        return state
-
-
-# ---------------------------------------------------------------------------
-# Finalizer node
-# ---------------------------------------------------------------------------
-def finalize_node(state: WorkingState) -> OutputState:
-    """
-    Convert WorkingState -> OutputState for final output.
-    Must be reached for every terminal path.
-    """
-    logger.info("Finalizing output.")
-    try:
-        return finalize_to_output(state)
-    except Exception as exc:
-        logger.exception("Finalizer failed.")
-        # Fallback to minimal OutputState with error annotation
-        return {"generation": state.get("generation"), "error": f"finalize failed: {exc}"}
-
 
 # ---------------------------------------------------------------------------
 # Graph builder (returns compiled graph)
@@ -197,13 +145,20 @@ def build_parent_graph() -> StateGraph:
     """
     parent_graph_builder = StateGraph(WorkingState)
 
-    # Register nodes (use named functions instead of lambdas for easier debugging)
+    # Register nodes
+    parent_graph_builder.add_node(NODE_UPDATE_USER_MESSAGES, append_user_message)
     parent_graph_builder.add_node(NODE_HANDLE_REDIRECT, handle_redirect)
     parent_graph_builder.add_node(NODE_ROUTE_QUESTION, route_question)
 
     parent_graph_builder.add_node(
+        NODE_AGENT,
+        lambda state: call_subgraph_preserving_state(agent_graph, state, "agent_graph"),
+    )
+    parent_graph_builder.add_node(
         NODE_TOOL_CALLING_AGENT,
-        lambda state: call_subgraph_preserving_state(tool_calling_agent_graph, state, "tool_calling_agent_graph"),
+        lambda state: call_subgraph_preserving_state(
+            tool_calling_agent_graph, state, "tool_calling_agent_graph"
+        ),
     )
     parent_graph_builder.add_node(
         NODE_SQL_AGENT,
@@ -215,14 +170,26 @@ def build_parent_graph() -> StateGraph:
     )
     parent_graph_builder.add_node(
         NODE_CONTRACT_COMPARATOR,
-        lambda state: call_subgraph_preserving_state(contract_comparator_graph, state, "contract_comparator_graph"),
+        lambda state: call_subgraph_preserving_state(
+            contract_comparator_graph, state, "contract_comparator_graph"
+        ),
     )
     parent_graph_builder.add_node(
         NODE_IMAGE_TOOL,
         lambda state: call_subgraph_preserving_state(image_tool_graph, state, "image_tool_graph"),
     )
 
+    parent_graph_builder.add_node(NODE_APPEND_MODEL_MESSAGE, append_model_message)
     parent_graph_builder.add_node(NODE_FINALIZE, finalize_node)
+    
+    parent_graph_builder.add_conditional_edges(
+        NODE_AGENT,
+        lambda state: state["next"],
+        {
+            "route_question": NODE_ROUTE_QUESTION,
+            "finalize_output": NODE_FINALIZE
+        },
+    )
 
     # Conditional routing from the router node
     parent_graph_builder.add_conditional_edges(
@@ -248,25 +215,31 @@ def build_parent_graph() -> StateGraph:
     )
 
     # Graph topology
-    parent_graph_builder.add_edge(START, NODE_ROUTE_QUESTION)
-    parent_graph_builder.add_edge(NODE_HANDLE_REDIRECT, NODE_FINALIZE)
-    parent_graph_builder.add_edge(NODE_SQL_AGENT, NODE_FINALIZE)
-    parent_graph_builder.add_edge(NODE_CONTRACT_COMPARATOR, NODE_FINALIZE)
-    parent_graph_builder.add_edge(NODE_LLM_FALLBACK, NODE_FINALIZE)
-    parent_graph_builder.add_edge(NODE_IMAGE_TOOL, NODE_FINALIZE)
+    # Ensure user message is appended immediately after START
+    parent_graph_builder.add_edge(START, NODE_UPDATE_USER_MESSAGES)
+    parent_graph_builder.add_edge(NODE_UPDATE_USER_MESSAGES, NODE_AGENT)
 
-    # Memory saver hookup
+    # After routing/handling/tool chains, flow should go to append_model_message -> finalize -> END
+    parent_graph_builder.add_edge(NODE_HANDLE_REDIRECT, NODE_APPEND_MODEL_MESSAGE)
+    parent_graph_builder.add_edge(NODE_SQL_AGENT, NODE_APPEND_MODEL_MESSAGE)
+    parent_graph_builder.add_edge(NODE_CONTRACT_COMPARATOR, NODE_APPEND_MODEL_MESSAGE)
+    parent_graph_builder.add_edge(NODE_LLM_FALLBACK, NODE_APPEND_MODEL_MESSAGE)
+    parent_graph_builder.add_edge(NODE_IMAGE_TOOL, NODE_APPEND_MODEL_MESSAGE)
+
+    parent_graph_builder.add_edge(NODE_APPEND_MODEL_MESSAGE, NODE_FINALIZE)
+    parent_graph_builder.add_edge(NODE_FINALIZE, END)
+
+    # Memory saver hookup (stores state snapshots keyed by thread_id from config)
     memory = MemorySaver()
-    # Note: depending on langgraph usage you may need to attach memory to nodes/checkpoints;
-    # leaving MemorySaver instantiated for future integration.
+    compiled = parent_graph_builder.compile(checkpointer=memory)
 
-    compiled = parent_graph_builder.compile()
     logger.info("Parent graph built and compiled.")
     return compiled
 
 
-# Build graph at module import time (preserves prior behavior)
+# Build graph at module import time
 parent_graph = build_parent_graph()
+
 
 
 # # Generate the PNG data from your graph

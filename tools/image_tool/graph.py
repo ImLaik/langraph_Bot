@@ -31,6 +31,7 @@ def generate_response(state: WorkingState) -> WorkingState:
             raise ValueError("Missing `question` in state")
 
         messages: List[Dict[str, Any]] | None = state.get("messages", [])
+
         if messages is None:
             messages = []
 

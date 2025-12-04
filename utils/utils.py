@@ -133,14 +133,15 @@ def get_relevant_catalog_context(
     *,
     k: int = 3,
     collection_name: str = "routing_prompts",
-    persist_directory: str = "./chroma_db",
     embeddings: Optional[AzureOpenAIEmbeddings] = None,
     vectorstore: Optional[Chroma] = None,
 ) -> str:
     """
     Perform semantic search with strict input validation and safety.
     """
-
+    parent_dir = os.path.normpath(__file__).rsplit(os.sep, maxsplit=2)[0]
+    vector_db_dir = f"{parent_dir}/VectorStore/query_router"
+    
     if not question or not question.strip():
         raise ValueError("Question must be a non-empty string.")
 
@@ -158,15 +159,17 @@ def get_relevant_catalog_context(
     if vectorstore is None:
         vectorstore = Chroma(
             collection_name=collection_name,
-            persist_directory=persist_directory,
+            persist_directory=vector_db_dir,
             embedding_function=embeddings,
         )
 
-    query = question.strip()
+    query = f"Question: {question.strip()} for Page URL: {page_url}"
     logger.info(f"Vector search: query='{query}'")
-
+    # retriever = vectorstore.as_retriever()
     try:
         results: List[Document] = vectorstore.similarity_search(query, k=k)
+        # results: List[Document] = retriever._get_relevant_documents(query, run_manager=None)
+        
     except Exception as exc:
         logger.error(f"Vectorstore similarity_search failed: {exc}")
         raise RuntimeError("Failed to query vectorstore.") from exc
@@ -251,7 +254,7 @@ def to_working_from_input(input_obj: Any) -> WorkingState:
 def finalize_to_output(state: WorkingState) -> OutputState:
     if state.get("error"):
         return OutputState(generation=f"Error: {state['error']}")
-
+    
     generation = state.get("generation") or "No output generated."
     return OutputState(generation=generation)
 
@@ -296,7 +299,7 @@ def filter_contracts(
 # ---------------------------------------------------------------------------
 def load_vector_retriever() -> Tuple[Chroma, Any]:
     parent_dir = os.path.normpath(__file__).rsplit(os.sep, maxsplit=2)[0]
-    vector_db_dir = f"{parent_dir}/llm_fallback/VectorStore/spinnaker_chatbot_data"
+    vector_db_dir = f"{parent_dir}/VectorStore/spinnaker_chatbot_data"
 
     embeddings = AzureOpenAIEmbeddings(
         openai_api_key=AZURE_API_KEY,
@@ -312,3 +315,157 @@ def load_vector_retriever() -> Tuple[Chroma, Any]:
     )
 
     return vector_store, vector_store.as_retriever()
+
+
+# ---------------------------------------------------------------------------
+# Small utilities
+# ---------------------------------------------------------------------------
+def _ensure_messages_list(state: WorkingState) -> List[Dict[str, Any]]:
+    """
+    Ensure state['messages'] is a list and return it.
+    """
+    msgs = state.get("messages")
+    if msgs is None:
+        msgs = []
+        state["messages"] = msgs
+    return msgs
+
+
+def _last_message_matches(messages: List[Dict[str, Any]], role: str, content: Any) -> bool:
+    """
+    Return True if the last message exists and matches the given role+content.
+    Content comparison uses string equality on the str() of content to be defensive.
+    """
+    if not messages:
+        return False
+    last = messages[-1]
+    if last.get("role") != role:
+        return False
+    # Normalize to string for safe comparison (generations may be dicts)
+    return str(last.get("content")) == str(content)
+
+
+def _append_message(state: WorkingState, role: str, content: Any) -> None:
+    """
+    Append message to state['messages'] if it's not a duplicate of the last message.
+    """
+    if content is None:
+        return
+    messages = _ensure_messages_list(state)
+    if _last_message_matches(messages, role, content):
+        logger.debug("Skipping duplicate {role} message append.", role=role)
+        return
+    messages.append({"role": role, "content": content})
+    state["messages"] = messages
+
+
+# ---------------------------------------------------------------------------
+# Message appending nodes
+# ---------------------------------------------------------------------------
+def append_user_message(state: WorkingState) -> WorkingState:
+    """
+    Append the incoming user question to the messages list (if not duplicate).
+    This node should run immediately after START so every invocation records the user message once.
+    """
+    try:
+        question = state.get("question")
+        if not question:
+            logger.debug("append_user_message: no question present; skipping.")
+            return state
+
+        _append_message(state, "user", question)
+        logger.debug("User message appended to state.messages.")
+        return state
+    except Exception as exc:
+        logger.exception("append_user_message failed: {}", exc)
+        state["error"] = f"append_user_message failed: {exc}"
+        return state
+
+
+def append_model_message(state: WorkingState) -> WorkingState:
+    """
+    Append the final model generation into messages. This node must run *before*
+    the finalize node so MemorySaver can checkpoint the assistant message.
+    Expects that subgraphs set state['generation'] to the assistant content.
+    """
+    try:
+        generation = state.get("generation")
+
+        if generation is None:
+            logger.debug("append_model_message: no generation present; skipping.")
+            return state
+
+        # If generation is a dict with a direct 'text' key or similar, prefer string,
+        # otherwise store the object as-is (we normalize to str for duplicate checks).
+        content_to_append = generation
+        # If generation is a dict containing common keys, try to extract: (optional)
+        if isinstance(generation, dict):
+            # prefer 'generation' or 'text' or 'content' keys if present
+            for key in ("generation", "text", "content"):
+                if key in generation and isinstance(generation[key], (str, int, float)):
+                    content_to_append = generation[key]
+                    break
+
+        _append_message(state, "assistant", content_to_append)
+        logger.debug("Assistant message appended to state.messages.")
+        return state
+    except Exception as exc:
+        logger.exception("append_model_message failed: {}", exc)
+        state["error"] = f"append_model_message failed: {exc}"
+        return state
+
+
+# ---------------------------------------------------------------------------
+# Simple nodes
+# ---------------------------------------------------------------------------
+def handle_redirect(state: WorkingState) -> WorkingState:
+    """
+    Simple redirect handler. Intentionally minimal — behavior can be extended.
+    If a redirect message was set by route_question, ensure it's used as generation.
+    """
+    logger.info("Redirect node triggered.")
+    # route_question may already set 'generation' to the redirect message
+    return state
+
+# ---------------------------------------------------------------------------
+# Subgraph invocation wrapper
+# ---------------------------------------------------------------------------
+def call_subgraph_preserving_state(
+    subgraph,
+    state: WorkingState,
+    subgraph_name: Optional[str] = None,
+) -> WorkingState:
+    """
+    Invoke a compiled subgraph that expects a WorkingState and returns a WorkingState.
+    On error, annotate the state with an 'error' key and return the original state.
+    """
+    name = subgraph_name or getattr(subgraph, "__name__", "subgraph")
+    logger.info("Invoking subgraph: {}", name)
+
+    try:
+        # subgraph.invoke accepts state (and uses the checkpointer's thread_id when provided externally)
+        result = subgraph.invoke(state)
+        # Normalise result
+        if isinstance(result, dict):
+            return result  # WorkingState-compatible mapping
+        return result
+    except Exception as exc:
+        logger.exception("Subgraph invocation failed: {}", name)
+        state["error"] = f"Subgraph '{name}' invocation failed: {exc}"
+        return state
+
+
+# ---------------------------------------------------------------------------
+# Finalizer node (output-only)
+# ---------------------------------------------------------------------------
+def finalize_node(state: WorkingState) -> OutputState:
+    """
+    Convert WorkingState -> OutputState for final output.
+    This node must not mutate persistent state (so that behavior is predictable).
+    """
+    logger.info("Finalizing output.")
+    try:
+        return finalize_to_output(state)
+    except Exception as exc:
+        logger.exception("Finalizer failed.")
+        return OutputState(generation=f"Error: finalize failed: {exc}")

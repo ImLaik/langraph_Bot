@@ -28,6 +28,7 @@ def prepare_sql_query(state: WorkingState) -> WorkingState:
     logger.info("STEP 1: Preparing SQL query...")
 
     question: str = state.get("question", "")
+    messages = state.get("messages", [])
     tool_info: Dict[str, Any] = state.get("tool_info", {})
 
     try:
@@ -46,7 +47,7 @@ def prepare_sql_query(state: WorkingState) -> WorkingState:
         system_prompt = REACT_SQL_PROMPT.format(
             input=question,
             agent_scratchpad="",
-            chat_history="",
+            chat_history=messages,
             product_prompt=product_prompt_text,
             tools="",
             tool_names="",
@@ -164,6 +165,7 @@ def summarize_results(state: WorkingState) -> WorkingState:
         sql_query = state.get("sql_query", "")
         assumptions = state.get("assumptions", "")
         df_json = state.get("df_json", [])
+        messages = state.get("messages", [])
 
         llm = create_llm()
 
@@ -183,6 +185,7 @@ def summarize_results(state: WorkingState) -> WorkingState:
                 "query": sql_query,
                 "sql_response": sql_result_preview,
                 "assumptions": assumptions,
+                "messages": messages
             }
         )
 

@@ -85,6 +85,7 @@ Context:
 User Question: {question}
 SQL Response: {sql_response}
 Assunptions: {assumptions}
+Chat history: {messages}
 
 Now provide a helpful, natural-language explanation.
 """
