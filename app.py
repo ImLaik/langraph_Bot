@@ -1,14 +1,15 @@
 from fastapi import FastAPI
 from loguru import logger
 
-from routes.parent_graph import router as parent_graph_router
+from routes.parent_graph import router as master_bot_router
+from routes.chat_history import router as chat_history_router
 from middlewares.middleware import setup_middlewares
 
 
 def create_app() -> FastAPI:
     """
-    Application factory for creating a production-ready FastAPI instance.
-    This allows better testing, modularity, and deployment flexibility.
+    Application factory for a full production-ready FastAPI instance.
+    Supports modular architecture, testing, and container deployment.
     """
     app = FastAPI(
         title="Master Chatbot API",
@@ -17,34 +18,35 @@ def create_app() -> FastAPI:
         redoc_url="/redoc",
     )
 
-    # Setup logging
-    logger.add("logs/server.log", rotation="10 MB", retention="7 days", level="INFO")
+    # Logging setup
+    logger.add(
+        "logs/server.log",
+        rotation="10 MB",
+        retention="7 days",
+        level="INFO",
+        enqueue=True,
+        backtrace=True,
+        diagnose=False,
+    )
 
-    # Setup middlewares (CORS, logging, tracing, etc.)
+    # Middlewares (CORS, Security, Logging, etc.)
     setup_middlewares(app)
 
     # Routers
-    app.include_router(parent_graph_router, prefix="/api", tags=["master-bot"])
+    app.include_router(master_bot_router, prefix="/api", tags=["Master-Bot"])
+    app.include_router(chat_history_router, prefix="/api", tags=["Chat-History"])
 
-    @app.get("/", tags=["health"])
+    # Health Endpoints
+    @app.get("/", tags=["Health"])
     def health_check():
-        """
-        Basic health endpoint to check if the API is online.
-        """
-        return {"message": "Master Chatbot API is running..."}
+        return {"message": "Master Chatbot API is running."}
 
-    @app.get("/ready", tags=["health"])
+    @app.get("/ready", tags=["Health"])
     def readiness_probe():
-        """
-        Readiness probe for container orchestration (K8s, ECS, etc.).
-        """
         return {"status": "ready"}
 
-    @app.get("/health", tags=["health"])
+    @app.get("/health", tags=["Health"])
     def liveness_probe():
-        """
-        Liveness probe.
-        """
         return {"status": "alive"}
 
     return app

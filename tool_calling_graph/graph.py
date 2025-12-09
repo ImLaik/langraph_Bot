@@ -132,11 +132,11 @@ def extract_tool_name(state: WorkingState) -> WorkingState:
     # Success
     # ----------------------------------------------------------------------
     logger.info(f"Resolved tool: {tool_name}")
-    logger.debug(f"Tool metadata: {row_dict}")
+    # logger.debug(f"Tool metadata: {row_dict}")
 
     state["tool_info"] = row_dict
     state["selected_tool"] = tool_name
-    state["next"] = tool_name  # downstream graph routes based on node name
+    state["next"] = tool_name
 
     return state
 

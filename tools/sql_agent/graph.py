@@ -11,6 +11,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langgraph.graph import END, START, StateGraph
 
+from sqlalchemy import text
 from db.sql_db import initialize_db_cached
 from tools.sql_agent.prompt import REACT_SQL_PROMPT, EXPLAIN_PROMPT
 from utils.utils import (
@@ -30,7 +31,7 @@ def prepare_sql_query(state: WorkingState) -> WorkingState:
     question: str = state.get("question", "")
     messages = state.get("messages", [])
     tool_info: Dict[str, Any] = state.get("tool_info", {})
-
+    schema = tool_info["schema_name"]
     try:
         # Extract metadata
         relevant_tables = parse_relevant_tables(tool_info.get("relevant_tables", ""))
@@ -38,8 +39,9 @@ def prepare_sql_query(state: WorkingState) -> WorkingState:
 
         # Prepare DB (cached)
         allowed_tuple = tuple(sorted(relevant_tables)) if relevant_tables else None
-        db = initialize_db_cached(allowed_tuple)
-
+        db = initialize_db_cached(allowed_tuple, schema)
+        state["allowed_tables"] = allowed_tuple
+        
         llm = create_llm()
         product_prompt_text = load_product_prompt(product_prompt_name) or ""
 
@@ -69,6 +71,8 @@ def prepare_sql_query(state: WorkingState) -> WorkingState:
                 "product_prompt": product_prompt_text,
             }
         )
+        
+        print(f"\n\nAgent Response:\n{agent_response}\n\n")
 
         # Get last AIMessage
         final_message = next(
@@ -81,12 +85,12 @@ def prepare_sql_query(state: WorkingState) -> WorkingState:
             ),
             None,
         )
-
+        print(f"\n\nFinal Messages:\n{final_message}\n\n")
         if not final_message:
             raise ValueError("No AIMessage content returned from SQL agent.")
 
         content = final_message.content.strip()
-
+        print(f"\n\nContent:\n{content}\n\n")
         # Strip "Final Answer:"
         if content.lower().startswith("final answer"):
             content = content.split(":", 1)[1].strip()
@@ -101,12 +105,14 @@ def prepare_sql_query(state: WorkingState) -> WorkingState:
         assumptions = parsed.get("assumptions", "")
 
         if not sql_query:
-            raise ValueError("SQL query missing in LLM output JSON.")
+            state["generation"] = assumptions
+            return state
 
         # Store results
         state["sql_query"] = sql_query
         state["assumptions"] = assumptions
-        state["allowed_tables"] = allowed_tuple  # Store key for DB reuse
+
+        print(f"\n\nAllowed_Tuple: \n{allowed_tuple}\n\n")
 
         return state
 
@@ -125,19 +131,25 @@ def execute_sql(state: WorkingState) -> WorkingState:
     if state.get("error"):
         logger.warning("Skipping execute_sql due to earlier error.")
         return state
+    
 
     sql_query = state.get("sql_query", "")
     allowed_tables = state.get("allowed_tables")
+    tool_info: Dict[str, Any] = state.get("tool_info", {})
 
+    print(f"\n\nSql query: {sql_query}\n\nAllowed Tables: \n{allowed_tables}\n\n")
+    schema = tool_info["schema_name"]
     try:
         if not sql_query:
-            raise ValueError("State missing sql_query.")
+            state["generation"] = state.get("assumptions")
+            return state
 
         # Fetch cached DB again (safe)
-        db = initialize_db_cached(allowed_tables)
+        db = initialize_db_cached(allowed_tables, schema)
 
         with db._engine.connect() as conn:
-            df = pd.read_sql(sql_query, conn)
+            # Wrap SQL string with text() and force params=None
+            df = pd.read_sql(text(sql_query), conn, params=None)
 
         state["df_json"] = df.to_dict(orient="records")
         logger.debug(f"SQL returned {len(state['df_json'])} rows.")
@@ -155,7 +167,6 @@ def execute_sql(state: WorkingState) -> WorkingState:
 # ---------------------------------------------------------------------------
 def summarize_results(state: WorkingState) -> WorkingState:
     logger.info("STEP 3: Summarizing SQL results...")
-
     if state.get("error"):
         logger.warning("Skipping summarize_results due to earlier error.")
         return state

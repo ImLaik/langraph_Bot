@@ -24,11 +24,12 @@ class WorkingState(MessagesState):
 
     sql_query: Optional[str] = None
     assumptions: Optional[str] = None
+
     df_json: Optional[Dict[str, Any]] = None
     summary: Optional[str] = None
     error: Optional[str] = None
     context: Optional[List[Document]] = None
-    messages: List
+    messages: Optional[List[Dict[str, Any]]] = None
     # The final human-facing generation content (populated by finalizer)
     generation: Optional[Union[str, Dict[str, Any]]] = None
 

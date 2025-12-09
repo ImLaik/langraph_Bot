@@ -406,7 +406,7 @@ def append_model_message(state: WorkingState) -> WorkingState:
                     content_to_append = generation[key]
                     break
 
-        _append_message(state, "assistant", content_to_append)
+        _append_message(state, "bot", content_to_append)
         logger.debug("Assistant message appended to state.messages.")
         return state
     except Exception as exc:

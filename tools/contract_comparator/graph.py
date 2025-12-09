@@ -115,6 +115,7 @@ def contract_comparator(state: WorkingState) -> WorkingState:
         question: str | None = state.get("question")
         metrics = state.get("metrics")
         context = state.get("contracts")
+        messages: List | None = state.get("messages")
 
         if not question:
             raise ValueError("Missing question")
@@ -134,7 +135,7 @@ def contract_comparator(state: WorkingState) -> WorkingState:
                 "question": question,
                 "metrics": metrics,
                 "context": context,
-                "chat_history": [],
+                "chat_history": messages,
             },
             "contract_comparator",
         )

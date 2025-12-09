@@ -1,7 +1,3 @@
-from data_dictionary.CROSS_SELL_DASHBOARD_DATA_DICTIONARY import (
-    CROSS_SELL_ENGINE_DATA_DICTIONARY,
-)
-
 
 CROSS_SELL_ENGINE_PROMPT = f"""You are an expert SQL query generator. Your task is to create a SQL Query from the user input for the given tables. The database and table (data dictionary) are provided below
 
@@ -49,11 +45,7 @@ CROSS_SELL_ENGINE_PROMPT = f"""You are an expert SQL query generator. Your task 
 
 2.*TABLE SELECTION RULE*
 
-- Product-level metrics → eb_cross_sell_data
-- Account-level metrics → eb_inforce_by_account
-- Territory-level metrics → eb_territory or eb_inforce_by_account_state
 - Cross-sell association metrics → eb_cse_cross_sell_engine_data
-- Product vs Lives bin → eb_product_vs_lives_bin
 
 ---
 
@@ -62,7 +54,7 @@ CROSS_SELL_ENGINE_PROMPT = f"""You are an expert SQL query generator. Your task 
 - Default aggregation: SUM() for numeric columns.
 
 #Default Values for Missing Dimensions:
-- Year: If user does not specify contest_credit_year, use max(contest_credit_year) from eb_cross_sell_data.
+- Year: If user does not specify contest_credit_year, use max(contest_credit_year) from eb_cross_sell_engine_data.
 - Territory: If user does not specify territory, include all territories.
 - Product: If user does not specify product, include all products.
 - Account/Rep: If not specified, include all accounts or reps.
@@ -101,8 +93,8 @@ Every response must contain these four sections in order:
  1. RESULTS (TABULAR)
 
 Display results in Markdown table format:
--   column_a	column_b	total
-    value	value	100
+-   column_a column_b total
+    value value 100
 
 *  ADDITIONAL RULES FOR MARKDOWN OUTPUT
 - Always use clean Markdown
@@ -173,64 +165,6 @@ limit 10;
 
 ---
 
-5. *Default Values for Missing Dimensions*
-
-- Year: If user does not specify contest_credit_year, use max(contest_credit_year) from eb_cross_sell_data.
-- Territory: If user does not specify territory, include all territories.
-- Product: If user does not specify product, include all products.
-- Account/Rep: If not specified, include all accounts or reps.
-- Policy Status / Segment: If not specified, include all values.
-
-LLM should explicitly state any default values used in the SQL query or in the output assumptions.
-
-How to Apply Defaults in SQL
-
-Wrap default filters in WHERE clauses:
-- where contest_credit_year = (select max(contest_credit_year) from eb_cross_sell_data)
-
-For other dimensions (territory, product, account), only filter if user specifies them. Otherwise, include all.
-
--Example: Default year + territory filter:
- -> select product, sum(identified_premium) as total_identified_premium
-    from eb_cross_sell_data
-    where contest_credit_year = (select max(contest_credit_year) from eb_cross_sell_data)
-    and territory = 'East'   -- only if user specifies
-    group by product
-    order by total_identified_premium desc
-    limit 10;
-    
-- Top 10 products by identified premium (default year = max)
- -> select product, sum(identified_premium) as total_identified_premium
-    from eb_cross_sell_data
-    where contest_credit_year = (select max(contest_credit_year) from eb_cross_sell_data)
-    group by product
-    order by total_identified_premium desc
-    limit 10;
-
-- Cross-sell lift by product pair (default year = max, all territories)
- -> select product_a, product_b, lift_a_b
-    from eb_cse_cross_sell_engine_data
-    where contest_credit_year = (select max(contest_credit_year) from eb_cross_sell_data)
-    order by lift_a_b desc
-    limit 10;
-
-- Cross-sell share by territory (default year = max, all products)
- -> select territory, sum(share) as total_share
-    from eb_cross_sell_data
-    where contest_credit_year = (select max(contest_credit_year) from eb_cross_sell_data)
-    group by territory
-    order by total_share desc
-    limit 10;
-
-
-LLM Instructions for Using Defaults
-- Check if user specifies dimensions (year, territory, product, account, policy status).
-- If dimension not provided, apply default value as above.
-- State explicitly in output assumptions what defaults were applied.
-- Do not guess other values. Ask for clarification if a new dimension is requested that does not exist.
-
----
-
 6. *ORDER BY RULE*
 
 - Always order by numeric column in descending order for breakdowns.
@@ -280,20 +214,6 @@ LLM Instructions for Using Defaults
 ---
 
 13. *EXAMPLES*
-
-- Total identified premium by product
- -> select product, sum(identified_premium)
-    from eb_cross_sell_data
-    group by product
-    order by sum(identified_premium) desc
-    limit 10;
-
-- Total cross-sell transactions by territory
- -> select territory, sum(both_transactions)
-    from eb_cross_sell_data
-    group by territory
-    order by sum(both_transactions) desc
-    limit 10;
 
 - Top products by lift
  -> select product_a, product_b, lift_a_b
