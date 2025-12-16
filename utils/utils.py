@@ -10,6 +10,7 @@ from langchain_chroma import Chroma
 from langchain_core.documents import Document
 
 from utils.states import WorkingState, OutputState
+import json
 
 logger = logging.getLogger(__name__)
 load_dotenv()
@@ -132,7 +133,7 @@ def get_relevant_catalog_context(
     page_url: str,
     *,
     k: int = 3,
-    collection_name: str = "routing_prompts",
+    collection_name: str = "product_catalog",
     embeddings: Optional[AzureOpenAIEmbeddings] = None,
     vectorstore: Optional[Chroma] = None,
 ) -> str:
@@ -140,7 +141,7 @@ def get_relevant_catalog_context(
     Perform semantic search with strict input validation and safety.
     """
     parent_dir = os.path.normpath(__file__).rsplit(os.sep, maxsplit=2)[0]
-    vector_db_dir = f"{parent_dir}/VectorStore/query_router"
+    vector_db_dir = f"{parent_dir}/VectorStore/product_catalog"
     
     if not question or not question.strip():
         raise ValueError("Question must be a non-empty string.")
@@ -169,7 +170,7 @@ def get_relevant_catalog_context(
     try:
         results: List[Document] = vectorstore.similarity_search(query, k=k)
         # results: List[Document] = retriever._get_relevant_documents(query, run_manager=None)
-        
+        print(f"\n\nResult: {results}\n\n")
     except Exception as exc:
         logger.error(f"Vectorstore similarity_search failed: {exc}")
         raise RuntimeError("Failed to query vectorstore.") from exc
@@ -178,7 +179,14 @@ def get_relevant_catalog_context(
         logger.warning("Vectorstore returned no relevant documents.")
         return ""
 
-    return "\n\n".join(doc.page_content for doc in results)
+    return json.dumps([{
+        "title": doc.metadata.get("title"),
+        "solution": doc.metadata.get("solution"),
+        "url_pattern": doc.metadata.get("url_pattern"),
+        "description": doc.page_content,
+        "industries": doc.metadata.get("industries"),
+        "industry_slugs": doc.metadata.get("industry_slugs")
+    } for doc in results], indent=2)
 
 
 # ---------------------------------------------------------------------------
@@ -375,6 +383,17 @@ def append_user_message(state: WorkingState) -> WorkingState:
 
         _append_message(state, "user", question)
         logger.debug("User message appended to state.messages.")
+        state["generation"] = None
+        state["error"] = None
+        state["tool_info"] = None
+        state["selected_tool"] = None
+        state["sql_query"] = None
+        state["assumptions"] = None
+        state["df_json"] = None
+        state["summary"] = None
+        state["context"] = None
+        state["next"] = None
+        
         return state
     except Exception as exc:
         logger.exception("append_user_message failed: {}", exc)

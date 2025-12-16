@@ -37,13 +37,7 @@ Action Input: <exact string to pass to the tool>
 
 When you have derived the final SQL, close with:
 Thought: I now know the final answer
-Final Answer: <JSON object as specified below>
-
-OUTPUT FORMAT (exact JSON structure — no extra fields):
-{{
-  "sql_query": <string | null>,
-  "assumptions": <string>          
-}}
+Final Answer: <Return the structured output>
 
 Behavioral rules, examples, and constraints:
 - Use exact table and column identifiers from the provided data dictionary. Prefer explicit qualified names where necessary.
@@ -90,8 +84,6 @@ Guidelines:
     - Use headings, bullet points, or bold text where helpful for clarity.
     - Avoid unnecessary details, repetition, or filler text.
     - Focus only on the core insight or summary the user needs to understand the result.
-
-    
 
 Context:
 User Question: {question}

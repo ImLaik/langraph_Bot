@@ -1,0 +1,1212 @@
+[
+  {
+    "solution": "Sales Prophet™",
+    "solution_slug": "/sales-prophet",
+    "solution_url": "https://www.spinnakerhub.com/sales-prophet",
+    "solution_description": "Accurately estimate market size, identify client-specific sales opportunities, and strategically allocate sales goals across regions, products, and customer segments.",
+    "domains": ["Distribution"],
+    "modules": [
+      {
+        "title": "Market Overview",
+        "slug": "/market-overview",
+        "url_pattern": "https://www.spinnakerhub.com/sales-prophet/{industry-slug}/market-overview",
+        "description": "Interactive market analysis dashboard displaying premiums, policies, agents, wallet share, and demographic data at national, state, and zip code levels. Users can filter by year, product, metric, and state to identify growth opportunities and compare company vs total market figures. Geographic heatmap visualization highlights high and low market potential areas, with detailed zip code tables showing top-performing regions by premium, policy count, agent count, population, and average household income.",
+        "industries": [
+          "Individual Life",
+          "Annuity",
+          "Worksite",
+          "Employee Benefits",
+          "Wealth Management"
+        ],
+        "industry_slugs": [
+          "individual-life",
+          "annuity",
+          "worksite",
+          "employee-benefits",
+          "wealth-management"
+        ],
+        "keywords": [
+          "market premium",
+          "market policies",
+          "agent distribution",
+          "wallet share",
+          "demographic analysis",
+          "household income",
+          "geographic heatmap",
+          "state-level market size",
+          "zip code targeting",
+          "company vs market comparison"
+        ],
+        "capabilities": [
+          "Display total market size including premium, policy count, and agent count",
+          "Compare company data against total market KPIs",
+          "View wallet share for premium, policies, and agents",
+          "Analyze demographic data including household income and total population",
+          "Filter results by year, product type, metric type, and state",
+          "Visualize market potential using color-coded geographic maps",
+          "Drill down to state or zip code level for detailed performance metrics",
+          "Identify top zips by premium, policies, agents, population, and household income",
+          "Spot high-value growth territories using heatmap and ranking tables"
+        ]
+      },
+      {
+        "title": "Wallet Share Assessment",
+        "slug": "/wallet-share-assessment",
+        "url_pattern": "https://www.spinnakerhub.com/sales-prophet/{industry-slug}/wallet-share-assessment",
+        "description": "Interactive dashboard that compares company sales performance against total market sales at zipcode and territory levels, calculating premium share and policy share as indicators of customer penetration. Users can toggle between Premium Share and Policy Share views, filter by year, product, and territory, and explore geographic map visualizations highlighting areas of high or low wallet share. Drill-down tables display detailed company premiums, market premiums, and calculated percentage shares, enabling identification of upsell and cross-sell opportunities within specific regions.",
+        "industries": ["Individual Life"],
+        "industry_slugs": ["individual-life"],
+        "keywords": [
+          "wallet share",
+          "premium share",
+          "policy share",
+          "market penetration",
+          "customer share analysis",
+          "territory performance",
+          "company vs market sales",
+          "geographic penetration",
+          "zip code sales comparison",
+          "share percentage analysis"
+        ],
+        "capabilities": [
+          "Toggle between Premium Share and Policy Share metrics",
+          "Display company sales (premium and policies) vs market totals",
+          "Calculate share percentage for premium and policy metrics at each geography level",
+          "Filter results by year, product, and territory",
+          "View wallet share distribution using a geographic heatmap",
+          "Drill down to zip code-level tables for detailed comparison",
+          "Identify high wallet share areas indicating strong penetration",
+          "Spot low wallet share areas for targeted upsell or cross-sell campaigns",
+          "Analyze territory-level premium and policy share trends"
+        ]
+      },
+      {
+        "title": "Sales Opportunity",
+        "slug": "/sales-opportunity",
+        "url_pattern": "https://www.spinnakerhub.com/sales-prophet/{industry-slug}/sales-opportunity",
+        "description": "Geospatial and tabular dashboard that identifies and ranks potential sales opportunities by territory, state, or zip code. Displays key metrics including company sales, incremental sales opportunity, total sales opportunity, incremental opportunity percentage, and recruiting opportunity. Users can toggle between Map View and Table View, filter by year, product, territory, and state, and select map metrics such as Company Sales, Incremental Sales Opportunity, Total Sales Opportunity, or Total Recruiting Opportunity. The heatmap highlights high and low potential areas, and drill-down tables provide detailed opportunity statistics for targeted sales planning.",
+        "industries": ["Individual Life"],
+        "industry_slugs": ["individual-life"],
+        "keywords": [
+          "sales opportunity analysis",
+          "incremental sales opportunity",
+          "total sales opportunity",
+          "company sales vs market",
+          "recruiting opportunity",
+          "incremental opportunity percentage",
+          "territory sales ranking",
+          "map view sales",
+          "geospatial sales potential",
+          "zip code opportunity ranking"
+        ],
+        "capabilities": [
+          "View potential sales by geography using heatmapped maps",
+          "Toggle between Map View and Table View representations",
+          "Filter results by year, product, territory, and state",
+          "Select map metrics: Company Sales, Incremental Sales Opportunity, Total Sales Opportunity, Total Recruiting Opportunity",
+          "Drill down into zip code-level detail to view sales opportunity KPIs",
+          "Rank regions by incremental opportunity percentage for targeted selling",
+          "Identify recruiting needs based on geographic opportunity data",
+          "Compare current company sales to total potential market sales",
+          "Highlight high-value opportunity zones for resource allocation"
+        ]
+      },
+      {
+        "title": "Agent Performance",
+        "slug": "/agent-performance",
+        "url_pattern": "https://www.spinnakerhub.com/sales-prophet/{industry-slug}/agent-performance",
+        "description": "Interactive dashboard for evaluating agent recruitment effectiveness and productivity by territory, state, or zip code. Displays key metrics including total life agents in market, company agents, company active agents, agent share, active agent ratio, premium per agent, applications per agent, and premium per application. Offers both Map View and Table View to visualize geographic distribution, with a selectable set of map metrics such as Company Agents, Life Agents in Market, Company Active Agent Ratio, Premium Per Agent, and Premium Per Application. Filters allow narrowing data by year, territory, and state, while color-coded geographic heatmaps highlight high and low performance areas for recruitment or productivity improvement.",
+        "industries": ["Individual Life"],
+        "industry_slugs": ["individual-life"],
+        "keywords": [
+          "agent performance",
+          "company agents",
+          "life agents in market",
+          "active agent ratio",
+          "premium per agent",
+          "applications per agent",
+          "premium per application",
+          "agent share analysis",
+          "agent recruitment metrics",
+          "geographic agent distribution",
+          "agent productivity mapping"
+        ],
+        "capabilities": [
+          "View agent counts and productivity KPIs at national, state, or zip code level",
+          "Switch between Map View and Table View modes",
+          "Select map metrics: Company Agents, Life Agents in Market, Company Active Agent Ratio, Premium Per Agent, Premium Per Application",
+          "Filter results by year, territory, and state",
+          "Analyze company agent share and active agent ratios",
+          "Identify high-performing and low-performing agent regions via heatmaps",
+          "Drill down to individual zip code performance metrics",
+          "Assess premium per agent and per application",
+          "Support recruitment planning by identifying opportunity zones"
+        ]
+      },
+      {
+        "title": "Intelligent Goal Setter",
+        "slug": "/intelligent-goal-setter",
+        "url_pattern": "https://www.spinnakerhub.com/sales-prophet/{industry-slug}/intelligent-goal-setter",
+        "description": "Advanced dashboard to set, assign, and adjust sales goals and expense allowances across territories, products, and customer size segments. Displays aggregated KPIs including Current Sales, Sales Goal, Sales Increment, Sales Increment Percentage, and Sales Target. Provides detailed territory and country-level breakdowns showing performance by country manager, incremental sales needed to meet goals, and product-specific targets (Universal Life, Whole Life, Term Life, Indexed Universal Life, Variable Universal Life). Enables planners to model different company-wide targets, assess goal gaps, and optimize allocations for both individual territories and overall sales strategy.",
+        "industries": [
+          "Individual Life",
+          "Employee Benefits",
+          "Property & Casualty"
+        ],
+        "industry_slugs": [
+          "individual-life",
+          "employee-benefits",
+          "property-and-casualty"
+        ],
+        "keywords": [
+          "sales goal setting",
+          "sales increment",
+          "quota planning",
+          "territory targets",
+          "product-level goals",
+          "goal vs current sales gap",
+          "Universal Life sales target",
+          "Indexed Universal Life goals",
+          "Variable Universal Life targets",
+          "Whole Life goal allocation",
+          "Term Life sales goals"
+        ],
+        "capabilities": [
+          "Display overall current sales, sales goal, sales increment, and increment percentage",
+          "Adjust company-wide sales target dynamically",
+          "View territory and country-level goal assignments with assigned country managers",
+          "Break down goals and current sales by product line",
+          "Identify sales gaps and incremental opportunities to meet targets",
+          "Filter results by industry, region, or product category",
+          "Support quota allocation planning by geography and product mix",
+          "Analyze performance at territory and product levels for optimization",
+          "Model adjustments to targets for different growth scenarios"
+        ]
+      },
+      {
+        "title": "Sales Funnel",
+        "slug": "/sales-funnel",
+        "url_pattern": "https://www.spinnakerhub.com/sales-prophet/{industry-slug}/sales-funnel",
+        "description": "Pipeline visualization and performance analysis dashboard showing each stage of the sales process from contact list through policies placed post free look period, with counts, percentages, and revenue impacts. The '3 Months Cumulative Funnel View' tracks stage-to-stage conversion (Leads, Qualified Leads, Applications Started, Applications Received, Applications Submitted, Policies Issued, Policies Placed), while the 'Sales Assessment' view quantifies monetary impacts from leads, applications, placement rate, and premium per policy against planned target, highlighting gaps in sales performance. This tool helps identify bottlenecks, measure conversion efficiency, and assess the financial implications of sales funnel performance.",
+        "industries": [
+          "Individual Life",
+          "Annuity",
+          "Property & Casualty",
+          "Employee Benefits",
+          "Reinsurance",
+          "Brokers",
+          "Wealth Management"
+        ],
+        "industry_slugs": [
+          "individual-life",
+          "annuity",
+          "property-and-casualty",
+          "employee-benefits",
+          "reinsurance",
+          "brokers",
+          "wealth-management"
+        ],
+        "keywords": [
+          "sales funnel stages",
+          "pipeline conversion",
+          "qualified leads",
+          "applications started",
+          "placement rate impact",
+          "premium per policy impact",
+          "lead generation",
+          "sales gap analysis",
+          "gross sales performance",
+          "conversion percentage",
+          "sales assessment"
+        ],
+        "capabilities": [
+          "Monitor pipeline stages from lead generation to policy placement post free look period",
+          "View stage-level metrics including counts and percentage of leads retained",
+          "Analyze gross sales YTD actual vs target, and identify over/under performance gap",
+          "Break down sales assessment by Leads Impact, Apps Impact, Placement Rate Impact, Premium/Policy Impact",
+          "Track conversion rates between stages to identify bottlenecks",
+          "Quantify financial impact of each sales stage relative to plan",
+          "Visualize funnel counts and conversion percentages over a 3-month cumulative period",
+          "Assess sales gap size and contributing factors via bar chart analysis",
+          "Use to evaluate marketing effectiveness and optimize sales resources"
+        ]
+      },
+      {
+        "title": "Territory Design",
+        "slug": "/territory-design",
+        "url_pattern": "https://www.spinnakerhub.com/sales-prophet/{industry-slug}/territory-design",
+        "description": "Interactive territory planning dashboard for designing and optimizing sales territories based on market potential and population metrics. Displays geographic boundary maps with color-coded territories and allows filtering by year, product type, state, territory, and Metropolitan Statistical Area (MSA). Provides views for Original, Transition, and New Territory configurations. The dashboard lists Relevant Market Size and Relevant Population for each territory, with drill-down into rep-level data showing individual market contributions and population coverage. Supports comparative analysis to balance workloads, maximize market penetration, and guide staffing recommendations.",
+        "industries": ["Individual Life"],
+        "industry_slugs": ["individual-life"],
+        "keywords": [
+          "territory planning",
+          "territory optimization",
+          "market size analysis",
+          "relevant population",
+          "sales territory boundaries",
+          "rep-level market potential",
+          "territory restructuring",
+          "MSA market coverage",
+          "territory comparison",
+          "original territory view",
+          "transition territory view",
+          "new territory design"
+        ],
+        "capabilities": [
+          "Display geographic maps with color-coded territory boundaries",
+          "Filter territories by year, product type, state, specific territory, and MSA",
+          "Switch between Original, Transition, and New Territory views",
+          "View Relevant Market Size and Relevant Population for each territory",
+          "Drill down into territory data for individual sales representatives",
+          "Rank territories by total market size or population",
+          "Identify territories with highest and lowest market potential",
+          "Support workload balancing by comparing rep-level market sizes",
+          "Assess impact of territory changes on overall market coverage"
+        ]
+      },
+      {
+        "title": "Territory Design Tool",
+        "slug": "/territory-design-tool",
+        "url_pattern": "https://www.spinnakerhub.com/sales-prophet/{industry-slug}/territory-design-tool",
+        "description": "Dynamic, interactive territory visualization and scenario modeling tool that allows users to create, edit, and compare regional sales configurations. A geographic heatmap displays territories with metrics such as Market Premium, Client Premium, Premium Share, Market Agents, Client Agents, Agent Share, Market Policies, Client Policies, Policy Share, Avg Household Income, Total Sales Opportunity, and Incremental Sales Growth. Provides functionality to add new regions, adjust territory boundaries, and save or delete custom scenarios with defined region groupings. Summary metrics update in real time to reflect selected scenarios, helping assess market potential, sales allocation, and growth impact.",
+        "industries": ["Individual Life"],
+        "industry_slugs": ["individual-life"],
+        "keywords": [
+          "territory visualization",
+          "territory scenario planning",
+          "geographic mapping",
+          "market premium analysis",
+          "client premium",
+          "incremental sales growth",
+          "agent share",
+          "policy share",
+          "scenario modeling",
+          "add new region",
+          "save territory scenarios"
+        ],
+        "capabilities": [
+          "Display interactive geographic map of territories with color-coded metrics",
+          "Select map metric—options include Market Premium, Client Premium, Agent Share, Policy Share, etc.",
+          "View real-time summary metrics for selected territories",
+          "Add, edit, or remove territory regions",
+          "Create custom territory scenarios with defined regional groupings",
+          "Save scenarios for future use or delete outdated scenarios",
+          "Compare different scenario configurations (e.g., 6-region vs 8-region view)",
+          "Assess impact of territory design changes on market potential and incremental growth",
+          "Filter or highlight regions to focus on key markets"
+        ]
+      },
+      {
+        "title": "Broker Score Card",
+        "slug": "/broker-score-card",
+        "url_pattern": "https://www.spinnakerhub.com/sales-prophet/{industry-slug}/broker-score-card",
+        "description": "Comprehensive broker analytics dashboard providing detailed KPIs on sponsorship, policies, product mix, premium history, persistency, and renewal performance at multiple levels. Includes filters for broker name, territory, and product line. Displays key metrics such as Sponsor Count, Policy Count, Products per Policy, F/M Premium, Renewal Premium, Prerenewal Premium, Renewal Rate, Pre-Renewal Rate, and Rate Change %. Visualizations include RTFM vs A/E Ratio scatter plot, RTFM History trend chart, Product per Sponsor distribution, Package Persistency, and Renewal Premium breakdowns by Product, Size, Industry, and Territory. Supports drilling down into renewal subsets to identify broker-specific strengths, weaknesses, and market opportunities.",
+        "industries": ["Employee Benefits"],
+        "industry_slugs": ["employee-benefits"],
+        "keywords": [
+          "broker performance analysis",
+          "RTFM ratio",
+          "actual vs expected ratio",
+          "RTFM history",
+          "product per sponsor",
+          "package persistency",
+          "renewal premium analysis",
+          "premium by territory",
+          "premium by product",
+          "premium by industry",
+          "premium by size",
+          "renewal rate",
+          "rate change",
+          "sponsor count",
+          "policy count"
+        ],
+        "capabilities": [
+          "Filter broker KPIs by broker name, territory, and product line",
+          "View total inforce sponsor, policy count, and products per policy",
+          "Analyze financial metrics: F/M Premium, Renewal Premium, Prerenewal Premium, Renewal Rate, Pre-Renewal Rate, Rate Change %",
+          "Visualize RTFM vs A/E Ratio scatter plot for performance distribution",
+          "Track RTFM history over multiple years",
+          "Display product mix via Product per Sponsor chart (Life, LTD, STD, Dental, Vision, Other)",
+          "Compare benefit persistency vs premium persistency over time",
+          "Break down renewal premium by product category",
+          "Analyze renewal premium by customer size segment",
+          "Review renewal premium by industry sector",
+          "Examine renewal premium by defined territory",
+          "Identify brokers with high or low persistency and renewal performance",
+          "Support data-driven decisions for broker retention strategies"
+        ]
+      },
+      {
+        "title": "InsurIQ",
+        "slug": "/insuriq",
+        "url_pattern": "https://www.spinnakerhub.com/sales-prophet/{industry-slug}/insuriq",
+        "description": "Property & Casualty performance dashboard providing a side-by-side comparison of company data vs market benchmarks. Displays detailed premium, loss, expense, and underwriting profitability metrics segmented by state, line of business (LOB), and year. The Summary view features Direct Premium Earned (DPE), Losses Incurred, Loss Adjustment Expense (LAE), Commissions, General Admin Expense, Other Expenses, Combined Expenses, and Underwriting Profit/Loss, alongside market values and computed market share. Also provides Operating Ratios such as Loss & LAE Ratio, Commissions Ratio, Admin Expense Ratio, Other Expenses Ratio, and Combined Ratio with basis point differences versus market averages. Interactive slicers and additional tabs allow deeper analysis of Market Share, Loss Ratio, Commissions, and Combined Ratio trends.",
+        "industries": ["Property & Casualty"],
+        "industry_slugs": ["property-and-casualty"],
+        "keywords": [
+          "P&C market performance",
+          "underwriting profit",
+          "premium earned",
+          "losses incurred",
+          "loss adjustment expense",
+          "commissions expense",
+          "administrative expense ratio",
+          "combined ratio",
+          "loss ratio",
+          "market share",
+          "NAIC data",
+          "premium vs market comparison",
+          "basis point difference"
+        ],
+        "capabilities": [
+          "Filter metrics by State, Line of Business (LOB), and Year",
+          "Compare company values to market data for all key P&C metrics",
+          "View detailed breakdown of premium, loss, commissions, admin expenses, and other expenses",
+          "Analyze market share across multiple metrics",
+          "Track underwriting profit or loss trends",
+          "Review operating ratios and basis point differences from market benchmarks",
+          "Navigate to specialized tabs for Market Share, Loss Ratio, Commissions, and Combined Ratio",
+          "Identify performance gaps versus market averages",
+          "Utilize NAIC-sourced industry benchmarking"
+        ]
+      }
+    ]
+  },
+  {
+    "solution": "Lead Prioritizer™",
+    "solution_slug": "/lead-prioritizer",
+    "solution_url": "https://www.spinnakerhub.com/lead-prioritizer",
+    "solution_description": "Utilize pattern recognition algorithms to prioritize applications or work volumes, maximizing yield rates, optimizing workflow, and reducing unit costs.",
+    "domains": ["Underwriting"],
+    "modules": [
+      {
+        "title": "Work Inventory",
+        "slug": "/work-inventory",
+        "url_pattern": "https://www.spinnakerhub.com/lead-prioritizer/{industry-slug}/work-inventory",
+        "description": "Comprehensive case-level inventory dashboard tracking applications across multiple dimensions including demographics, financials, product type, status, underwriting details, and risk assessment. Displays sortable table columns such as Case ID, Submit Date, Age, Gender, BMI, State, Income, Tobacco use, Application Type, Product, Face Amount, Broker, Status (Open/Complete), Underwriter, Lead Score, Priority level (High, Normal, Low, DTQ), Assessment (risk categorization), and Client Name. Enables filtering by case attributes, product type, geography, and priority to track work volumes, monitor case progression, and assess risk levels. Supports workflow management by highlighting high-priority cases for immediate action and identifying bottlenecks in processing.",
+        "industries": [
+          "Individual Life",
+          "Employee Benefits",
+          "Commercial Lines - P&C",
+          "Personal Lines - P&C"
+        ],
+        "industry_slugs": [
+          "individual-life",
+          "employee-benefits",
+          "commercial-lines-pnc",
+          "personal-lines-pnc"
+        ],
+        "keywords": [
+          "case inventory",
+          "case tracking",
+          "workflow management",
+          "lead score",
+          "priority level",
+          "risk assessment",
+          "application tracking",
+          "broker tracking",
+          "underwriter monitoring",
+          "face amount",
+          "application type",
+          "processing bottlenecks"
+        ],
+        "capabilities": [
+          "Display full case inventory with sortable and filterable columns",
+          "Filter cases by product type, geography, broker, underwriter, and risk category",
+          "View detailed applicant demographic and financial data",
+          "Monitor case status (Open/Complete) for workflow tracking",
+          "Highlight and prioritize cases based on lead score and priority label",
+          "Review underwriting assignments and broker relationships",
+          "Assess risk using the Assessment column with categories such as Declined, Low Risk, Medium Risk",
+          "Track face amounts and product types for portfolio balance analysis",
+          "Identify bottlenecks by monitoring cases in specific workflow stages"
+        ]
+      },
+      {
+        "title": "Score Calculator",
+        "slug": "/score-calculator",
+        "url_pattern": "https://www.spinnakerhub.com/lead-prioritizer/{industry-slug}/score-calculator",
+        "description": "Interactive tool for generating real-time case scores based on detailed customer and application attributes, with automatic classification into priority levels (DTQ, Low Priority, Normal Priority, High Priority). Users can input data including age, height, weight, gender, alcohol consumption, nicotine use, state, application type, product type, broker, received month, annual income, and face amount. Displays resulting case score alongside priority category, and visualizes factor impacts using a Percentile Contribution Chart. Supports scenario adjustments by modifying any attribute, allowing scoring weight analysis and export of results for integration with case databases.",
+        "industries": [
+          "Individual Life",
+          "Employee Benefits",
+          "Commercial Lines - P&C",
+          "Personal Lines - P&C"
+        ],
+        "industry_slugs": [
+          "individual-life",
+          "employee-benefits",
+          "commercial-lines-pnc",
+          "personal-lines-pnc"
+        ],
+        "keywords": [
+          "case scoring",
+          "risk scoring",
+          "underwriting score",
+          "score calculator",
+          "priority classification",
+          "DTQ priority",
+          "low priority case",
+          "normal priority case",
+          "high priority case",
+          "percentile contribution analysis",
+          "sales propensity score"
+        ],
+        "capabilities": [
+          "Enter detailed case attributes for scoring",
+          "Generate case score instantly based on sales propensity",
+          "Automatically classify case into DTQ, Low, Normal, or High Priority ranges",
+          "Visualize factor contributions in a Percentile Contribution Chart",
+          "Modify attribute values to test score sensitivity and impact",
+          "Export scoring results for external tracking or reporting",
+          "Integrate score output with case databases",
+          "Support strategic prioritization of cases based on calculated score"
+        ]
+      },
+      {
+        "title": "Attribute Analysis",
+        "slug": "/attribute-analysis",
+        "url_pattern": "https://www.spinnakerhub.com/lead-prioritizer/{industry-slug}/attribute-analysis",
+        "description": "Analytical dashboard for evaluating average lead scores and performance metrics across multiple case attributes, including broker, state, age, income, product type, and face amount. Provides summary KPIs such as total cases, sold cases, closing ratio, average lead score, total premium, and forecast premium. Visualizations show top-performing brokers and states by average lead score, age and income brackets linked to lead score performance, and product/face amount contributions to lead scoring. Interactive filters for application type and underwriter enable targeted attribute analysis, helping identify key drivers of performance and conversion trends across industries and product lines.",
+        "industries": [
+          "Individual Life",
+          "Employee Benefits",
+          "Commercial Lines - P&C",
+          "Personal Lines - P&C"
+        ],
+        "industry_slugs": [
+          "individual-life",
+          "employee-benefits",
+          "commercial-lines-pnc",
+          "personal-lines-pnc"
+        ],
+        "keywords": [
+          "attribute analysis",
+          "average lead score",
+          "broker performance",
+          "state performance",
+          "age bracket analysis",
+          "income bracket analysis",
+          "product type lead score",
+          "face amount lead score",
+          "closing ratio",
+          "forecast premium",
+          "conversion performance metrics"
+        ],
+        "capabilities": [
+          "Display top brokers ranked by average lead score",
+          "Display top states ranked by average lead score",
+          "Analyze lead score by age bracket",
+          "Evaluate lead score by income range",
+          "View product types ranked by average lead score",
+          "Break down face amount ranges by lead score performance",
+          "Filter results by application type and underwriter",
+          "Compare total premium vs forecast premium",
+          "Assess closing ratio across selected attributes",
+          "Identify key performance drivers influencing lead score and conversion rates"
+        ]
+      },
+      {
+        "title": "Priority Bin Dashboard",
+        "slug": "/priority-bin-dashboard",
+        "url_pattern": "https://www.spinnakerhub.com/lead-prioritizer/{industry-slug}/priority-bin-dashboard",
+        "description": "Interactive pipeline and priority segmentation dashboard that categorizes applications into priority bins (High Priority, Normal, Low, DTQ) and tracks case counts, premiums, and conversion metrics for each bin. Displays key KPIs including total cases, sold count, % sold, total premium, and expected premium. Visualizations include application mix by priority bin, total premium by bin, expected premium by bin, average case score by bin, and expected sold ratio by bin, with pipeline averages highlighted for comparison. Users can filter by product, application type, underwriter, broker, state, and income bin to evaluate performance drivers and prioritize sales activities for the most promising cases.",
+        "industries": [
+          "Individual Life",
+          "Commercial Lines - P&C",
+          "Personal Lines - P&C"
+        ],
+        "industry_slugs": [
+          "individual-life",
+          "commercial-lines-pnc",
+          "personal-lines-pnc"
+        ],
+        "keywords": [
+          "priority bin",
+          "high priority cases",
+          "normal priority",
+          "low priority",
+          "DTQ cases",
+          "pipeline value",
+          "expected premium",
+          "total premium",
+          "case score analysis",
+          "expected sold ratio",
+          "priority mix",
+          "priority segmentation",
+          "application mix"
+        ],
+        "capabilities": [
+          "Categorize applications into High Priority, Normal, Low, and DTQ bins",
+          "Track case counts per priority bin",
+          "View total and expected premium by priority category",
+          "Analyze average case score for each bin vs pipeline average",
+          "Compare expected sold ratio to pipeline average",
+          "Filter results by product, application type, underwriter, broker, state, and income bin",
+          "Identify opportunities in high priority bins for targeted follow-up",
+          "Assess sales potential and conversion likelihood by priority category",
+          "Visualize pipeline distribution for workload balancing and targeting"
+        ]
+      },
+      {
+        "title": "Score Distribution",
+        "slug": "/score-distribution",
+        "url_pattern": "https://www.spinnakerhub.com/lead-prioritizer/{industry-slug}/score-distribution",
+        "description": "Analytical dashboard for exploring case score distributions and their relationship to sales conversion performance. Includes key metrics such as total cases, sold cases, closing ratio, total premium, and average lead score. Provides breakdowns by priority action (High Priority, Normal, Low, DTQ) with case counts, sold cases, case percentage, sold case percentage, and closing ratio. Visualizations include percentage of cases by sold indicator vs case score, cumulative case percentage by sold indicator, histogram showing score frequency with sold vs not sold overlay, and case mix by score illustrating sold proportion across score ranges. Filters allow segmentation by product, application type, underwriter, age bin, income bin, and state to identify outliers, performance trends, and optimal scoring ranges.",
+        "industries": ["Individual Life", "Employee Benefits"],
+        "industry_slugs": ["individual-life", "employee-benefits"],
+        "keywords": [
+          "score distribution",
+          "case score histogram",
+          "sold vs not sold analysis",
+          "priority action",
+          "closing ratio by score",
+          "case mix by score",
+          "cumulative case percentage",
+          "broker performance",
+          "underwriter analysis",
+          "score-based conversion analysis",
+          "outlier case scores"
+        ],
+        "capabilities": [
+          "View overall case score distribution and overlay of sold vs not sold cases",
+          "Analyze cumulative case percentage by sold indicator across score ranges",
+          "Break down case mix by score to see conversion proportion",
+          "Compare metrics across priority bins (High, Normal, Low, DTQ)",
+          "Filter cases by product, application type, underwriter, age bin, income bin, and state",
+          "Identify optimal scoring ranges for highest closing ratios",
+          "Detect outlier scores and investigate their conversion outcomes",
+          "Track changes in distribution when applying segmentation filters",
+          "Support data-driven case prioritization based on scoring trends"
+        ]
+      }
+    ]
+  },
+  {
+    "solution": "UW Engine",
+    "solution_slug": "/uw-engine",
+    "solution_url": "https://www.spinnakerhub.com/uw-engine",
+    "solution_description": "Efficiently assign risk ratings to prospective life customers purchasing transactional term products by leveraging minimally invasive customer and external data.",
+    "domains": ["Underwriting"],
+    "modules": [
+      {
+        "title": "Engine",
+        "slug": "/engine",
+        "url_pattern": "https://www.spinnakerhub.com/uw-engine/{industry-slug}/engine",
+        "description": "Interactive underwriting engine tool for calculating real-time risk recommendations and ratings based on comprehensive customer attributes. Users input case data including age, height, weight, gender, exercise habits, smoking habits, genetic family medical history, motor vehicle violation record, and systolic/diastolic blood pressure. The system calculates a rating percentage and assigns a risk category ranging from Sub Standard to Super Preferred, reflecting the propensity of the case to be preferred. A dynamic Percentile Contribution Chart visualizes the impact of each attribute on the overall risk rating. Supports scenario adjustments to see how changing inputs alters outcomes, and results can be exported for record-keeping.",
+        "industries": ["Individual Life"],
+        "industry_slugs": ["individual-life"],
+        "keywords": [
+          "underwriting engine",
+          "real-time risk recommendation",
+          "risk rating calculation",
+          "preferred rating",
+          "super preferred rating",
+          "sub standard rating",
+          "percentile contribution chart",
+          "customer attributes analysis",
+          "medical history impact",
+          "blood pressure underwriting",
+          "motor vehicle violation risk"
+        ],
+        "capabilities": [
+          "Enter detailed customer attributes for underwriting analysis",
+          "Calculate real-time risk rating and recommended underwriting class",
+          "Classify cases into categories: Sub Standard, Standard, Standard Plus, Preferred, Super Preferred",
+          "View percentile contribution chart for attribute impact visualization",
+          "Assess influence of lifestyle habits and medical history on rating",
+          "Adjust inputs to model different risk scenarios",
+          "Export results for external review or historical tracking"
+        ]
+      },
+      {
+        "title": "Underwriting Engine Framework",
+        "slug": "/underwriting-engine-framework",
+        "url_pattern": "https://www.spinnakerhub.com/uw-engine/{industry-slug}/underwriting-engine-framework",
+        "description": "Visual framework illustrating the data flow and algorithm logic used to generate underwriting risk ratings. Inputs include a wide range of non-invasive applicant attributes such as demographics (age, gender, height, weight), lifestyle factors (exercise, activity, tobacco use, alcohol use), financial indicators (income, net worth, credit), product details (product type, face amount), personal and family health history, motor vehicle violation records (MVR), inspection, and Rx search data. These inputs feed into the UW Engine analytic module, producing a Risk Assessment Rating ranging from Substandard to Super Preferred. The output table provides calculated logistic values, odds ratios, model fit probabilities, and final ratings per case ID. A comparison-to-actual chart visually depicts how predicted risk class aligns with real-world outcomes.",
+        "industries": ["Individual Life"],
+        "industry_slugs": ["individual-life"],
+        "keywords": [
+          "underwriting framework",
+          "risk assessment rating",
+          "non-invasive input data",
+          "odds ratio",
+          "model fit probability",
+          "preferred rating",
+          "super preferred rating",
+          "substandard rating",
+          "logistic regression output",
+          "comparison to actual",
+          "UW engine algorithm flow"
+        ],
+        "capabilities": [
+          "Display the end-to-end underwriting engine data flow",
+          "Illustrate non-invasive applicant attributes considered by the model",
+          "Show algorithm outputs including logistic values, odds ratios, probabilities, and risk ratings",
+          "Rank cases by predicted underwriting class",
+          "Compare predicted ratings against actual classifications using visual charts",
+          "Highlight key factors impacting movement between rating categories",
+          "Support transparency in model-based underwriting decisions"
+        ]
+      },
+      {
+        "title": "Performance Metrics",
+        "slug": "/performance-metrics",
+        "url_pattern": "https://www.spinnakerhub.com/uw-engine/{industry-slug}/performance-metrics",
+        "description": "Comprehensive set of visualizations and probability distribution analyses for evaluating UW Engine model accuracy against actual underwriting decisions. Includes model training data output, testing data validation, and cross-validation outputs for multiple variable configurations. Each chart shows the model's estimated probability that a case is in a preferred underwriting class (Y = 1), segmented by likelihood ranges (<10%, 10-25%, 25-50%, 50-75%, 75-90%, 90%+). Key metrics highlight false negatives (low likelihood predicted but actually preferred) and false positives (high likelihood predicted but actually standard/substandard) with associated percentages. Cross-validation views display performance using reduced variable sets (e.g., 8-variable model, 6-variable model) with breakdowns by demographic and risk history attributes. Supports model refinement and validation by revealing classification trends, prediction accuracy, and misclassification rates across probability ranges.",
+        "industries": ["Individual Life"],
+        "industry_slugs": ["individual-life"],
+        "keywords": [
+          "model performance metrics",
+          "probability distribution analysis",
+          "false positive rate",
+          "false negative rate",
+          "likelihood ranges",
+          "model validation",
+          "cross-validation results",
+          "UW engine accuracy",
+          "training data output",
+          "testing data validation",
+          "reduced variable model performance"
+        ],
+        "capabilities": [
+          "View probability distribution across likelihood segments for preferred classification",
+          "Compare model predictions to actual underwriting decisions",
+          "Analyze false positives and false negatives with percentage breakdowns",
+          "Review training data output vs testing data validation results",
+          "Evaluate cross-validation performance using different variable sets",
+          "Highlight attribute importance in reduced variable models",
+          "Identify prediction accuracy trends across varying likelihood ranges",
+          "Support model optimization through misclassification analysis"
+        ]
+      },
+      {
+        "title": "Submission Ingestion",
+        "slug": "/submission-ingestion",
+        "url_pattern": "https://www.spinnakerhub.com/uw-engine/{industry-slug}/submission-ingestion",
+        "description": "Automated email ingestion system for underwriters that extracts key submission data fields from inbound emails and attachments, presenting them in a clean, tabular format for review and action. Fields such as Submission Date, Inception Date, Industry, Currency, Revenue, Region, Underwriter Name, Broker Name, and Insured Name are parsed directly from message bodies, signatures, and contextual content. Integrated auto-reply functionality can notify brokers or carriers if any required data fields are missing, or confirm when all required data fields have been received and the query is in process. This tool accelerates underwriting workflows by standardizing data collection from varied unstructured email inputs.",
+        "industries": [],
+        "industry_slugs": [],
+        "keywords": [
+          "email ingestion",
+          "submission extraction",
+          "attachment parsing",
+          "auto-reply underwriting",
+          "broker notification",
+          "carrier notification",
+          "submission date",
+          "inception date",
+          "industry classification",
+          "currency extraction",
+          "annual revenue",
+          "underwriter name extraction",
+          "insured name extraction"
+        ],
+        "capabilities": [
+          "Parse inbound submission emails and attachments to extract predefined data fields",
+          "Identify and fill required fields including dates, industry, currency, revenue, region, underwriter, broker, and insured details",
+          "Display parsed submission details in a sortable, editable table format",
+          "Send automated responses to brokers/carriers specifying missing or complete data fields",
+          "Integrate with UW tools for rapid case initiation",
+          "Enable editing or correction of extracted fields before workflow continuation",
+          "Support consistent data formatting for underwriting evaluation"
+        ],
+        "components": [
+          {
+            "title": "UW Manager",
+            "slug": "/uw-manager",
+            "url_pattern": "https://www.spinnakerhub.com/uw-engine/{industry-slug}/uw-manager",
+            "description": "Interface for managing extraction column definitions, data field descriptions, and priority levels for incoming email submissions. Underwriters can select active fields, set high/medium/low extraction priorities, and define parsing rules, including contextual inference (e.g., infer currency from symbols or codes) and hierarchical data extraction (e.g., broker from email signature). Ensures system extracts all required fields with quality and consistency.",
+            "industries": ["Property & Casualty"],
+            "industry_slugs": ["property-and-casualty"],
+            "keywords": [
+              "submission column management",
+              "data extraction configuration",
+              "priority setting",
+              "currency inference",
+              "broker inference",
+              "description-based extraction rules"
+            ],
+            "capabilities": [
+              "Select which extracted fields are active in ingestion output",
+              "Assign priority (High/Medium/Low) for each column",
+              "Define detailed descriptions for extraction logic per field",
+              "Use contextual rules to infer missing values (currency, broker name, insured name)",
+              "Ensure data completeness before auto-reply is triggered",
+              "Maintain standardized field configuration across underwriting team"
+            ]
+          },
+          {
+            "title": "UW Inbox",
+            "slug": "/uw-inbox",
+            "url_pattern": "https://www.spinnakerhub.com/uw-engine/{industry-slug}/uw-inbox",
+            "description": "Inbox-style interface displaying extracted submissions from received emails with all parsed fields visible in a tabular layout. Each entry includes metadata such as sender, subject, submission date, inception date, industry, currency, revenue, region, underwriter name, broker name, and insured name. Allows quick review, editing, and processing of cases directly from the list view, with attachment and email context accessible on demand.",
+            "industries": ["Property & Casualty"],
+            "industry_slugs": ["property-and-casualty"],
+            "keywords": [
+              "underwriter inbox",
+              "submission list view",
+              "email metadata display",
+              "extracted field review",
+              "editable submission data",
+              "underwriting workflow initiation"
+            ],
+            "capabilities": [
+              "Display parsed submissions in a sortable and filterable table",
+              "Show full metadata for each received email submission",
+              "Allow inline editing of extracted fields",
+              "Link directly to original email and attachments",
+              "Provide easy navigation between submissions for batch processing",
+              "Support quick transition from email ingestion to underwriting analysis"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "solution": "Renewals Optimizer",
+    "solution_slug": "/renewals-optimizer",
+    "solution_url": "https://www.spinnakerhub.com/renewals-optimizer",
+    "solution_description": "Enhance profitability by applying targeted renewal actions informed by historical sales and claims experience data.",
+    "domains": ["New Business", "Renewals"],
+    "modules": [
+      {
+        "title": "Renewals Estimator / RTM Estimator / RTF Estimator",
+        "slug": "/renewals-estimator",
+        "url_pattern": "https://www.spinnakerhub.com/renewals-optimizer/{industry-slug}/renewals-estimator",
+        "description": "Industry-specific analytics dashboard for calculating and adjusting renewal rates at the sponsor (policyholder) level. For Employee Benefits, the tool uses Renewals to Manual (RTM) methodology; for Commercial Lines – P&C, it uses Renewals to Formula (RTF) methodology. RTM/RTF compares the previous year's renewal, pre-renewal, and benchmark premium amounts against actual and historical performance to provide recommended rate adjustments. Displays active policyholder profile data—industry category, territory, tenure, size index, product portfolio, coverages, and renewal month—as well as historical loss experience including 5-year expected loss, incurred loss, premium, expected loss ratio (LR), actual LR, incurred-but-not-reported ratio (IBNR), and A/E ratio. Visual tools include RTM/RTF vs 5-year LR scatter plots, scenario vs recommended premium comparisons, and term rate sensitivity views. Supports scenario modeling, premium forecasting, and targeted renewal strategies using either manual or formula benchmarks depending on industry.",
+        "industries": ["Employee Benefits", "Commercial Lines - P&C"],
+        "industry_slugs": ["employee-benefits", "commercial-lines-pnc"],
+        "keywords": [
+          "renewal rate modeling",
+          "RTM calculation",
+          "RTF calculation",
+          "renewals to manual",
+          "renewals to formula",
+          "pre-renewal premium",
+          "manual premium",
+          "formula premium",
+          "implied RTM",
+          "implied RTF",
+          "premium scenario analysis",
+          "term rate sensitivity",
+          "historical loss experience",
+          "loss ratio",
+          "IBNR",
+          "A/E ratio",
+          "policyholder renewal recommendation",
+          "scenario vs recommended premium",
+          "indexed action analysis"
+        ],
+        "capabilities": [
+          "Display active policyholder profile and core underwriting metrics",
+          "For Employee Benefits: calculate and benchmark using Renewals to Manual (RTM)",
+          "For Commercial Lines – P&C: calculate and benchmark using Renewals to Formula (RTF)",
+          "View historical 5-year loss experience including IBNR and A/E ratios",
+          "Compare renewal, pre-renewal, and benchmark premiums against RTM or RTF values",
+          "Adjust scenario actions to see effects on implied RTM/RTF and premium values",
+          "Compare scenario vs recommended premiums side-by-side",
+          "Analyze RTM/RTF vs 5-year LR scatter plots for historical performance context",
+          "Evaluate term rate sensitivities at scenario and suggested action levels",
+          "Support targeted bundling and renewal strategies aligned to industry-specific benchmarks"
+        ]
+      },
+      {
+        "title": "Target List / Target Sponsor List / Target Policy Holder List",
+        "slug": "/target-list",
+        "url_pattern": "https://www.spinnakerhub.com/renewals-optimizer/{industry-slug}/target-list",
+        "description": "Industry-specific targeting dashboard to identify accounts with persistently unprofitable renewal histories for precise, data-driven renewal actions. For Employee Benefits, the tool is presented as the 'Target Sponsor List', listing sponsors with details such as policy effective date, industry category, employee lives, state, territory, broker, and in-force product basket (products currently active). For Commercial Lines – P&C, it is presented as the 'Target Policy Holder List', listing policy holders with similar attributes including company size and product basket. The lists support setting thresholds to determine inclusion criteria and provide comparison views for 'Target vs All' accounts. Designed to prioritize renewal actions toward accounts needing rate adjustments, coverage changes, or targeted bundling based on profitability and strategic fit.",
+        "industries": ["Employee Benefits", "Commercial Lines - P&C"],
+        "industry_slugs": ["employee-benefits", "commercial-lines-pnc"],
+        "keywords": [
+          "target sponsor list",
+          "target policy holder list",
+          "renewal action targets",
+          "account profitability analysis",
+          "company size",
+          "employee lives",
+          "broker accounts",
+          "policy effective date",
+          "industry category",
+          "territory targeting",
+          "in-force product basket",
+          "threshold filtering",
+          "target vs all comparison"
+        ],
+        "capabilities": [
+          "List accounts flagged for prioritized renewal action based on profitability criteria",
+          "For Employee Benefits: display sponsor details including employee lives, broker, product basket, and territory",
+          "For Commercial Lines – P&C: display policy holder details including company size, broker, product basket, and territory",
+          "Filter target lists by thresholds such as size, industry category, and territory",
+          "Use 'Target vs All' comparison to contextualize performance of selected accounts",
+          "Identify opportunities for rate adjustments, coverage changes, and product bundling",
+          "Provide quick access to broker and product portfolio information for each account"
+        ]
+      },
+      {
+        "title": "Renewals Dashboard",
+        "slug": "/renewals-dashboard",
+        "url_pattern": "https://www.spinnakerhub.com/renewals-optimizer/{industry-slug}/renewals-dashboard",
+        "description": "Comprehensive renewal performance dashboard with industry-specific benchmarking. For Employee Benefits, displays the Policy RTM (Renewals to Manual) Distribution; for Commercial Lines – P&C, displays the Policy RTF (Renewals to Formula) Distribution. Summarizes in-force renewal data across market segments, including policies, gross written premium (GWP) values for pre-renewal, renewal, and benchmark (manual or formula), lapse rates, pre-RTM/pre-RTF values, RTM/RTF values, rate increase percentages, premiums, expected claims, incurred claims, loss ratio, and either the A/E ratio (Employee Benefits) or IBNR ratio (Commercial Lines). Provides filtering by market segment, size/lives bin, SIC industry category, and territory. Visualizations include histograms showing policy distribution by RTM/RTF bins, cumulative policy count lines, and bar charts showing percentage of policies and renewal premium by aggregate action bin. Enables underwriters to identify renewal segments needing rate adjustments and to analyze renewal outcomes against industry benchmark methodologies.",
+        "industries": ["Employee Benefits", "Commercial Lines - P&C"],
+        "industry_slugs": ["employee-benefits", "commercial-lines-pnc"],
+        "keywords": [
+          "RTM distribution",
+          "RTF distribution",
+          "renewals to manual",
+          "renewals to formula",
+          "policy lapse rate",
+          "premium lapse rate",
+          "rate increase analysis",
+          "renewal GWP",
+          "manual GWP",
+          "formula GWP",
+          "expected claims",
+          "incurred claims",
+          "loss ratio",
+          "A/E ratio",
+          "IBNR ratio",
+          "aggregate action bin",
+          "RTM histogram",
+          "RTF histogram",
+          "policy count distribution"
+        ],
+        "capabilities": [
+          "Filter renewal data by market segment, lives/size bin, SIC industry category, and territory",
+          "Summarize renewal KPIs including lapse rates, premiums, claims, loss ratio, and benchmark ratios",
+          "For Employee Benefits: calculate and display Renewals to Manual (RTM) values with A/E ratio",
+          "For Commercial Lines – P&C: calculate and display Renewals to Formula (RTF) values with IBNR ratio",
+          "Display histograms of policy count by RTM/RTF bin and cumulative policy count",
+          "Show percentage split of policies and renewal premium by aggregate action bin (<0.9, [0.9, 1), (1, 1.1], >1.1)",
+          "Provide context for each RTM/RTF bin including GWP, claims, and loss ratios",
+          "Enable identification of renewal segments above or below benchmark thresholds for targeted rate actions"
+        ]
+      },
+      {
+        "title": "Pricing & Economics",
+        "slug": "/pricing-and-economics",
+        "url_pattern": "https://www.spinnakerhub.com/renewals-optimizer/{industry-slug}/pricing-and-economics",
+        "description": "Pricing and profitability analysis dashboard for evaluating the impact of renewal rate changes against the formula benchmark in Commercial Lines – P&C. Provides model price sensitivity plots comparing price sensitivity values against 2-year sales data to identify optimal pricing actions. Accounts are visually categorized into four strategic action segments: High Demand / High Sensitivity, Low Demand / High Sensitivity, High Demand / Low Sensitivity, and Low Demand / Low Sensitivity. The chart uses a horizontal benchmark sensitivity line (1.00) and vertical sales benchmark to segment accounts for potential renewal adjustments. Enables underwriters and pricing analysts to model how changes in renewal rates can capture additional revenue or margin while maintaining competitive positioning relative to the formula rate.",
+        "industries": ["Commercial Lines - P&C"],
+        "industry_slugs": ["commercial-lines-pnc"],
+        "keywords": [
+          "pricing sensitivity analysis",
+          "renewals to formula",
+          "formula benchmark pricing",
+          "profitability impact analysis",
+          "high demand high sensitivity",
+          "low demand high sensitivity",
+          "high demand low sensitivity",
+          "low demand low sensitivity",
+          "2-year sales analysis",
+          "pricing segmentation",
+          "commercial lines renewals"
+        ],
+        "capabilities": [
+          "Compare account price sensitivity scores against 2-year sales data",
+          "Identify accounts with high demand and high sensitivity for targeted rate increases",
+          "Detect accounts with low sensitivity where rate adjustments may be less impactful",
+          "Segment accounts visually into four strategic pricing action categories",
+          "Use benchmark sensitivity (1.00) and sales thresholds to guide renewal pricing decisions",
+          "Evaluate potential revenue and profitability impacts from rate changes compared to the formula rate",
+          "Support strategic negotiations with brokers using demand and sensitivity profiling",
+          "Model competitive pricing scenarios for Commercial Lines – P&C renewals"
+        ]
+      }
+    ]
+  },
+  {
+    "solution": "Commission Intelligence",
+    "solution_slug": "/commission-intelligence",
+    "solution_url": "https://www.spinnakerhub.com/commission-intelligence",
+    "solution_description": "Optimize commission structures by analyzing contracts and scenarios for both retail and wholesale brokerage.",
+    "domains": ["Broker"],
+    "modules": [
+      {
+        "title": "Contract Ingestion",
+        "slug": "/contract-ingestion",
+        "url_pattern": "https://www.spinnakerhub.com/commission-intelligence/{industry-slug}/contract-ingestion",
+        "description": "AI-assisted ingestion of insurance commission contracts, transforming unstructured documents into clean, structured, ready-to-use data. Accepts electronic or scanned contract files and extracts key contractual details for both Property & Casualty and Employee Benefits contexts. Upon ingestion, displays the parsed output using the same layout as the Contract Summary module, allowing verification immediately after processing. For Property & Casualty, extracted fields include Contract ID, Carrier, Ingestion Date, Year, Program Name, Bonus Type, Threshold Definitions, Bonus Percentages, Effective/Expiration Dates, and Source Document references with notes. For Employee Benefits, extracted fields include Contract ID, Carrier, Ingestion Date, Business Type, Product Type, Compensation Method, Amount, Unit, Qualifier, Payment Frequency, Effective Date, State, Maximum Amount, Maximum Applies To, and Notes (e.g., region-specific growth targets). Enables quick transition from ingestion to analysis, eliminating manual data entry.",
+        "industries": ["Property & Casualty", "Employee Benefits"],
+        "industry_slugs": ["property-and-casualty", "employee-benefits"],
+        "keywords": [
+          "contract ingestion",
+          "AI document processing",
+          "commission contract parsing",
+          "bonus threshold extraction",
+          "compensation method extraction",
+          "structured contract data",
+          "employee benefits commission details",
+          "P&C commission program ingestion"
+        ],
+        "capabilities": [
+          "Upload contract documents in supported formats for ingestion",
+          "Apply AI models to parse unstructured PDFs or scanned documents into structured fields",
+          "Extract Property & Casualty-specific fields: Contract ID, Program Name, Bonus Type, Thresholds, Bonus %, Dates, Source Document, Notes",
+          "Extract Employee Benefits-specific fields: Contract ID, Business Type, Product Type, Compensation Method, Amount/Unit, Unit Qualifier, Payment Frequency, Dates, Max Amount, Max Applies To, Notes",
+          "Display ingestion results in tabular form for immediate verification",
+          "Filter or search within ingestion results by key field values",
+          "Export parsed contract data to CSV for integration into downstream systems"
+        ]
+      },
+      {
+        "title": "Contract Summary",
+        "slug": "/contract-summary",
+        "url_pattern": "https://www.spinnakerhub.com/commission-intelligence/{industry-slug}/contract-summary",
+        "description": "Centralized repository of all ingested commission contracts, offering search, filter, and export functionality. Displays structured contract data for both Property & Casualty and Employee Benefits industries. For Property & Casualty, the summary table includes: Contract ID, Carrier, Ingestion Date, Year, Program Name, Bonus Type, Threshold Applied To, Threshold Criteria, Bonus Percentages, Effective Date, Expiration Date, Source Document, and Notes. For Employee Benefits, the table includes: Contract ID, Carrier, Ingestion Date, Business Type, Product Type, Compensation Method, Amount, Unit, Unit Qualifier, Payment Frequency, Effective Date, State, Maximum Amount, Maximum Applies To, and Notes (e.g., regional growth requirements). Provides ability to filter contracts by carrier or other key fields, search text across all columns, and export selected contract data to CSV for external reporting.",
+        "industries": ["Property & Casualty", "Employee Benefits"],
+        "industry_slugs": ["property-and-casualty", "employee-benefits"],
+        "keywords": [
+          "contract repository",
+          "commission contract summary",
+          "bonus program details",
+          "threshold and bonus lookup",
+          "compensation contract data",
+          "carrier contract search",
+          "employee benefits commission summary",
+          "P&C commission program summary"
+        ],
+        "capabilities": [
+          "View all ingested commission contracts in a unified table by industry",
+          "Filter contracts by carrier, year, program name, or other attributes",
+          "Search text across multiple contract fields",
+          "For Property & Casualty: display fields like Contract ID, Program Name, Bonus Type, Thresholds, Bonus %, Dates, Source Document, Notes",
+          "For Employee Benefits: display fields like Contract ID, Business Type, Product Type, Compensation Method, Amount & Unit, Payment Frequency, Dates, Max Amount, Max Applies To, Notes",
+          "Export filtered contract lists to CSV for offline analysis",
+          "Serve as the single source of truth for all commission agreements on file"
+        ]
+      },
+      {
+        "title": "Contract Comparison",
+        "slug": "/contract-comparison",
+        "url_pattern": "https://www.spinnakerhub.com/commission-intelligence/{industry-slug}/contract-comparison",
+        "description": "Side-by-side comparison tool for analyzing two commission contracts, highlighting similarities, differences, and key clauses across core sections. Supports both Property & Casualty (P&C) and Employee Benefits (EB) industries. For P&C, compares commercial lines commission schedules, bonus plans, thresholds, eligibility criteria, variables, caps, payment timing, and inclusions/exclusions. For EB, compares life and supplemental benefit product commission plans including commission rates, renewal/retention requirements, product inclusions/exclusions, caps, effective periods, and special clauses. Differences are summarized in a dedicated 'Key Difference' column for rapid analysis.",
+        "industries": ["Property & Casualty", "Employee Benefits"],
+        "industry_slugs": ["property-and-casualty", "employee-benefits"],
+        "keywords": [
+          "commission contract comparison",
+          "side-by-side contract review",
+          "P&C commission schedule",
+          "employee benefits commission plan",
+          "bonus plan comparison",
+          "eligibility criteria",
+          "payment timing",
+          "effective period",
+          "product inclusions",
+          "key differences",
+          "variables and caps",
+          "renewal and retention",
+          "commercial lines commission",
+          "life insurance commission"
+        ],
+        "capabilities": [
+          "Display contracts side-by-side by metric/category",
+          "Highlight differences between corresponding contract sections",
+          "Summarize distinctions in a 'Key Difference' column",
+          "Compare P&C commercial line plans including program bonus types, eligibility criteria, rate ranges, caps, eligibility period, and payment terms",
+          "Compare EB product lines such as life, LTD, STD, supplemental, and voluntary coverages with details on new and renewal rates, persistency, and caps",
+          "Review variables impacting commission (rate tiers, growth factors, multipliers)",
+          "Identify effective dates and renewal term differences between contracts",
+          "Document inclusions and exclusions for eligible products and coverages",
+          "Support compliance and negotiation by surfacing contract discrepancies quickly"
+        ]
+      },
+      {
+        "title": "Commission Tool",
+        "slug": "/commission-tool-agency-level",
+        "url_pattern": "https://www.spinnakerhub.com/commission-intelligence/{industry-slug}/commission-tool-agency-level",
+        "description": "Agency-level contingent commission management platform that enables property & casualty and employee benefits agencies to adjust, calculate, and optimize commissions across all carriers with full flexibility. For Property & Casualty, users can set loss ratio limits, eligible written premium thresholds, and contingent commission rates for commercial lines to distribute commissions across carriers. Carriers can be ranked by contingent commission percentage or dollar value, with contract database integration providing min/max thresholds and eligible ranges. Includes optimization views that compare current commission mix to a reallocated mix based on premium movement strategies, showing total commission gain, percentage improvement, and estimated impact on enterprise value. For Employee Benefits, the tool calculates contingent commissions for selected benefit products based on current in-force premium, new premium amounts, number of clients, and business type, identifying top carriers by contingent commission earnings. Supports ongoing refinement of commission strategies as new contracts are ingested.",
+        "industries": ["Property & Casualty", "Employee Benefits"],
+        "industry_slugs": ["property-and-casualty", "employee-benefits"],
+        "keywords": [
+          "commission optimization",
+          "contingent commission distribution",
+          "agency-level commission planning",
+          "loss ratio adjustment",
+          "eligible written premium",
+          "carrier ranking",
+          "commercial lines commission",
+          "employee benefits contingent commission",
+          "premium mix optimization",
+          "commission improvement",
+          "contract database",
+          "enterprise value impact"
+        ],
+        "capabilities": [
+          "Set loss ratio thresholds and eligible written premium ranges for contingent commission distribution (P&C)",
+          "View top carriers ranked by contingent commission percentage or dollar value",
+          "Access contract database with min/max ranges for loss ratio and premium eligibility",
+          "Upload and manage commission contract terms for multiple carriers",
+          "Calculate contingent commissions for employee benefit products based on current and new premium amounts",
+          "Filter commission calculations by number of clients and business type",
+          "Compare current commission mix to optimized mix after reallocation of premium to best-performing carriers",
+          "Display total commission values, improvement amounts, improvement percentages, and enterprise value impact",
+          "Adjust premium movement scenarios and EBITDA multiples to model financial outcomes",
+          "Support iterative refinement of commission strategies as new contracts are ingested"
+        ]
+      },
+      {
+        "title": "Commission Forecasting",
+        "slug": "/commission-forecasting",
+        "url_pattern": "https://www.spinnakerhub.com/commission-intelligence/{industry-slug}/commission-forecasting",
+        "description": "Interactive forecasting dashboard for projecting commission income at the property & casualty portfolio level, designed to support strategic planning and performance management for agencies and carriers. Provides month-by-month, quarter-by-quarter, and annual summaries with data categories including Actuals, Budget, and 4Qast (forecast projections). Key metrics display variance between Actuals vs Budget, Actuals vs 4Qast, and 4Qast vs Budget with percentage differences color-coded for quick interpretation. Filters allow users to segment by business segment, region, and metric subtype to refine analysis. Includes both summary and comparison views to track performance trends, identify deviations, and adjust commission strategies accordingly.",
+        "industries": ["Property & Casualty"],
+        "industry_slugs": ["property-and-casualty"],
+        "keywords": [
+          "commission forecasting",
+          "commission projections",
+          "actual vs budget variance",
+          "actual vs forecast variance",
+          "forecast vs budget variance",
+          "monthly commission performance",
+          "quarterly commission trends",
+          "annual commission planning",
+          "budget tracking",
+          "agency commission forecast",
+          "property and casualty commission analysis"
+        ],
+        "capabilities": [
+          "View commission data broken down by year, quarter, and month",
+          "Analyze actual commission results against budget targets",
+          "Compare actual values against forecast (4Qast) projections",
+          "Review forecast values against set budget targets",
+          "Interpret variance percentages with color-coded indicators for better insight",
+          "Segment forecast and performance data by business segment, region, and metric subtype",
+          "Switch between summary and comparison modes to explore different analytical perspectives",
+          "Identify periods with underperformance or overperformance to guide commission strategies",
+          "Support planning exercises with historical trend and forecast-based adjustments"
+        ]
+      }
+    ]
+  },
+  {
+    "solution": "4Qast™",
+    "solution_slug": "/4qast",
+    "solution_url": "https://www.spinnakerhub.com/4qast",
+    "solution_description": "Analyze historical data and apply statistical techniques to predict future results accurately. Identify key trends and variance drivers for proactive decision-making.",
+    "modules": [
+      {
+        "title": "Leadership Dashboard",
+        "slug": "/leadership-dashboard",
+        "url_pattern": "https://www.spinnakerhub.com/4qast/{industry-slug}/leadership-dashboard",
+        "description": "Executive-level dashboard providing performance metrics for revenue, expenses, and EBITDA across selectable timeframes, regions, products, and profit centers. Includes overall financial KPIs such as Total Revenue, Total Expenses, EBITDA Actual, EBITDA Margin, Core EBITDA Margin, Flow Through %, and Core Revenue Growth %. The Summary view consolidates profitability metrics, revenue metrics, and expense metrics, comparing Actual, Budget, 4Qast (forecast), and Prior year values. Revenue metrics distinguish between contingent and core income streams, while expense metrics break down by category (Compensation, Admin Core, Technology, Occupancy, Selling, Admin Non-Core) with detailed components such as salary, commissions, benefits, bonus, payroll tax, contract labor, and occupancy costs. Designed for top-level variance analysis and comparison over multiple periods and scenarios to support strategic decision-making.",
+        "industries": ["Commercial Lines - P&C", "Personal Lines - P&C"],
+        "industry_slugs": ["commercial-lines-pnc", "personal-lines-pnc"],
+        "keywords": [
+          "leadership dashboard",
+          "EBITDA analysis",
+          "revenue metrics",
+          "expense metrics",
+          "financial KPI tracking",
+          "variance analysis",
+          "budget vs actual comparison",
+          "4Qast forecast comparison",
+          "flow through percentage",
+          "core revenue growth",
+          "profitability summary",
+          "contingent revenue",
+          "executive financial overview"
+        ],
+        "capabilities": [
+          "View high-level financial KPIs for total revenue, total expenses, EBITDA, EBITDA margin, and growth percentages",
+          "Compare Actual, Budget, 4Qast forecast, and Prior year values for profitability metrics",
+          "Distinguish revenue streams between contingent and core income",
+          "Analyze expense distributions across major categories including Compensation, Admin Core, Technology, Occupancy, Selling, and Admin Non-Core",
+          "Drill down into detailed expense components such as salary, commissions, benefits, bonus, payroll taxes, contract labor, and technology costs",
+          "Filter dashboard by view type (e.g., YTD cumulative), year, month, region, profit center, and product line",
+          "Support variance analysis through Actual vs Budget, Actual vs 4Qast, and Budget vs 4Qast comparisons",
+          "Enable leadership teams to monitor operational and financial performance across multiple divisions or business lines",
+          "Provide strategic insight for budget adjustments, cost optimization, and growth planning"
+        ]
+      },
+      {
+        "title": "4Qast Dashboard",
+        "slug": "/4qast-dashboard",
+        "url_pattern": "https://www.spinnakerhub.com/4qast/{industry-slug}/4qast-dashboard",
+        "description": "Forecast analytics dashboard for visualizing and analyzing sales and revenue forecasts across multiple industries, regions, territories, products, segments, and size bins. The Current Forecast view displays month-by-month sales performance metrics for the current year against forecast, last year actuals, and goal targets. Charts show actual vs forecast bars with goal and last year trend lines, plus a difference-from-prior-forecast variance chart to highlight significant changes. Summary panels provide Year-to-Date (YTD) and Full Year (FY) totals for actuals, forecasts, goals, last year performance, and percentage achievements vs targets or prior periods. Variance panels compare values vs prior forecasts and budgets to quantify accuracy and trend improvements. Supports detailed filtering and switching between Current Forecast, Forecast Breakdown, and Rolling Forecast tabs for deeper analysis of drivers influencing forecast behavior.",
+        "industries": [
+          "Individual Life",
+          "E-Commerce & Consumer Goods",
+          "Supplemental Health",
+          "Commercial Lines - P&C",
+          "Personal Lines - P&C"
+        ],
+        "industry_slugs": [
+          "individual-life",
+          "ecommerce-and-consumer-goods",
+          "supplemental-health",
+          "commercial-lines-pnc",
+          "personal-lines-pnc"
+        ],
+        "keywords": [
+          "sales forecast analysis",
+          "forecast vs goal comparison",
+          "variance from prior forecast",
+          "current forecast view",
+          "YTD forecast summary",
+          "full year forecast",
+          "industry forecast trends",
+          "forecast breakdown",
+          "rolling forecast",
+          "forecast accuracy assessment",
+          "performance vs last year"
+        ],
+        "capabilities": [
+          "Visualize monthly actual vs forecast sales and revenue",
+          "Overlay goal and last year performance trend lines for context",
+          "Analyze difference-from-prior-forecast variance to detect changes",
+          "View YTD and FY summaries for actuals, forecasts, goals, and last year values",
+          "Calculate % achievement vs goal and vs last year",
+          "Compare current forecast against prior forecasts to assess accuracy and trends",
+          "Filter forecasts by sales region, sales territory, product, segment, and size bin",
+          "Switch between Current Forecast, Forecast Breakdown, and Rolling Forecast views",
+          "Identify drivers influencing forecast changes using breakdown views",
+          "Support cross-industry forecasting with unified analysis framework"
+        ]
+      },
+      {
+        "title": "4Qast Drill Down",
+        "slug": "/4qast-drill-down",
+        "url_pattern": "https://www.spinnakerhub.com/4qast/{industry-slug}/4qast-drill-down",
+        "description": "Interactive drill-down forecasting view that breaks down the factors influencing forecast performance at a detailed attribute level. The Sales Waterfall chart compares the forecast vs goal, showing category-by-category contributions (positive or negative) that explain variance from targets. Categories can include product lines, segments, size bins, regions, or territories depending on selected filters. Each waterfall step quantifies the revenue impact in monetary terms, enabling users to see how specific products, segments, or markets contributed to variances from the goal and to the year-end forecast total. Supports dynamic filtering and toggling between attribute types to isolate the drivers for changes in forecast behavior.",
+        "industries": [
+          "Individual Life",
+          "E-Commerce & Consumer Goods",
+          "Supplemental Health",
+          "Commercial Lines - P&C",
+          "Personal Lines - P&C"
+        ],
+        "industry_slugs": [
+          "individual-life",
+          "ecommerce-and-consumer-goods",
+          "supplemental-health",
+          "commercial-lines-pnc",
+          "personal-lines-pnc"
+        ],
+        "keywords": [
+          "drill-down forecast analysis",
+          "sales waterfall",
+          "forecast vs goal breakdown",
+          "attribute level forecast drivers",
+          "product impact on forecast",
+          "segment contribution",
+          "region contribution",
+          "territory variance analysis",
+          "size bin forecast analysis",
+          "variance decomposition"
+        ],
+        "capabilities": [
+          "Display a waterfall chart showing forecast vs goal revenue differences",
+          "Break down variance contributions by product, segment, size bin, region, or territory",
+          "Quantify individual category impacts in monetary terms",
+          "Highlight positive and negative revenue drivers relative to forecast goals",
+          "Isolate category-level performance to identify areas of strength or weakness",
+          "Filter and drill down by multiple attributes to refine analysis",
+          "Provide a year-end forecast total after accounting for all category contributions",
+          "Support root cause analysis for forecast variance at granular attribute levels"
+        ]
+      }
+    ]
+  }
+]

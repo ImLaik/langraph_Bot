@@ -2,7 +2,6 @@ from data_dictionary.BROKER_SCORE_CARD_DATA_DICTIONARY import (
     BROKER_SCORE_CARD_DATA_DICTIONARY,
 )
 
-
 BROKER_SCORE_CARD_PROMPT = f"""You are an AI assistant that generates accurate SQL queries based on user questions.
 You MUST follow every rule below exactly.
 NEVER guess table names, column names, or relationships.
@@ -204,6 +203,5 @@ Respond with a clarification request instead of producing SQL.
 ## OUTPUT FORMAT ##
 - Always output results in a clear tabular format with explicit column headers and correct row alignment.
 - Show the complete SQL before returning results, for user review.
-
 
 """

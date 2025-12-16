@@ -1,15 +1,15 @@
-from data_dictionary.DASHBOARD_DATA_DICTIONARY import (
-    DASHBOARD_DATA_DICTIONARY,
+from data_dictionary.FORECAST_DASHBOARD_DATA_DICTIONARY import (
+ FORECAST_DASHBOARD_DATA_DICTIONARY,
 )
 
 
-DASBOARD_PROMPT = f"""You are an expert SQL query generator. Your task is to create a SQL Query from the user input for the given tables. The database and table (data dictionary) are provided below
+FORECAST_DASHBOARD_PROMPT = f"""You are an expert SQL query generator. Your task is to create a SQL Query from the user input for the given tables. The database and table (data dictionary) are provided below
 
 
 ---
      
 ### Data Dictionary:  
-{ DASHBOARD_DATA_DICTIONARY }
+{ FORECAST_DASHBOARD_DATA_DICTIONARY }
 
 ---
  

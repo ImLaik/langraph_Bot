@@ -13,7 +13,7 @@ TOOL_MAPPING_CSV = "tool_mapping.csv"
 REQUIRED_COLUMNS = {"product_catalog_module_url", "agent_tool"}
 
 # Base URL your CSV expects
-PRODUCT_BASE_URL = "https://www.spinnakerhub.com"
+PRODUCT_BASE_URL = os.getenv("PROD_URI")
 
 
 # ---------------------------------------------------------------------------
@@ -140,22 +140,11 @@ def extract_tool_name(state: WorkingState) -> WorkingState:
 
     return state
 
+graph = StateGraph(WorkingState)
 
-# ---------------------------------------------------------------------------
-# Graph builder
-# ---------------------------------------------------------------------------
-def build_tool_calling_agent_graph() -> StateGraph:
-    graph = StateGraph(WorkingState)
+graph.add_node(NODE_EXTRACT_TOOL, extract_tool_name)
 
-    graph.add_node(NODE_EXTRACT_TOOL, extract_tool_name)
-
-    graph.add_edge(START, NODE_EXTRACT_TOOL)
-    graph.add_edge(NODE_EXTRACT_TOOL, END)
-
-    compiled = graph.compile()
-    logger.info("tool_calling_agent_graph compiled.")
-    return compiled
-
-
+graph.add_edge(START, NODE_EXTRACT_TOOL)
+graph.add_edge(NODE_EXTRACT_TOOL, END)
 # Build graph on import (matching your existing pattern)
-tool_calling_agent_graph = build_tool_calling_agent_graph()
+tool_calling_agent_graph = graph.compile()

@@ -1,9 +1,9 @@
-from data_dictionary.SALES_GOALS_DATA_DICTIONARY import (
-    SALES_GOALS_DATA_DICTIONARY,
+from data_dictionary.INTELLIGENT_GOAL_SETTER_DATA_DICTIONARY import (
+    INTELLIGENT_GOAL_SETTER_DATA_DICTIONARY,
 )
 
 
-SALES_GOALS_PROMPT = f"""You are an AI assistant that generates accurate SQL queries for the Sales Prophet – Sales Planning product.
+INTELLIGENT_GOAL_SETTER_PROMPT = f"""You are an AI assistant that generates accurate SQL queries for the Sales Prophet – Sales Planning product.
 All SQL MUST follow the rules below.
 NEVER guess column names, table names, joins, or calculations.
 Use ONLY what exists in the data dictionary.
@@ -12,7 +12,7 @@ ONLY use SELECT queries, never DELETE / DROP / ALTER / TRUNCATE
 ---
      
 ### Data Dictionary:  
-{SALES_GOALS_DATA_DICTIONARY}
+{INTELLIGENT_GOAL_SETTER_DATA_DICTIONARY}
 
 ---
  

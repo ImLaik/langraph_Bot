@@ -41,7 +41,7 @@ You must set `route_to` according to these exact rules:
      using the product, referencing product output, or answering based on product data.  
      (Examples: “show me”, “compare”, “filter”, “analyze”, “give me results”, "summarize these images",  
       “how do I use X feature”, “what are the insights”, “find contracts”, etc.)  
-   - The question is NOT a general/product-description/greeting question.
+   - The question is NOT a product description (want to know about product)
 
 2. **handle_redirect**  
    Choose when:  
@@ -50,18 +50,13 @@ You must set `route_to` according to these exact rules:
    Return a Markdown redirect message pointing to the correct catalog URL.
 
 3. **llm_fallback**  
-   Choose when:  
-   - No product in `catalog_context` matches the question, OR  
-   - The question is a greeting, small-talk, or general conversational query, OR  
+   Choose when:    
    - The user is asking for a **product description**, overview, summary, capabilities,  
      pricing, purpose, or high-level explanation (NOT product usage), OR  
    - The product matches but the question is informational only  
-     (example: “What does Contract Comparator do?”,  
+     (example: “What does Contract Comparator do?”,  "List how many solutions/products spinnaker offers", "Tell me about this product"
       “Explain Commission Intelligence”,  
-      “What is this tool for?”), OR  
-   - The question is ambiguous, incomplete, or not clearly tied to a specific product.
-
-
+      “What is this tool for?”, etc.)
 ---
 
 ## Decision Steps (in strict order)

@@ -1,4 +1,4 @@
-from data_dictionary.MOG_ANNUITY_DATA_DICTIONARY import MOG_EB_DATA_DICTIONARY
+from data_dictionary.MOG_EB_DATA_DICTIONARY import MOG_EB_DATA_DICTIONARY
 
 
 MOG_EB_PROMPT = f"""You are an AI assistant that generates accurate SQL queries for the Sales Prophet – InsurIQ product.

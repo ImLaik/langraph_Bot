@@ -1,5 +1,6 @@
 from data_dictionary.LEAD_PRIORITIZER_DATA_DICTIONARY import LEAD_PRIORITIZER_DATA_DICTIONARY
 
+
 LEAD_PRIORITIZER_PROMPT = f"""
 ### Data Dictionary:  
 { LEAD_PRIORITIZER_DATA_DICTIONARY }
@@ -235,3 +236,4 @@ Assumptions Used:
 - “All products included.”
 ***Always follow these rules. No deviations. Only use approved tables and columns (case_lead_scoring_data).***
 """
+

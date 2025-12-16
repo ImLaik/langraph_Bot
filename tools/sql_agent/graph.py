@@ -5,6 +5,7 @@ from typing import Dict, Any
 import pandas as pd
 from loguru import logger
 from langchain.agents import create_agent
+from langchain.agents.structured_output import ToolStrategy
 from langchain_community.agent_toolkits import SQLDatabaseToolkit
 from langchain_core.messages import AIMessage
 from langchain_core.output_parsers import StrOutputParser
@@ -14,6 +15,7 @@ from langgraph.graph import END, START, StateGraph
 from sqlalchemy import text
 from db.sql_db import initialize_db_cached
 from tools.sql_agent.prompt import REACT_SQL_PROMPT, EXPLAIN_PROMPT
+from tools.sql_agent.model import SQLToolResult
 from utils.utils import (
     parse_relevant_tables,
     create_llm,
@@ -63,6 +65,7 @@ def prepare_sql_query(state: WorkingState) -> WorkingState:
             model=llm,
             tools=tools,
             system_prompt=system_prompt,
+            response_format=ToolStrategy(SQLToolResult)
         )
 
         agent_response = agent.invoke(
@@ -72,47 +75,21 @@ def prepare_sql_query(state: WorkingState) -> WorkingState:
             }
         )
         
-        print(f"\n\nAgent Response:\n{agent_response}\n\n")
+        result = agent_response["structured_response"]
+        print(f"\n\nStructured Response:\n{result}")
+        print(f"\n\nSQL QUERY:\n{result.sql_query}\n\nAssumptions:\n{result.assumptions}")
 
-        # Get last AIMessage
-        final_message = next(
-            (
-                msg
-                for msg in reversed(agent_response.get("messages", []))
-                if isinstance(msg, AIMessage)
-                and msg.content
-                and msg.content.strip()
-            ),
-            None,
-        )
-        print(f"\n\nFinal Messages:\n{final_message}\n\n")
-        if not final_message:
-            raise ValueError("No AIMessage content returned from SQL agent.")
-
-        content = final_message.content.strip()
-        print(f"\n\nContent:\n{content}\n\n")
-        # Strip "Final Answer:"
-        if content.lower().startswith("final answer"):
-            content = content.split(":", 1)[1].strip()
-
-        # Extract JSON block
-        json_match = re.search(r"\{.*\}", content, re.DOTALL)
-        if not json_match:
-            raise ValueError("No JSON object detected in LLM output.")
-
-        parsed = json.loads(json_match.group(0))
-        sql_query = parsed.get("sql_query", "")
-        assumptions = parsed.get("assumptions", "")
+        sql_query = result.sql_query
+        assumptions = result.assumptions
 
         if not sql_query:
+            state["sql_query"] = sql_query # To update the state so that we will not get the previous query
             state["generation"] = assumptions
             return state
 
         # Store results
         state["sql_query"] = sql_query
         state["assumptions"] = assumptions
-
-        print(f"\n\nAllowed_Tuple: \n{allowed_tuple}\n\n")
 
         return state
 
@@ -137,7 +114,7 @@ def execute_sql(state: WorkingState) -> WorkingState:
     allowed_tables = state.get("allowed_tables")
     tool_info: Dict[str, Any] = state.get("tool_info", {})
 
-    print(f"\n\nSql query: {sql_query}\n\nAllowed Tables: \n{allowed_tables}\n\n")
+    # print(f"\n\nSql query: {sql_query}\n\nAllowed Tables: \n{allowed_tables}\n\n")
     schema = tool_info["schema_name"]
     try:
         if not sql_query:

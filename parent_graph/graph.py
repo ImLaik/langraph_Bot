@@ -63,6 +63,7 @@ def route_question(state: WorkingState) -> Dict[str, Any]:
     # Retrieve context from product/catalog
     try:
         catalog_context = get_relevant_catalog_context(question, page_url)
+        print(f"\n\nCatalog Context: {catalog_context}\n\n")
         logger.debug("Catalog context retrieved.")
     except Exception as exc:
         logger.exception("Failed retrieving catalog context.")
